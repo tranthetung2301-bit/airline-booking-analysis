@@ -1,0 +1,13 @@
+﻿issue_id,field,issue,detection_rule,affected_rows,example_record_ids
+I01,airline,Nhan khong chuan,not in AIRLINES,139,R000002; R000040; R000067; R000186; R000192
+I02,booking_status,Ngay nam nham cot,fullmatch date AND bsd empty,26,R000493; R000691; R001712; R001739; R001825
+I03,booking_status,Nhan khong chuan,not in STATUSES,63,R000250; R000468; R000526; R000882; R000897
+I04,is_cancelled,Issue I04,See code,123,R000161; R000331; R000332; R000485; R000493
+I05,departure_date,Issue I05,See code,1935,R000002; R000003; R000005; R000011; R000017
+I06,avg_ticket_fare,Issue I06,See code,159,R000095; R000149; R000187; R000262; R000281
+I07,passenger_country,Issue I07,See code,381,R000035; R000067; R000091; R000128; R000154
+I08,ALL,Issue I08,See code,360,R000042; R000072; R000114; R000117; R000132
+I09,meal_option,Issue I09,See code,125,R000300; R000417; R000531; R000539; R000553
+I10,child_passengers,Issue I10,See code,40,R000180; R000193; R000243; R000278; R000666
+I11,market_segment,Issue I11,See code,0,
+I12,is_cancelled/booking_status,Issue I12,See code,32,R000030; R000355; R000607; R001060; R001158

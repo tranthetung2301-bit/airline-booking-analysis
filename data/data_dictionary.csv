@@ -1,0 +1,25 @@
+column,expected_clean_type,business_definition
+record_id,string,Technical identifier for each raw input row; unique; used for lineage.
+reservation_id,string,Business reservation identifier; multiple raw rows may refer to the same reservation.
+airline,category,Operating airline: Aurora Air or Horizon Wings.
+is_cancelled,0/1,1 if cancelled or no-show; 0 if flown.
+booking_lead_days,integer,Days between booking and scheduled departure.
+departure_date,date,Scheduled departure date.
+trip_weekend_days,integer,Number of trip days falling on Saturday/Sunday.
+trip_weekdays,integer,Number of trip days falling Monday-Friday.
+adult_passengers,integer,Number of adult passengers.
+child_passengers,integer,Number of child passengers.
+infant_passengers,integer,Number of infant passengers.
+meal_option,category,Primary meal option for the reservation.
+passenger_country,string,Country code associated with passenger/booking representative.
+market_segment,category,Commercial demand segment.
+sales_channel,category,Channel through which the reservation was created.
+is_returning_customer,0/1,Whether the customer has booked previously.
+booked_cabin_code,category,Cabin/fare product code originally booked.
+assigned_cabin_code,category,Final cabin/fare product code assigned.
+fare_policy,category,Refund/cancellation flexibility of the fare.
+traveler_type,category,Reservation/traveler type.
+avg_ticket_fare,float,"Average base ticket fare per passenger, USD; zero can be valid."
+special_service_requests,integer,Count of special service requests.
+booking_status,category,Final reservation status.
+booking_status_date,date,Date on which the final reservation status was recorded.
