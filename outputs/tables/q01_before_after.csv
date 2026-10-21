@@ -1,0 +1,8 @@
+﻿chi_tieu,truoc_lam_sach,sau_lam_sach,thay_doi
+Tổng số dòng bản ghi,"10,325","10,000","-325 dòng (loại 208 trùng lặp 23 cột, gộp 117 dòng cùng mã)"
+Số mã đặt chỗ (reservation_id) duy nhất,"10,000","10,000","Giữ nguyên 100% (10,000 đặt chỗ độc lập)"
+Số dòng trùng lặp tuyệt đối trên 23 cột,360,0,Đã loại bỏ toàn bộ bản sao dư thừa
+Định dạng ngày (departure_date),Lẫn 4 định dạng khác nhau,100% chuẩn YYYY-MM-DD,Đã chuyển đổi thống nhất định dạng ISO
+Giá vé (avg_ticket_fare),"Lẫn $, USD, EUR, dấu phẩy thập phân",100% số thực Float64 trong khoảng 0-5000,"Làm sạch tiền tệ, giữ nguyên vé 0 đồng hợp lệ"
+Mã quốc gia (passenger_country),"Lẫn tên tiếng Anh, chữ thường, ký tự lạ",100% mã ISO 2-3 chữ in hoa (hoặc NaN),"Ánh xạ chuẩn hóa quốc tế, ký tự lạ chuyển NaN"
+Nhất quán is_cancelled và booking_status,42 dòng mâu thuẫn nghiệp vụ,0 dòng mâu thuẫn (100% nhất quán),Đồng bộ cờ hủy với trạng thái bay
