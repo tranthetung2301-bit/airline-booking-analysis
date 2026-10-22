@@ -1,0 +1,13 @@
+﻿booked_cabin_code,n_valid,n_changed,changed_rate_pct,small_sample
+B1,314,37,11.78,False
+B2,247,32,12.96,False
+B3,177,24,13.56,False
+E1,2323,257,11.06,False
+E2,2363,283,11.98,False
+E3,1923,204,10.61,False
+E4,1470,185,12.59,False
+F1,55,7,12.73,True
+F2,34,3,8.82,True
+F3,38,4,10.53,True
+P1,530,61,11.51,False
+P2,447,45,10.07,False
