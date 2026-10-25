@@ -191,7 +191,7 @@ def cau2(df, show=True):
     ax.bar_label(bars, fmt="%.1f%%", padding=3, fontsize=11)
     ax.set_ylim(0, t["cancel_rate_pct"].max() * 1.3)
     _style(ax, "Tỷ lệ hủy đặt chỗ theo hãng", ylabel="Tỷ lệ hủy (%)")
-    _finish(fig, "fig01_airline_cancel_rate",
+    _finish(fig, "fig01_airline_cancel",
             f"n = {int(t['n_known'].sum()):,} đặt chỗ có trạng thái hủy xác định | "
             f"Nguồn: outputs/tables/q02_airline_cancel.csv", show)
 
