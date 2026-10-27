@@ -11,7 +11,12 @@ with open(NB_PATH, 'r', encoding='utf-8') as f:
     nb = json.load(f)
 
 # Global execution scope
-scope = {}
+try:
+    from IPython.display import display
+except ImportError:
+    display = print
+
+scope = {"display": display}
 exec_count = 1
 
 print(f'Starting execution of {len(nb["cells"])} cells...')
@@ -64,7 +69,7 @@ for idx, cell in enumerate(nb['cells']):
         print(f'❌ Error in Cell {idx}:\n{err_msg}')
         outputs.append({
             'ename': 'ExecutionError',
-            'evalue': str(e),
+            'evalue': str(err_msg),
             'output_type': 'error',
             'traceback': err_msg.splitlines()
         })

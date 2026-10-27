@@ -1,8 +1,18 @@
-"""Unit test cho các hàm làm sạch và tạo cột dẫn xuất của Thành viên 2."""
+"""Unit test cho các hàm làm sạch dữ liệu (TV1: cleaning.py & TV2: feature_engineering.py)."""
 
 import unittest
 import numpy as np
 import pandas as pd
+from src.cleaning import (
+    clean_key,
+    _to_binary_int,
+    clean_b1_duplicates,
+    clean_b2_misplaced_dates,
+    clean_b3_invalid_symbols,
+    clean_b4_categorical_labels,
+    clean_b5_date_formats,
+    run_phase_b,
+)
 from src.feature_engineering import (
     clean_int_col,
     clean_fare,
@@ -11,6 +21,95 @@ from src.feature_engineering import (
     create_derived_columns,
     create_monthly_summary,
 )
+
+
+class TestCleaningTV1(unittest.TestCase):
+
+    def test_clean_key(self):
+        self.assertEqual(clean_key(" Aurora Air "), "auroraair")
+        self.assertEqual(clean_key("Non-Refundable"), "nonrefundable")
+        self.assertTrue(pd.isna(clean_key(None)))
+
+    def test_to_binary_int(self):
+        s = pd.Series(['yes', 'no', '1', '0', 'True', 'False', 'unknown', None])
+        res = _to_binary_int(s)
+        self.assertEqual(res[0], 1)
+        self.assertEqual(res[1], 0)
+        self.assertEqual(res[2], 1)
+        self.assertEqual(res[3], 0)
+        self.assertEqual(res[4], 1)
+        self.assertEqual(res[5], 0)
+        self.assertTrue(pd.isna(res[6]))
+        self.assertTrue(pd.isna(res[7]))
+
+    def test_clean_b1_duplicates(self):
+        df = pd.DataFrame({
+            'record_id': ['REC001', 'REC002', 'REC003'],
+            'reservation_id': [' ar001 ', 'ar001', 'AR002'],
+            'airline': ['Aurora Air', 'Aurora Air', 'Horizon Wings'],
+        })
+        res, dropped = clean_b1_duplicates(df)
+        self.assertEqual(len(res), 2)
+        self.assertEqual(dropped, ['REC002'])
+        self.assertEqual(res['reservation_id'].iloc[0], 'AR001')
+
+    def test_clean_b2_misplaced_dates(self):
+        df = pd.DataFrame({
+            'booking_status': ['2025-06-15', 'Flown'],
+            'booking_status_date': ['', '2025-06-10']
+        })
+        res = clean_b2_misplaced_dates(df)
+        self.assertEqual(res['booking_status_date'].iloc[0], '2025-06-15')
+        self.assertEqual(res['booking_status'].iloc[0], '')
+        self.assertEqual(res['booking_status'].iloc[1], 'Flown')
+
+    def test_clean_b3_invalid_symbols(self):
+        df = pd.DataFrame({
+            'record_id': ['REC001'],
+            'meal_option': ['?'],
+            'market_segment': ['Undefined'],
+            'sales_channel': ['NULL']
+        })
+        res = clean_b3_invalid_symbols(df)
+        self.assertTrue(pd.isna(res['meal_option'].iloc[0]))
+        self.assertTrue(pd.isna(res['market_segment'].iloc[0]))
+        self.assertTrue(pd.isna(res['sales_channel'].iloc[0]))
+
+    def test_clean_b4_categorical_labels(self):
+        df = pd.DataFrame({
+            'record_id': ['REC001', 'REC002'],
+            'airline': ['aurora air', 'horizon'],
+            'meal_option': ['standard', 'undefined'],
+            'market_segment': ['direct', 'corporate'],
+            'sales_channel': ['website', 'mobile app'],
+            'fare_policy': ['flexible', 'nonrefundable'],
+            'traveler_type': ['individual', 'group'],
+            'booking_status': ['flown', 'cancelled'],
+            'booked_cabin_code': ['e1', 'x9'],
+            'assigned_cabin_code': ['E1', 'E2'],
+            'is_cancelled': ['1', '0'],
+            'is_returning_customer': ['no', 'yes']
+        })
+        res = clean_b4_categorical_labels(df)
+        self.assertEqual(res['airline'].iloc[0], 'Aurora Air')
+        self.assertEqual(res['airline'].iloc[1], 'Horizon Wings')
+        self.assertEqual(res['meal_option'].iloc[1], 'No Meal')
+        self.assertEqual(res['booked_cabin_code'].iloc[0], 'E1')
+        self.assertTrue(pd.isna(res['booked_cabin_code'].iloc[1]))
+        # is_cancelled must be synced with booking_status: Flown -> 0, Cancelled -> 1
+        self.assertEqual(res['is_cancelled'].iloc[0], 0)
+        self.assertEqual(res['is_cancelled'].iloc[1], 1)
+
+    def test_clean_b5_date_formats(self):
+        df = pd.DataFrame({
+            'departure_date': ['2025-06-15', '23/08/2025', 'October 6, 2025', '15 Nov 2024'],
+            'booking_status_date': ['2025-06-10', '2025-08-20', '2025-10-01', '2024-11-01']
+        })
+        res = clean_b5_date_formats(df)
+        self.assertEqual(res['departure_date'].iloc[0], pd.Timestamp('2025-06-15'))
+        self.assertEqual(res['departure_date'].iloc[1], pd.Timestamp('2025-08-23'))
+        self.assertEqual(res['departure_date'].iloc[2], pd.Timestamp('2025-10-06'))
+        self.assertEqual(res['departure_date'].iloc[3], pd.Timestamp('2024-11-15'))
 
 
 class TestFeatureEngineering(unittest.TestCase):

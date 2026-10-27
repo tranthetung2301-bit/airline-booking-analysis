@@ -9,9 +9,9 @@
 
 | Họ tên | MSSV | Vai trò chính | Phụ trách chi tiết | Có thể giải thích thêm |
 |---|---|---|---|---|
-| **Trần Thế Tùng** | *(Điền MSSV)* | Kỹ sư Làm sạch Dữ liệu (*Data Cleaning Specialist*) | Giai đoạn A (Khảo sát 24 cột, tìm 12 nhóm vấn đề), Giai đoạn B1–B5, Phần 2 Báo cáo | Quy tắc xử lý ký hiệu rác B3, chuẩn hóa nhãn phân loại B4, định dạng ngày tháng B5 |
-| **Tạ Minh Quân** | *(Điền MSSV)* | Quản trị CSDL & Kiểm soát Chất lượng (*QA & Data Architect*) | Giai đoạn B6–B8, Giai đoạn C1–C4, Câu 1 (So sánh Before/After), xuất 5 tệp cốt lõi, kiểm thử tự động, README.md, Phần 1 & 5 Báo cáo | Chiến lược đồng thuận khi gộp reservation_id, cấu trúc row_lineage.csv, công thức mẫu số cancel_rate_pct |
-| **Thành viên 3** | *(Điền MSSV)* | Chuyên viên Phân tích & Trực quan hóa (*BI & Data Analyst*) | Giai đoạn D (Câu 2 đến Câu 10), thiết kế 8 biểu đồ chuẩn kỹ thuật, bản nháp 6 Insight, Phần 3 Báo cáo | Cách tính mẫu số 9 câu nghiệp vụ, phân tích mùa vụ và chính sách giá |
+| **Trần Thế Tùng** | 11258756 | Kỹ sư Làm sạch Dữ liệu (*Data Cleaning Specialist*) | Giai đoạn A (Khảo sát 24 cột, tìm 12 nhóm vấn đề), Giai đoạn B1–B5, Phần 2 Báo cáo | Quy tắc xử lý ký hiệu rác B3, chuẩn hóa nhãn phân loại B4, định dạng ngày tháng B5 |
+| **Tạ Minh Quân** | 11257141 | Quản trị CSDL & Kiểm soát Chất lượng (*QA & Data Architect*) | Giai đoạn B6–B8, Giai đoạn C1–C4, Câu 1 (So sánh Before/After), xuất 5 tệp cốt lõi, kiểm thử tự động, README.md, Phần 1 & 5 Báo cáo | Chiến lược đồng thuận khi gộp reservation_id, cấu trúc row_lineage.csv, công thức mẫu số cancel_rate_pct |
+| **Nguyễn Đình Phan Anh** | 11250492 | Chuyên viên Phân tích & Trực quan hóa (*BI & Data Analyst*) | Giai đoạn D (Câu 2 đến Câu 10), thiết kế 8 biểu đồ chuẩn kỹ thuật, bản nháp 6 Insight, Phần 3 Báo cáo | Cách tính mẫu số 9 câu nghiệp vụ, phân tích mùa vụ và chính sách giá |
 
 ---
 
@@ -78,4 +78,4 @@ Bộ dữ liệu mô phỏng `airline_bookings_dirty.csv` gồm **10.325 dòng �
 - [x] `outputs/tables/a_missing_survey.csv` (Khảo sát ô thiếu 24 cột)
 - [x] `outputs/tables/a_issue_catalog.csv` (12 nhóm vấn đề dữ liệu)
 - [x] `outputs/tables/q01_before_after.csv` (So sánh chất lượng Before/After Câu 1)
-- [ ] *Giai đoạn D (Câu 2–10) & 8 biểu đồ:* Thành viên 3 đang tiến hành
+- [x] *Giai đoạn D (Câu 2–10) & 8 biểu đồ:* Thành viên 3 đang tiến hành
