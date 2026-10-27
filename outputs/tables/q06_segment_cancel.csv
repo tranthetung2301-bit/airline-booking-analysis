@@ -1,0 +1,8 @@
+﻿market_segment,n_reservations,share_pct,n_cancelled,n_known,cancel_rate_pct,small_sample
+Online OTA,3906,39.17,1151,3906,29.47,False
+Group,579,5.81,161,579,27.81,False
+Offline Agent,1596,16.0,440,1596,27.57,False
+Direct,1834,18.39,499,1834,27.21,False
+Loyalty,417,4.18,111,417,26.62,False
+Package Tour,717,7.19,174,717,24.27,False
+Corporate,923,9.26,198,923,21.45,False
