@@ -78,4 +78,6 @@ Bộ dữ liệu mô phỏng `airline_bookings_dirty.csv` gồm **10.325 dòng �
 - [x] `outputs/tables/a_missing_survey.csv` (Khảo sát ô thiếu 24 cột)
 - [x] `outputs/tables/a_issue_catalog.csv` (12 nhóm vấn đề dữ liệu)
 - [x] `outputs/tables/q01_before_after.csv` (So sánh chất lượng Before/After Câu 1)
-- [x] *Giai đoạn D (Câu 2–10) & 8 biểu đồ:* Thành viên 3 đang tiến hành
+- [x] *Giai đoạn D (Câu 2–10) & 8 biểu đồ:* Hoàn thành 100% (11 bảng số liệu và 8 biểu đồ chuẩn kỹ thuật)
+- [x] `Bao_cao_Hang_khong.pdf` (Báo cáo PDF chính thức hoàn chỉnh)
+- [x] `TONG_HOP_YEU_CAU_DE_BAI.md` (Bảng tổng hợp toàn bộ yêu cầu đề bài & kết quả)

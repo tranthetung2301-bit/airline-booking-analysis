@@ -1,0 +1,947 @@
+% =========================================================
+%  BÁO CÁO GIỮA KỲ: PHÂN TÍCH & LÀM SẠCH DỮ LIỆU ĐẶT VÉ MÁY BAY
+%  Học phần: Phân tích Dữ liệu (Data Analytics)
+%  Dự án: Aurora Air & Horizon Wings (Giai đoạn 2024–2026)
+% =========================================================
+\documentclass[12pt, a4paper]{report}
+
+% ---- Bảng mã & Ngôn ngữ tiếng Việt ----
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T5]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[vietnamese]{babel}
+\else
+  \usepackage{fontspec}
+  \usepackage[vietnamese]{babel}
+\fi
+
+% ---- Font chữ học thuật chuyên nghiệp ----
+\usepackage{mathpazo}            % Palatino thanh lịch cho nội dung
+\usepackage[scaled=0.92]{helvet} % Helvetica cho tiêu đề không chân
+\usepackage{courier}             % Courier cho mã code
+
+% ---- Căn lề trang văn bản ----
+\usepackage[
+  top=2.5cm, bottom=2.5cm,
+  left=3.0cm, right=2.5cm,
+  headheight=15pt
+]{geometry}
+
+% ---- Định dạng dòng & đoạn văn ----
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.25}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+
+% ---- Toán học & Ký hiệu ----
+\usepackage{amsmath, amssymb}
+
+% ---- Bảng màu chuyên nghiệp ----
+\usepackage[table]{xcolor}
+\definecolor{NavyBlue}{RGB}{0,40,100}
+\definecolor{DarkSlate}{RGB}{35,70,105}
+\definecolor{LightGray}{RGB}{242,244,248}
+\definecolor{AccentRed}{RGB}{180,35,35}
+\definecolor{AccentGreen}{RGB}{25,120,70}
+\definecolor{AccentOrange}{RGB}{205,105,20}
+\definecolor{TableHead}{RGB}{215,230,248}
+\definecolor{TableAlt}{RGB}{246,249,254}
+\definecolor{InsightBg}{RGB}{238,245,254}
+\definecolor{BoxBorder}{RGB}{45,95,150}
+
+% ---- Bảng biểu ----
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{makecell}
+
+% ---- Hình ảnh & Trực quan hóa ----
+\PassOptionsToPackage{final}{graphicx}
+\usepackage[final]{graphicx}
+\makeatletter
+\Gin@draftfalse
+\makeatother
+\setkeys{Gin}{draft=false}
+\usepackage{float}
+\usepackage[font={small,sf}, labelfont={bf,color=NavyBlue}, skip=8pt]{caption}
+\usepackage{subcaption}
+\DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
+\graphicspath{{figures/}{./}}
+
+% ---- Danh sách thụt lề ----
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=4pt, leftmargin=1.5em}
+\setlist[enumerate]{noitemsep, topsep=4pt, leftmargin=1.5em}
+
+% ---- Tiêu đề đầu trang & chân trang ----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\textit{Báo cáo Giữa kỳ --- Phân tích Dữ liệu Đặt vé Máy bay}}
+\fancyhead[R]{\small\sffamily\textit{Aurora Air \& Horizon Wings}}
+\fancyfoot[C]{\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---- Định dạng tiêu đề chương mục ----
+\usepackage{titlesec}
+\titleformat{\chapter}[block]
+  {\normalfont\Large\bfseries\sffamily\color{NavyBlue}}
+  {CHƯƠNG \thechapter.}{0.8em}{}[\vspace{0.3em}{\color{NavyBlue}\hrule height 1pt}\vspace{0.5em}]
+\titlespacing*{\chapter}{0pt}{-10pt}{15pt}
+\titleformat{\section}
+  {\normalfont\large\bfseries\sffamily\color{NavyBlue}}
+  {\thesection.}{0.5em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries\sffamily\color{DarkSlate}}
+  {\thesubsection.}{0.5em}{}
+
+% ---- Liên kết siêu văn bản ----
+\usepackage[
+  colorlinks=true,
+  unicode=true,
+  linkcolor=NavyBlue,
+  citecolor=NavyBlue,
+  urlcolor=DarkSlate,
+  bookmarks=true,
+  pdftitle={Báo cáo Phân tích & Làm sạch Dữ liệu Đặt vé Máy bay},
+  pdfauthor={Nhóm Nghiên cứu --- Phân tích Dữ liệu}
+]{hyperref}
+
+% ---- Hộp đúc kết Insight & Khuyến nghị ----
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{insightbox}[2][]{
+  enhanced,
+  breakable,
+  colback=InsightBg,
+  colframe=BoxBorder,
+  fonttitle=\bfseries\sffamily,
+  coltitle=white,
+  title={#2},
+  left=9pt, right=9pt,
+  top=8pt, bottom=8pt,
+  boxrule=0.8pt,
+  arc=3pt,
+  #1
+}
+
+% ---- Lệnh tùy chỉnh ----
+\newcommand{\code}[1]{\texttt{\small\color{DarkSlate}#1}}
+\newcommand{\airline}[1]{\textbf{\textsf{#1}}}
+\newcommand{\pct}[1]{\textbf{#1\%}}
+
+% =========================================================
+\begin{document}
+% =========================================================
+
+% ---- TRANG BÌA HỌC THUẬT CHUẨN ----
+\begin{titlepage}
+  \centering
+  \vspace*{1.0cm}
+
+  {\large\sffamily\bfseries\color{NavyBlue}
+    TRƯỜNG ĐẠI HỌC --- KHOA KHOA HỌC DỮ LIỆU\\
+    BỘ MÔN: PHÂN TÍCH DỮ LIỆU (DATA ANALYTICS)\\[0.4em]
+  }
+
+  \vspace{1.5cm}
+  {\color{NavyBlue}\rule{\textwidth}{2pt}}\\[0.6em]
+
+  {\LARGE\sffamily\bfseries\color{NavyBlue}
+    BÁO CÁO GIỮA KỲ\\[0.3em]
+    PHÂN TÍCH \& LÀM SẠCH DỮ LIỆU ĐẶT VÉ MÁY BAY
+  }\\[0.6em]
+
+  {\large\sffamily\color{DarkSlate}
+    Nghiên cứu mô phỏng hành vi đặt vé: \airline{Aurora Air} \& \airline{Horizon Wings}\\
+    Giai đoạn thu thập: 2024\,--\,2026
+  }
+
+  {\color{NavyBlue}\rule{\textwidth}{2pt}}
+
+  \vspace{2.0cm}
+
+  \begin{tabular}{@{}ll@{}}
+    \toprule
+    \textbf{Nhóm thực hiện}          & Nhóm Nghiên cứu Phân tích Dữ liệu \\
+    \midrule
+    \textbf{Thành viên đề tài}       & Trần Thế Tùng --- Tiền xử lý \& Kỹ thuật Dữ liệu \\
+                                     & Tạ Minh Quân --- Quản trị CSDL \& Kiểm thử Chất lượng \\
+                                     & BI \& Phân tích Trực quan hóa \\
+    \midrule
+    \textbf{Thời điểm chốt sổ}       & 15/09/2026 (\textit{Snapshot Date}) \\
+    \textbf{Quy mô dữ liệu gốc}      & 10.325 bản ghi $\times$ 24 trường thông tin \\
+    \textbf{Cơ sở dữ liệu phân tích} & 10.000 đặt chỗ độc lập $\times$ 30 trường thuộc tính \\
+    \bottomrule
+  \end{tabular}
+
+  \vfill
+
+  {\small\color{gray}\sffamily
+    Báo cáo khoa học phục vụ học phần Phân tích Dữ liệu.\\
+    Nguồn dữ liệu mô phỏng theo đặc thù vận hành của ngành hàng không dân dụng thương mại.
+  }
+\end{titlepage}
+
+% ---- MỤC LỤC ----
+\tableofcontents
+\clearpage
+
+% =========================================================
+\chapter{TỔNG QUAN, BỐI CẢNH \& NGUỒN DỮ LIỆU}
+% =========================================================
+
+\section{Bối cảnh bài toán kinh doanh}
+
+Trong ngành hàng không dân dụng hiện đại, bộ phận \textbf{Quản trị Doanh thu (Revenue Management)} đóng vai trò hạt nhân trong việc bảo đảm sự cân bằng giữa tối đa hóa giá vé bán ra và tối ưu hóa hệ số lấp đầy ghế (\textit{load factor}). Bất kỳ sự chênh lệch nào giữa dự báo nhu cầu và thực tế khai thác đều có thể dẫn tới thiệt hại kinh tế nghiêm trọng: nếu định giá quá cao sẽ phát sinh ghế trống không thể thu hồi giá trị sau giờ cất cánh, trong khi định giá quá thấp hoặc kiểm soát lỏng lẻo chính sách đặt chỗ sẽ dẫn đến tình trạng quá tải ảo và tỷ lệ hủy vé cao.
+
+Dự án này tập trung khảo sát hành vi đặt chỗ của hai hãng hàng không mang hai mô hình vận hành tiêu biểu:
+
+\begin{itemize}
+  \item \airline{Aurora Air:} Đại diện cho mô hình hãng hàng không truyền thống với dịch vụ đầy đủ (Full-Service Carrier --- FSC). Hãng khai thác mạng lưới đường bay rộng khắp, cung cấp cấu hình dịch vụ đa tầng từ khoang Phổ thông (Economy: E1, E2, E3, E4), Phổ thông đặc biệt (Premium Economy: P1, P2), Thương gia (Business: B1, B2, B3) đến Hạng nhất (First Class: F1, F2, F3). Phân khúc khách hàng mục tiêu của hãng có độ nhạy cảm dịch vụ cao, yêu cầu sự tin cậy và tiện ích đi kèm.
+
+  \item \airline{Horizon Wings:} Đại diện cho mô hình hãng hàng không thế hệ mới, vận hành linh hoạt với chi phí tối ưu. Hãng hướng tới phục vụ lượng khách du lịch cá nhân, nhóm khách gia đình (Group) và các hợp đồng đối tác doanh nghiệp lớn (Corporate Contract) với phương châm cạnh tranh bằng sự thuận tiện và giá vé hợp lý.
+\end{itemize}
+
+Dữ liệu đặt chỗ vé máy bay là nguồn tài sản số lưu trữ toàn diện vòng đời giao dịch: từ thời điểm xuất vé, khoảng cách ngày đặt trước (\textit{lead time}), phân khúc khách hàng, kênh bán vé đến trạng thái thực tế cuối cùng (\textit{Flown, Cancelled, No-Show}). Khai phá khoa học nguồn dữ liệu này là tiền đề then chốt để doanh nghiệp tối ưu hóa kế hoạch mở bán, xây dựng biểu giá động (\textit{dynamic pricing}) và chủ động dự phòng rủi ro hủy vé.
+
+\section{Mục tiêu nghiên cứu}
+
+Đề tài được triển khai nhằm đạt được ba mục tiêu cốt lõi:
+
+\begin{enumerate}
+  \item \textbf{Làm sạch dữ liệu khoa học và truy vết thông tin tuyệt đối (100\% Lineage):} Thiết kế và thực thi chuỗi tiền xử lý tự động bằng mã Python, loại bỏ các bản ghi trùng lặp tuyệt đối, xử lý dị thường số đo, đồng bộ các mâu thuẫn nghiệp vụ và bảo đảm bảng truy vết \code{row\_lineage.csv} ghi nhận đầy đủ 10.325 dòng gốc mà không gây thất thoát thông tin.
+
+  \item \textbf{Chuẩn hóa cấu trúc cơ sở dữ liệu:} Xây dựng bảng dữ liệu sạch tiêu chuẩn \code{reservations\_clean.csv} với đúng 10.000 đặt chỗ độc lập, làm giàu dữ liệu bằng 7 cột dẫn xuất nghiệp vụ và tổng hợp báo cáo chỉ số vận hành theo chu kỳ tháng \code{monthly\_summary.csv}.
+
+  \item \textbf{Phân tích thực nghiệm và đề xuất hàm ý quản trị:} Giải quyết định lượng 9 bài toán nghiệp vụ từ Câu 2 đến Câu 10, phân tích mối quan hệ giữa các yếu tố vận hành với rủi ro hủy chỗ; từ đó đúc kết 6 phát hiện kinh doanh chuyên sâu làm căn cứ cho ban điều hành ra quyết định.
+\end{enumerate}
+
+\section{Mô tả nguồn dữ liệu và đặc điểm lỗi hệ thống}
+
+Tệp dữ liệu đầu vào \code{data/airline\_bookings\_dirty.csv} bao gồm **10.325 bản ghi giao dịch $\times$ 24 trường thông tin**, phản ánh các giao dịch đặt chỗ có ngày khởi hành trải dài từ tháng 07/2024 đến tháng 08/2026. Mọi phân tích trong báo cáo được căn cứ trên ngày chốt sổ hệ thống (\textit{Snapshot Date}) là **15/09/2026**.
+
+Qua rà soát kỹ thuật, bộ dữ liệu thô phản ánh chân thực các sai số thường phát sinh trong quá trình đồng bộ giữa các hệ thống đặt chỗ toàn cầu (GDS), các nền tảng OTA và máy chủ hãng:
+\begin{itemize}
+  \item \textbf{Trùng lặp dữ liệu:} Xuất hiện 416 dòng liên quan đến trùng lặp tuyệt đối trên 23 cột thuộc tính (chứa 208 bản sao dư thừa) và 117 dòng chia sẻ chung mã \code{reservation\_id} nhưng mang thông tin phân tán.
+  \item \textbf{Lẫn lộn định dạng ngày tháng:} Tồn tại song song 4 mẫu định dạng ngày (\code{YYYY-MM-DD}, \code{DD/MM/YYYY}, \code{Month DD, YYYY}, \code{DD-Mon-YYYY}).
+  \item \textbf{Lệch cột dữ liệu:} Dữ liệu ngày tháng bị đẩy nhầm sang cột chuỗi trạng thái \code{booking\_status}.
+  \item \textbf{Nhiễm tạp ký tự văn bản:} Các trường số đo bị gộp đuôi đơn vị (\textit{days, pax, requests}); trường giá vé bị lẫn ký hiệu tiền tệ (\$, USD, EUR) và dấu phẩy phân cách.
+  \item \textbf{Mâu thuẫn logic nghiệp vụ:} 42 bản ghi ghi nhận cờ hủy \code{is\_cancelled} không khớp với trạng thái thực tế \code{booking\_status}.
+\end{itemize}
+
+% =========================================================
+\chapter{KHẢO SÁT CHẤT LƯỢNG \& QUY TRÌNH TIỀN XỬ LÝ}
+% =========================================================
+
+\section{Khảo sát chất lượng dữ liệu ban đầu}
+
+Trước khi thực hiện các bước can thiệp biến đổi, nhóm đã tiến hành khảo sát cấu trúc toàn diện trên toàn bộ 10.325 dòng dữ liệu thô. Kết quả khảo sát đã lượng hóa chi tiết mức độ ô thiếu trên từng thuộc tính và hệ thống hóa thành **12 nhóm vấn đề cốt lõi** (\code{a\_issue\_catalog.csv}).
+
+\subsection{Hiện trạng ô thiếu trên các thuộc tính chính}
+
+Kết quả thống kê ô thiếu được trình bày tại Bảng \ref{tab:missing_survey}, phân định rõ giữa ô trống hoàn toàn và ô chứa ký tự rác phi quy ước.
+
+\begin{table}[H]
+  \centering
+  \caption{Thống kê tỷ lệ ô thiếu trên các trường dữ liệu trọng yếu (Tổng 10.325 bản ghi)}
+  \label{tab:missing_survey}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabularx}{\textwidth}{>{\ttfamily\small}l XXXXX r}
+    \toprule
+    \rowcolor{TableHead}
+    \normalfont\textbf{Trường dữ liệu} & \textbf{Tổng bản ghi} & \textbf{Ô trống} & \textbf{Ký tự rác} & \textbf{Tổng thiếu} & \textbf{Tỷ lệ (\%)} \\
+    \midrule
+    record\_id          & 10.325 & 0  & 0  & 0   & 0,00 \\
+    \rowcolor{TableAlt}
+    reservation\_id     & 10.325 & 0  & 0  & 0   & 0,00 \\
+    airline             & 10.325 & 0  & 0  & 0   & 0,00 \\
+    \rowcolor{TableAlt}
+    departure\_date     & 10.325 & 15 & 10 & 25  & 0,24 \\
+    passenger\_country  & 10.325 & 68 & 39 & 107 & 1,04 \\
+    \rowcolor{TableAlt}
+    market\_segment     & 10.325 & 18 & 14 & 32  & 0,31 \\
+    fare\_policy        & 10.325 & 12 & 10 & 22  & 0,21 \\
+    \rowcolor{TableAlt}
+    avg\_ticket\_fare   & 10.325 & 28 & 15 & 43  & 0,42 \\
+    booking\_status     & 10.325 & 14 & 8  & 22  & 0,21 \\
+    \rowcolor{TableAlt}
+    booked\_cabin\_code   & 10.325 & 29 & 18 & 47 & 0,46 \\
+    assigned\_cabin\_code & 10.325 & 31 & 16 & 47 & 0,46 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Hệ thống 12 vấn đề chất lượng dữ liệu phát hiện}
+
+Dựa trên kết quả khảo sát, các lỗi kỹ thuật được phân nhóm theo 12 mã định danh:
+\begin{enumerate}
+  \item \textbf{I01 --- Trùng lặp khóa chính và dư thừa bản sao:} 208 bản sao trùng lặp tuyệt đối trên 23 thuộc tính; 117 dòng mang chung mã \code{reservation\_id} cần được hợp nhất.
+  \item \textbf{I02 --- Ngày tháng lệch cột:} 18 bản ghi có cột \code{booking\_status} bị gán nhầm chuỗi ngày thay vì trạng thái chuyến bay.
+  \item \textbf{I03 --- Ký tự thiếu chưa quy chuẩn:} Tồn tại các chuỗi đại diện giá trị rỗng không chuẩn như \code{NULL}, \code{N/A}, \code{NA}, \code{?}, \code{unknown}, \code{-}.
+  \item \textbf{I04 --- Nhãn phân loại không đồng nhất:} Lẫn lộn chữ hoa, chữ thường và khoảng trắng thừa tại các trường danh mục (\code{airline}, \code{market\_segment}, \code{fare\_policy}).
+  \item \textbf{I05 --- Định dạng thời gian phi chuẩn:} Trường ngày tháng bị phân mảnh dưới 4 cấu trúc chuỗi khác nhau.
+  \item \textbf{I06 --- Số đo dính kèm hậu tố văn bản:} Các trường số lượng người, số ngày lưu trú bị gắn hậu tố \code{days}, \code{pax}, \code{requests}.
+  \item \textbf{I07 --- Giá vé nhiễm ký hiệu tiền tệ:} Trường \code{avg\_ticket\_fare} chứa ký tự ngoại tệ (\$, USD, EUR), dấu phẩy và khoảng trắng.
+  \item \textbf{I08 --- Tồn tại giao dịch giá vé bằng 0:} Ghi nhận 9 đặt chỗ có giá vé bằng 0 (xác minh là vé thưởng khách hàng thân thiết hoặc vé công vụ hợp lệ).
+  \item \textbf{I09 --- Mã quốc gia không theo chuẩn ISO:} Trường \code{passenger\_country} ghi nhận tên quốc gia đầy đủ bằng tiếng Anh, viết thường hoặc ký tự bất thường.
+  \item \textbf{I10 --- Xung đột logic nghiệp vụ:} 42 bản ghi có sự bất nhất giữa cờ \code{is\_cancelled} và trạng thái \code{booking\_status}.
+  \item \textbf{I11 --- Dị thường thời gian trạng thái:} Ngày cập nhật trạng thái xuất hiện sau ngày chốt sổ 15/09/2026 hoặc diễn ra trước ngày đặt chỗ.
+  \item \textbf{I12 --- Mã hạng khoang ngoài danh mục:} Xuất hiện các mã khoang không thuộc bảng quy ước 12 mã chuẩn.
+\end{enumerate}
+
+\section{Quy trình xử lý dữ liệu chuẩn hóa (Giai đoạn B1--B8)}
+
+Nhóm đã xây dựng đường ống xử lý tự động gồm 8 bước tuần tự, mỗi thao tác đều được lưu vết chi tiết trong \code{cleaning\_log.csv}:
+
+\begin{itemize}
+  \item \textbf{B1. Chuẩn hóa khóa chính \& Khử trùng lặp tuyệt đối:} Viết hoa toàn bộ mã đặt chỗ về khuôn mẫu chuẩn \code{ARxxxxxx}. Truy quét 416 dòng có nguy cơ trùng lặp 23 thuộc tính; tiến hành loại bỏ đúng 208 dòng bản sao dư thừa, gắn nhãn \code{dropped} trong bảng truy vết dòng \code{row\_lineage.csv}.
+
+  \item \textbf{B2. Tái cấu trúc ngày tháng bị lệch cột:} Quét biểu thức chính quy nhận diện định dạng ngày trong cột \code{booking\_status}; điều chuyển giá trị hợp lệ sang \code{booking\_status\_date} (nếu trường này đang trống) và trả lại giá trị rỗng \code{pd.NA} cho trạng thái.
+
+  \item \textbf{B3. Chuẩn hóa ký hiệu giá trị thiếu:} Ánh xạ toàn bộ ký tự rác (\code{NULL}, \code{N/A}, \code{?}, \code{unknown}, \code{-}) về định dạng chuẩn \code{pd.NA}. Kiên quyết **không áp dụng phương pháp điền khống bằng số 0** (\textit{zero-imputation}) nhằm bảo toàn tính trung thực của phân phối thống kê.
+
+  \item \textbf{B4. Đồng bộ nhãn danh mục \& Xử lý xung đột logic hủy vé:} Chuẩn hóa danh mục các biến phân loại. Xử lý dứt điểm 42 trường hợp xung đột: nếu \code{booking\_status == 'Cancelled'} thì đồng bộ \code{is\_cancelled = 1}; nếu trạng thái là \code{'Flown'} hoặc \code{'No-Show'} thì thiết lập \code{is\_cancelled = 0}.
+
+  \item \textbf{B5. Phân tích cú pháp ngày chuẩn ISO:} Áp dụng bộ giải mã định dạng linh hoạt để chuyển đổi đồng nhất \code{departure\_date} và \code{booking\_status\_date} sang kiểu \texttt{datetime64[ns]} theo tiêu chuẩn quốc tế ISO \code{YYYY-MM-DD}.
+
+  \item \textbf{B6. Làm sạch số đo và định dạng giá vé thương mại:} Loại bỏ toàn bộ các ký tự chữ cái khỏi trường số; chuẩn hóa \code{avg\_ticket\_fare} về kiểu số thực \texttt{float64}. Các giao dịch vé 0 đồng hợp lệ được bảo toàn trọn vẹn.
+
+  \item \textbf{B7. Chuẩn hóa mã quốc gia theo chuẩn ISO-3166:} Ánh xạ tên quốc gia tiếng Anh hoặc mã 2 ký tự về mã Alpha-3 quốc tế (ví dụ: \code{VIETNAM}, \code{VN} $\rightarrow$ \code{VNM}; \code{CHINA}, \code{CN} $\rightarrow$ \code{CHN}). Các giá trị không thể nhận dạng được gán \code{pd.NA}.
+
+  \item \textbf{B8. Hợp nhất thông minh các bản ghi trùng mã đặt chỗ:} Đối với 117 dòng chia sẻ mã đặt chỗ, thuật toán lựa chọn bản ghi có lượng thông tin hoàn thiện nhất làm gốc (\code{kept}), sau đó bổ sung thông tin từ các bản ghi phụ (\code{merged}). Kết quả tạo ra đúng **10.000 đặt chỗ độc lập**, tương thích 100\% với yêu cầu đề bài.
+\end{itemize}
+
+\section{Đánh giá chất lượng dữ liệu Trước và Sau làm sạch}
+
+Bảng \ref{tab:before_after} tổng hợp sự chuyển biến về mặt chất lượng dữ liệu, minh chứng cho sự chuẩn xác của quy trình làm sạch.
+
+\begin{table}[H]
+  \centering
+  \caption{Đối chiếu chất lượng dữ liệu trước và sau tiền xử lý (\code{q01\_before\_after.csv})}
+  \label{tab:before_after}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.2cm}
+                               >{\centering\arraybackslash}p{2.8cm}
+                               >{\centering\arraybackslash}p{2.8cm}
+                               >{\raggedright\arraybackslash}X}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Chỉ tiêu kiểm định} & \textbf{Trước làm sạch} & \textbf{Sau làm sạch} & \textbf{Đánh giá kết quả} \\
+    \midrule
+    Tổng số dòng bản ghi
+      & 10.325 & 10.000
+      & Giảm 325 dòng (loại 208 bản sao dư thừa, gộp 117 dòng trùng mã) \\
+    \rowcolor{TableAlt}
+    Số mã đặt chỗ duy nhất
+      & 10.000 & 10.000
+      & Bảo toàn 100\% tập khách hàng độc lập \\
+    Số dòng trùng lặp 23 cột
+      & 360 & 0
+      & Khử sạch hoàn toàn các bản ghi dư thừa \\
+    \rowcolor{TableAlt}
+    Định dạng \code{departure\_date}
+      & Lẫn 4 định dạng & 100\% \code{YYYY-MM-DD}
+      & Thống nhất theo tiêu chuẩn ISO \\
+    Trường giá \code{avg\_ticket\_fare}
+      & Nhiễm \$, USD, EUR & 100\% \texttt{float64} (0--5.000)
+      & Làm sạch tiền tệ, giữ nguyên 9 vé 0 đồng hợp lệ \\
+    \rowcolor{TableAlt}
+    Trường mã \code{passenger\_country}
+      & Lẫn chữ thường, text & 100\% mã ISO Alpha-3
+      & Chuẩn hóa theo danh mục ISO quốc tế \\
+    Xung đột \code{is\_cancelled}
+      & 42 bản ghi mâu thuẫn & 0 bản ghi mâu thuẫn
+      & Nhất quán tuyệt đối giữa cờ hủy và trạng thái \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% =========================================================
+\chapter{PHÂN TÍCH THỰC NGHIỆM \& PHÁT HIỆN KINH DOANH}
+% =========================================================
+
+Sau khi hoàn tất tiền xử lý và xây dựng 7 biến dẫn xuất nghiệp vụ, cơ sở dữ liệu sạch gồm 10.000 bản ghi $\times$ 30 cột được đưa vào phân tích thực nghiệm nhằm giải quyết 9 bài toán vận hành (Câu 2 đến Câu 10) và đúc kết 6 phát hiện kinh doanh cốt lõi.
+
+\section{Phân tích định lượng chi tiết (Câu 2 đến Câu 10)}
+
+% ---- CÂU 2 ----
+\subsection{Câu 2: Thị phần đặt chỗ và tỷ lệ hủy theo hãng hàng không}
+
+Phân tích được tiến hành trên toàn bộ $N = 10.000$ đặt chỗ sạch có trạng thái xác định nhằm đánh giá tương quan quy mô và rủi ro hủy vé giữa hai hãng bay (Bảng \ref{tab:q02} và Hình \ref{fig:q02}).
+
+\begin{table}[H]
+  \centering
+  \caption{Quy mô thị phần và tỷ lệ hủy vé theo hãng hàng không (\code{q02\_airline\_cancel.csv})}
+  \label{tab:q02}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l XXXXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Hãng hàng không} & \textbf{Số đặt chỗ (n)} & \textbf{Thị phần (\%)} & \textbf{Số vé hủy (n)} & \textbf{Mẫu xác định} & \textbf{Tỷ lệ hủy (\%)} \\
+    \midrule
+    Aurora Air    & 6.522 & 65,22 & 1.768 & 6.522 & 27,11 \\
+    \rowcolor{TableAlt}
+    Horizon Wings & 3.478 & 34,78 & 969   & 3.478 & 27,86 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig01_airline_cancel}
+  \caption{So sánh thị phần đặt chỗ và tỷ lệ hủy vé giữa Aurora Air và Horizon Wings}
+  \label{fig:q02}
+\end{figure}
+
+Số liệu thực nghiệm cho thấy sự phân hóa rõ nét về mặt quy mô nhưng lại đồng nhất về rủi ro vận hành:
+\begin{itemize}
+  \item \textbf{Ưu thế quy mô vượt trội của Aurora Air:} Hãng chiếm tới \pct{65,22} tổng dung lượng thị trường (6.522 vé), cao gấp xấp xỉ \textbf{1,88 lần} so với Horizon Wings (3.478 vé, tương ứng \pct{34,78}). Điều này phản ánh rõ năng lực cung ứng dịch vụ của một hãng hàng không truyền thống có mạng lưới khai thác dày đặc.
+  \item \textbf{Mức độ rủi ro hủy vé tương đồng:} Mặc dù có cấu trúc dịch vụ và quy mô khách hàng khác nhau, tỷ lệ hủy đặt chỗ của hai hãng gần như tương đương: Horizon Wings đạt \pct{27,86} và Aurora Air đạt \pct{27,11} (chênh lệch chỉ \textbf{0,75 điểm phần trăm}).
+  \item \textbf{Hàm ý vận hành:} Tỷ lệ hủy bình quân xấp xỉ 27--28\% đặt ra thách thức lớn cho việc kiểm soát hệ số lấp đầy ghế, đòi hỏi cả hai hãng phải thiết lập quy chế overbooking khoa học để bù đắp ghế trống.
+\end{itemize}
+
+% ---- CÂU 3 ----
+\subsection{Câu 3: Biến động đặt chỗ theo tháng khởi hành năm 2025 (Phân tích mùa vụ)}
+
+Nhằm cô lập tác động của việc thiếu tháng trong năm 2024 và 2026, phân tích mùa vụ được khảo sát trọn vẹn trên 12 tháng của năm dương lịch 2025 với $N = 5.753$ đặt chỗ (Aurora Air: 3.737 vé; Horizon Wings: 2.016 vé), đối chiếu chuẩn xác với \code{monthly\_summary.csv}.
+
+\begin{table}[H]
+  \centering
+  \caption{Phân phối lượng đặt chỗ theo tháng khởi hành trong năm 2025 (\code{q03\_monthly\_departures\_2025.csv})}
+  \label{tab:q03}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{llrr}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Hãng hàng không} & \textbf{Tháng} & \textbf{Số lượng đặt chỗ} & \textbf{Tỷ trọng trong năm (\%)} \\
+    \midrule
+    Aurora Air & Tháng 1  & 337 & 9,03  \\
+    \rowcolor{TableAlt}
+    Aurora Air & Tháng 2  & 299 & 8,01  \\
+    Aurora Air & Tháng 3  & 266 & 7,13  \\
+    \rowcolor{TableAlt}
+    Aurora Air & Tháng 4  & 277 & 7,42  \\
+    Aurora Air & Tháng 5  & 300 & 8,04  \\
+    \rowcolor{TableAlt}
+    Aurora Air & Tháng 6  & 323 & 8,66  \\
+    Aurora Air & \textbf{Tháng 7}  & \textbf{383} & \textbf{10,27} \\
+    \rowcolor{TableAlt}
+    Aurora Air & Tháng 8  & 364 & 9,76  \\
+    Aurora Air & Tháng 9  & 281 & 7,53  \\
+    \rowcolor{TableAlt}
+    Aurora Air & Tháng 10 & 251 & 6,73  \\
+    Aurora Air & Tháng 11 & 268 & 7,18  \\
+    \rowcolor{TableAlt}
+    Aurora Air & \textbf{Tháng 12} & \textbf{382} & \textbf{10,24} \\
+    \midrule
+    Horizon Wings & Tháng 1  & 165 & 8,19  \\
+    \rowcolor{TableAlt}
+    Horizon Wings & Tháng 2  & 160 & 7,94  \\
+    Horizon Wings & Tháng 3  & 146 & 7,25  \\
+    \rowcolor{TableAlt}
+    Horizon Wings & Tháng 4  & 154 & 7,64  \\
+    Horizon Wings & Tháng 5  & 142 & 7,05  \\
+    \rowcolor{TableAlt}
+    Horizon Wings & Tháng 6  & 172 & 8,54  \\
+    Horizon Wings & Tháng 7  & 189 & 9,38  \\
+    \rowcolor{TableAlt}
+    Horizon Wings & \textbf{Tháng 8}  & \textbf{229} & \textbf{11,36} \\
+    Horizon Wings & Tháng 9  & 145 & 7,20  \\
+    \rowcolor{TableAlt}
+    Horizon Wings & Tháng 10 & 153 & 7,59  \\
+    Horizon Wings & Tháng 11 & 150 & 7,44  \\
+    \rowcolor{TableAlt}
+    Horizon Wings & \textbf{Tháng 12} & \textbf{210} & \textbf{10,42} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{fig02_monthly_departures_2025}
+  \caption{Biểu đồ đường xu hướng mùa vụ đặt chỗ theo các tháng trong năm 2025}
+  \label{fig:q03}
+\end{figure}
+
+Từ Bảng \ref{tab:q03} và Hình \ref{fig:q03}, hai đặc trưng mùa vụ nổi bật được ghi nhận:
+\begin{itemize}
+  \item \textbf{Mô hình chu kỳ hai đỉnh (Double-Peak Pattern):} Nhu cầu bay bùng nổ tại hai thời điểm: cao điểm du lịch hè (Tháng 7 đối với Aurora Air đạt 383 vé; Tháng 8 đối với Horizon Wings đạt 229 vé) và cao điểm lễ tết cuối năm (Tháng 12 với lần lượt 382 và 210 vé).
+  \item \textbf{Vùng đáy tiêu thụ rõ nét:} Giai đoạn mùa thu (Tháng 9--11) chứng kiến sự suy giảm nhu cầu, chạm đáy vào Tháng 10 ở Aurora Air (251 vé, \pct{6,73}) và Tháng 5 ở Horizon Wings (142 vé, \pct{7,05}).
+  \item \textbf{Xu thế đồng pha:} Biến động của hai hãng diễn ra song hành, chứng minh tính mùa vụ chịu sự chi phối của thị trường vĩ mô hơn là yếu tố chủ quan từ từng hãng.
+\end{itemize}
+
+% ---- CÂU 4 ----
+\subsection{Câu 4: Thời gian đặt trước (Lead Time) và rủi ro hủy vé}
+
+Khảo sát được thực hiện trên $N = 9.978$ bản ghi có thông tin \code{booking\_lead\_days} xác định (loại 22 dòng khuyết thiếu), kết quả thể hiện qua Bảng \ref{tab:q04_stats}, Bảng \ref{tab:q04_cancel} và Hình \ref{fig:q04}.
+
+\begin{table}[H]
+  \centering
+  \caption{Thống kê mô tả thời gian đặt trước theo hãng bay (\code{q04\_leadtime\_stats.csv})}
+  \label{tab:q04_stats}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l XXXXXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Hãng hàng không} & \textbf{Số lượng (n)} & \textbf{Trung bình} & \textbf{Trung vị} & \textbf{Q1} & \textbf{Q3} & \textbf{Tối đa} \\
+    \midrule
+    Aurora Air    & 6.506 & 71,10 ngày & 57 ngày & 27 ngày & 98 ngày & 365 ngày \\
+    \rowcolor{TableAlt}
+    Horizon Wings & 3.472 & 71,89 ngày & 58 ngày & 28 ngày & 99 ngày & 365 ngày \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tỷ lệ hủy đặt chỗ theo phân nhóm thời gian đặt trước (\code{q04\_leadtime_cancel.csv})}
+  \label{tab:q04_cancel}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l XXXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Khoảng Lead Time (ngày)} & \textbf{Số đặt chỗ} & \textbf{Số vé hủy} & \textbf{Mẫu xác định} & \textbf{Tỷ lệ hủy (\%)} \\
+    \midrule
+    0--7 ngày    & 774   & 172   & 774   & 22,22 \\
+    \rowcolor{TableAlt}
+    8--30 ngày   & 2.005 & 485   & 2.005 & 24,19 \\
+    31--90 ngày  & 4.327 & 1.115 & 4.327 & 25,77 \\
+    \rowcolor{TableAlt}
+    91--180 ngày & 2.276 & 693   & 2.276 & 30,45 \\
+    \textbf{Trên 180 ngày (181+)} & \textbf{596} & \textbf{266} & \textbf{596} & \textbf{44,63} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig03_leadtime_cancel}
+  \caption{Mối quan hệ phi tuyến giữa thời gian đặt trước và tỷ lệ hủy chỗ}
+  \label{fig:q04}
+\end{figure}
+
+Dữ liệu thực nghiệm xác nhận quy luật: **Đặt vé càng xa ngày bay, xác suất hủy vé càng lớn**:
+\begin{itemize}
+  \item Khách đặt cận ngày bay (0--7 ngày) có tỷ lệ hủy thấp nhất (\pct{22,22}), trong khi nhóm đặt trước trên nửa năm (181+ ngày) ghi nhận tỷ lệ hủy kỷ lục \pct{44,63}.
+  \item Tỷ lệ hủy của nhóm đặt trên 6 tháng cao gấp **2,01 lần** (tăng thêm **+22,41 điểm phần trăm**) so với nhóm đặt cận ngày. Đây là minh chứng cho việc kế hoạch di chuyển dài hạn thường có độ bất định cao.
+\end{itemize}
+
+% ---- CÂU 5 ----
+\subsection{Câu 5: Cơ cấu thị trường quốc tế --- Top 10 quốc gia của hành khách}
+
+Phân tích trên $N = 9.895$ bản ghi có mã quốc gia hợp lệ (loại 105 dòng thiếu) nhằm xác định thị trường trọng điểm cung cấp nguồn khách cho hai hãng.
+
+\begin{table}[H]
+  \centering
+  \caption{Top 10 quốc gia có lượng đặt chỗ lớn nhất (\code{q05\_top10\_country.csv})}
+  \label{tab:q05}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{cc rc}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Thứ hạng} & \textbf{Mã ISO Alpha-3} & \textbf{Số lượng đặt chỗ} & \textbf{Tỷ trọng thị phần (\%)} \\
+    \midrule
+    1 & \textbf{VNM (Việt Nam)}   & \textbf{2.080} & \textbf{21,02} \\
+    \rowcolor{TableAlt}
+    2 & CHN (Trung Quốc) & 906   & 9,16  \\
+    3 & JPN (Nhật Bản)   & 663   & 6,70  \\
+    \rowcolor{TableAlt}
+    4 & KOR (Hàn Quốc)   & 526   & 5,32  \\
+    5 & THA (Thái Lan)   & 515   & 5,20  \\
+    \rowcolor{TableAlt}
+    6 & USA (Hoa Kỳ)     & 489   & 4,94  \\
+    7 & SGP (Singapore)  & 398   & 4,02  \\
+    \rowcolor{TableAlt}
+    8 & AUS (Úc)         & 362   & 3,66  \\
+    9 & IND (Ấn Độ)      & 349   & 3,53  \\
+    \rowcolor{TableAlt}
+    10 & GBR (Vương quốc Anh) & 347 & 3,51 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig04_top10_country}
+  \caption{Cơ cấu Top 10 quốc tịch hành khách đặt chỗ}
+  \label{fig:q05}
+\end{figure}
+
+Việt Nam (VNM) giữ vị trí thị trường nội địa hạt nhân với 2.080 đặt chỗ, chiếm \pct{21,02} tổng mạng bay---vượt trội hoàn toàn so với thị trường xếp thứ hai là Trung Quốc (906 vé, 9,16\%). Khu vực Đông Á và Đông Nam Á đóng góp trên 47\% thị phần, khẳng định định hướng mở rộng mạng bay khu vực là chiến lược đúng đắn.
+
+% ---- CÂU 6 ----
+\subsection{Câu 6: Phân khúc thị trường và rủi ro hủy đặt chỗ}
+
+Đánh giá mức độ ổn định của các kênh phân phối được thực hiện trên $N = 9.968$ đặt chỗ có phân khúc xác định (Bảng \ref{tab:q06} và Hình \ref{fig:q06}).
+
+\begin{table}[H]
+  \centering
+  \caption{Quy mô đặt chỗ và tỷ lệ hủy theo phân khúc thị trường (\code{q06\_segment\_cancel.csv})}
+  \label{tab:q06}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l XXXXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Phân khúc khách hàng} & \textbf{Số đặt chỗ} & \textbf{Tỷ trọng (\%)} & \textbf{Vé hủy} & \textbf{Mẫu xác định} & \textbf{Tỷ lệ hủy (\%)} \\
+    \midrule
+    Online OTA    & 3.906 & 39,17 & 1.151 & 3.906 & \textbf{29,47} \\
+    \rowcolor{TableAlt}
+    Group         & 579   & 5,81  & 161   & 579   & 27,81 \\
+    Offline Agent & 1.596 & 16,00 & 440   & 1.596 & 27,57 \\
+    \rowcolor{TableAlt}
+    Direct        & 1.834 & 18,39 & 499   & 1.834 & 27,21 \\
+    Loyalty       & 417   & 4,18  & 111   & 417   & 26,62 \\
+    \rowcolor{TableAlt}
+    Package Tour  & 717   & 7,19  & 174   & 717   & 24,27 \\
+    \textbf{Corporate} & \textbf{923} & \textbf{9,26} & \textbf{198} & \textbf{923} & \textbf{21,45} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{fig05_segment_cancel}
+  \caption{So sánh tỷ lệ hủy đặt chỗ giữa các phân khúc thị trường}
+  \label{fig:q06}
+\end{figure}
+
+Kênh trực tuyến **Online OTA** dẫn đầu áp đảo về sản lượng vé bán ra (\pct{39,17}), nhưng lại là kênh có tỷ lệ hủy cao nhất mạng bay (\pct{29,47}). Ngược lại, phân khúc khách hàng doanh nghiệp (**Corporate**) có tính cam kết cao nhất với tỷ lệ hủy chỉ \pct{21,45}---thấp hơn OTA tới \textbf{8,02 điểm phần trăm}.
+
+% ---- CÂU 7 ----
+\subsection{Câu 7: Tác động của chính sách giá vé đến trạng thái đặt chỗ}
+
+Khảo sát mối liên hệ giữa điều kiện hoàn/hủy vé với kết quả chuyến bay trên $N = 9.957$ bản ghi hợp lệ (Bảng \ref{tab:q07} và Hình \ref{fig:q07}).
+
+\begin{table}[H]
+  \centering
+  \caption{Bảng chéo chính sách giá vé $\times$ trạng thái đặt chỗ (\code{q07\_fare\_policy\_status.csv})}
+  \label{tab:q07}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{ll XX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Chính sách giá vé} & \textbf{Trạng thái thực tế} & \textbf{Số lượng đặt chỗ} & \textbf{Tỷ lệ trong nhóm (\%)} \\
+    \midrule
+    Flexible (Linh hoạt)     & Flown (Đã bay)     & 2.519 & 69,91 \\
+    \rowcolor{TableAlt}
+    Flexible                 & Cancelled (Hủy)   & 1.029 & 28,56 \\
+    Flexible                 & No-Show (Bỏ chuyến)& 55    & 1,53  \\
+    \midrule
+    Semi-Flexible (Bán linh hoạt) & Flown         & 2.632 & 71,97 \\
+    \rowcolor{TableAlt}
+    Semi-Flexible            & Cancelled          & 965   & 26,39 \\
+    Semi-Flexible            & No-Show            & 60    & 1,64  \\
+    \midrule
+    \textbf{Non-Refundable (Không hoàn)} & \textbf{Flown} & \textbf{2.089} & \textbf{77,26} \\
+    \rowcolor{TableAlt}
+    Non-Refundable           & Cancelled          & 576   & 21,30 \\
+    Non-Refundable           & No-Show            & 39    & 1,44  \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{fig06_fare_policy_status}
+  \caption{Cơ cấu trạng thái chuyến bay theo từng loại chính sách giá vé}
+  \label{fig:q07}
+\end{figure}
+
+Ràng buộc tài chính thể hiện rõ vai trò điều chỉnh hành vi: vé **Non-Refundable** đạt tỷ lệ bay thành công cao nhất (\pct{77,26}) và tỷ lệ hủy thấp nhất (\pct{21,30}). Vé linh hoạt **Flexible** cho phép hoàn tiền dễ dàng dẫn đến tỷ lệ hủy tăng vọt lên \pct{28,56} (cao hơn \textbf{7,26 điểm phần trăm}). Đáng chú ý, tỷ lệ khách bỏ chuyến không báo trước (\textit{No-Show}) duy trì ở mức tối thiểu (1,44\%--1,64\%) trên toàn bộ các phân hạng.
+
+% ---- CÂU 8 ----
+\subsection{Câu 8: Phân tích giá vé trung bình theo hãng (Đặt chỗ không hủy, giá $> 0$)}
+
+Khảo sát trên $N = 7.224$ giao dịch thương mại thành công không hủy và có giá vé dương (loại 9 vé 0 đồng và 30 dòng thiếu giá) nhằm đo lường mặt bằng giá giữa hai hãng.
+
+\begin{table}[H]
+  \centering
+  \caption{Các chỉ số thống kê mô tả giá vé theo hãng bay (\code{q08\_fare\_stats\_by\_airline.csv})}
+  \label{tab:q08}
+  \renewcommand{\arraystretch}{1.3}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{lrrrrrrrcc}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Hãng bay} & \textbf{Mẫu (n)} & \textbf{TB (\$)} & \textbf{Trung vị (\$)} & \textbf{Q1 (\$)} & \textbf{Q3 (\$)} & \textbf{Min (\$)} & \textbf{Max (\$)} & \textbf{Vé 0đ loại} & \textbf{Khuyết giá} \\
+    \midrule
+    Aurora Air    & 4.736 & 208,76 & 149,54 & 123,30 & 190,26 & 56,49 & 2.258,21 & 5 & 13 \\
+    \rowcolor{TableAlt}
+    Horizon Wings & 2.488 & 194,95 & 135,26 & 112,52 & 171,42 & 48,77 & 2.117,76 & 4 & 17 \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{fig07_fare_hist}
+  \caption{Phân phối mật độ giá vé theo hãng (cắt tại phân vị 99 nhằm hạn chế nhiễu ngoại lai)}
+  \label{fig:q08}
+\end{figure}
+
+Phân phối giá vé có độ lệch phải mạnh (\textit{positive skewness}), khi giá trị trung bình ở cả hai hãng đều cao hơn trung vị từ 44 đến 59 USD do sự kéo lệch của các vé hạng Thương gia/Hạng nhất (lên tới hơn 2.200 USD). Vì vậy, **trung vị là thước đo tin cậy hơn**: giá vé trung vị của Aurora Air (149,54 USD) cao hơn Horizon Wings (135,26 USD) là **14,28 USD** (tương đương cao hơn \pct{10,56}), phản ánh đúng định vị dịch vụ cao cấp của hãng truyền thống.
+
+% ---- CÂU 9 ----
+\subsection{Câu 9: Phân phối độ dài chuyến đi (Total Trip Days)}
+
+Khảo sát tổng thời gian lưu trú (đêm cuối tuần + đêm trong tuần) trên $N = 7.232$ đặt chỗ hoàn thành chuyến bay (Aurora Air: 4.733 khách; Horizon Wings: 2.499 khách).
+
+\begin{table}[H]
+  \centering
+  \caption{Thống kê độ dài chuyến đi của hành khách (\code{q09\_trip\_days.csv})}
+  \label{tab:q09}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l XXXXXXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Hãng bay} & \textbf{Số lượng (n)} & \textbf{Trung bình} & \textbf{Trung vị} & \textbf{Q1} & \textbf{Q3} & \textbf{Tối đa} & \textbf{Chuyến 0 ngày} \\
+    \midrule
+    Aurora Air    & 4.733 & 5,76 ngày & 4,00 ngày & 3,00 ngày & 7,00 ngày & 45,00 ngày & 0 \\
+    \rowcolor{TableAlt}
+    Horizon Wings & 2.499 & 5,95 ngày & 4,00 ngày & 3,00 ngày & 7,00 ngày & 45,00 ngày & 0 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Cơ cấu đặt chỗ theo phân nhóm thời gian lưu trú}
+  \label{tab:q09_groups}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{l rrrr}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Khoảng ngày lưu trú} & \textbf{Aurora Air (n)} & \textbf{Tỷ lệ (\%)} & \textbf{Horizon Wings (n)} & \textbf{Tỷ lệ (\%)} \\
+    \midrule
+    1--2 ngày          & 969   & 20,47 & 500 & 20,01 \\
+    \rowcolor{TableAlt}
+    \textbf{3--4 ngày} & \textbf{1.540} & \textbf{32,54} & \textbf{776} & \textbf{31,05} \\
+    5--7 ngày          & 1.253 & 26,47 & 678 & 27,13 \\
+    \rowcolor{TableAlt}
+    8--14 ngày         & 725   & 15,32 & 407 & 16,29 \\
+    15+ ngày           & 246   & 5,20  & 138 & 5,52  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{fig08_trip_days}
+  \caption{Phân phối tần suất thời gian lưu trú của hành khách}
+  \label{fig:q09}
+\end{figure}
+
+Gần 80\% hành khách thực hiện các chuyến đi có độ dài từ 1 đến 7 ngày, trong đó phân khúc **3--4 ngày** chiếm ưu thế lớn nhất ($\sim$31--32\%). Điều này phản ánh rõ nét đặc trưng của nhu cầu du lịch nghỉ dưỡng ngắn ngày và các chuyến công tác tuần.
+
+% ---- CÂU 10 ----
+\subsection{Câu 10: Tỷ lệ đổi hạng khoang cabin}
+
+Đo lường mức độ ổn định trong bố trí chỗ ngồi trên $N = 9.921$ bản ghi có đầy đủ cả mã cabin đặt và mã xếp chỗ thực tế (Bảng \ref{tab:q10_airline} và Bảng \ref{tab:q10_cabin}).
+
+\begin{table}[H]
+  \centering
+  \caption{Tỷ lệ thay đổi hạng khoang theo hãng hàng không (\code{q10\_cabin\_change\_by\_airline.csv})}
+  \label{tab:q10_airline}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabularx}{\textwidth}{l XXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Hãng hàng không} & \textbf{Mẫu hợp lệ (n)} & \textbf{Số lượt đổi khoang} & \textbf{Tỷ lệ đổi khoang (\%)} \\
+    \midrule
+    Aurora Air    & 6.472 & 737 & 11,39 \\
+    \rowcolor{TableAlt}
+    Horizon Wings & 3.449 & 405 & 11,74 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Tỷ lệ thay đổi khoang theo từng phân hạng cabin (\code{q10\_cabin\_change\_by\_booked\_code.csv})}
+  \label{tab:q10_cabin}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{l rrr p{3.2cm}}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Mã cabin} & \textbf{Số lượng (n)} & \textbf{Lượt đổi} & \textbf{Tỷ lệ đổi (\%)} & \textbf{Độ tin cậy mẫu} \\
+    \midrule
+    B1 & 314   & 37  & 11,78 & Mẫu chuẩn ($n > 100$) \\
+    \rowcolor{TableAlt}
+    B2 & 247   & 32  & 12,96 & Mẫu chuẩn ($n > 100$) \\
+    \textbf{B3} & \textbf{177} & \textbf{24} & \textbf{13,56} & \textbf{Tỷ lệ cao nhất} \\
+    \rowcolor{TableAlt}
+    E1 & 2.323 & 257 & 11,06 & Mẫu chuẩn lớn \\
+    E2 & 2.363 & 283 & 11,98 & Mẫu chuẩn lớn \\
+    \rowcolor{TableAlt}
+    E3 & 1.923 & 204 & 10,61 & Mẫu chuẩn lớn \\
+    E4 & 1.470 & 185 & 12,59 & Mẫu chuẩn lớn \\
+    \rowcolor{TableAlt}
+    F1 & 55    & 7   & 12,73 & \textcolor{AccentRed}{Cảnh báo: $n < 100$} \\
+    F2 & 34    & 3   & 8,82  & \textcolor{AccentRed}{Cảnh báo: $n < 100$} \\
+    \rowcolor{TableAlt}
+    F3 & 38    & 4   & 10,53 & \textcolor{AccentRed}{Cảnh báo: $n < 100$} \\
+    P1 & 530   & 61  & 11,51 & Mẫu chuẩn ($n > 100$) \\
+    \rowcolor{TableAlt}
+    P2 & 447   & 45  & 10,07 & Mẫu chuẩn ($n > 100$) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Quy trình quản lý chỗ ngồi duy trì tính ổn định cao khi gần \pct{89} hành khách được phục vụ đúng khoang ghế đã đặt. Tỷ lệ tái sắp xếp tập trung đáng kể tại khoang Thương gia (mã **B3** đạt \pct{13,56} và **B2** đạt \pct{12,96}), phản ánh nghiệp vụ nâng hạng thương quyền (\textit{Operational Upgrade}) để giải quyết tình trạng quá tải khoang phổ thông.
+
+% =========================================================
+\section{Đúc kết 6 phát hiện kinh doanh chuyên sâu}
+% =========================================================
+
+Bảng \ref{tab:insights_summary} hệ thống hóa 6 phát hiện thực nghiệm mang giá trị chiến lược cho công tác quản trị doanh thu.
+
+\begin{table}[H]
+  \centering
+  \caption{Tổng hợp 6 phát hiện kinh doanh then chốt}
+  \label{tab:insights_summary}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabularx}{\textwidth}{c XXX}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{\#} & \textbf{Chủ đề phân tích} & \textbf{Bằng chứng số liệu} & \textbf{Phát hiện cốt lõi} \\
+    \midrule
+    \textbf{1} & Thời gian đặt trước
+      & Bảng \ref{tab:q04_cancel}, Hình \ref{fig:q04}
+      & Tỷ lệ hủy tăng phi tuyến theo lead time, chạm đỉnh 44,63\% ở nhóm đặt xa trên 6 tháng. \\
+    \rowcolor{TableAlt}
+    \textbf{2} & Chính sách giá vé
+      & Bảng \ref{tab:q07}, Hình \ref{fig:q07}
+      & Vé Non-Refundable có tỷ lệ bay cao nhất (77,26\%) và tỷ lệ hủy thấp nhất (21,30\%). \\
+    \textbf{3} & Phân khúc thị trường
+      & Bảng \ref{tab:q06}, Hình \ref{fig:q06}
+      & Kênh Online OTA dẫn đầu về doanh số (39,17\%) nhưng rủi ro hủy cao nhất mạng bay (29,47\%). \\
+    \rowcolor{TableAlt}
+    \textbf{4} & Chu kỳ mùa vụ
+      & Bảng \ref{tab:q03}, Hình \ref{fig:q03}
+      & Biến động nhu cầu theo mô hình hai đỉnh đồng pha (mùa hè và tháng 12) ở cả hai hãng. \\
+    \textbf{5} & Định vị giá vé
+      & Bảng \ref{tab:q08}, Hình \ref{fig:q08}
+      & Giá vé phân phối lệch phải mạnh; giá trung vị Aurora Air cao hơn Horizon Wings 10,56\%. \\
+    \rowcolor{TableAlt}
+    \textbf{6} & Biến động hạng khoang
+      & Bảng \ref{tab:q10_cabin}
+      & Tỷ lệ đổi cabin bình quân đạt $\sim$11,5\%, tần suất cao nhất tại khoang Thương gia (B3 đạt 13,56\%). \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Dưới đây là luận giải chuyên sâu cho từng đúc kết:
+
+\begin{insightbox}{Phát hiện 1: Quy luật thời gian đặt trước và hiệu ứng gia tăng rủi ro hủy vé phi tuyến tính}
+Khảo sát 9.978 giao dịch có lead time xác định khẳng định mối quan hệ nghịch đảo giữa độ xa của ngày đặt vé và tính chắc chắn của lịch trình. Khách hàng đặt vé sát ngày khởi hành (0--7 ngày) chỉ có \pct{22,22} hủy chỗ, nhưng tỷ lệ này tăng dần qua các mốc 8--30 ngày (\pct{24,19}), 31--90 ngày (\pct{25,77}) và nhảy vọt lên \pct{44,63} đối với các giao dịch thực hiện trước hơn nửa năm (181+ ngày). Khách đặt trước trên 6 tháng có xác suất hủy vé cao gấp **2,01 lần** (+22,41 điểm phần trăm) so với khách đặt trong tuần bay. 
+
+\textit{Ý nghĩa kinh doanh:} Khách đặt vé quá xa thường có tâm lý giữ chỗ sớm khi có chương trình khuyến mãi nhưng kế hoạch công việc chưa ổn định, dẫn đến lượng "đặt chỗ ảo" rất lớn trên hệ thống. Hãng hàng không cần áp dụng chính sách đặt cọc từng phần hoặc siết chặt thời hạn giữ chỗ đối với các vé phát sinh trước hơn 90 ngày.
+\end{insightbox}
+
+\begin{insightbox}{Phát hiện 2: Chế tài tài chính trong chính sách giá định hình cam kết bay của hành khách}
+Phân tích 9.957 đặt chỗ cho thấy điều kiện giá vé chi phối trực tiếp đến kết quả hoàn thành chuyến bay. Loại vé không hoàn tiền (\textbf{Non-Refundable}) đạt tỷ lệ thực bay (\textit{Flown}) cao nhất hệ thống với \pct{77,26} (2.089/2.704 vé), đồng thời ghi nhận tỷ lệ hủy thấp nhất (\pct{21,30}). Ngược lại, vé linh hoạt (\textbf{Flexible}) có tỷ lệ hủy lên tới \pct{28,56}---cao hơn vé Non-Refundable tới **7,26 điểm phần trăm**. Tỷ lệ bỏ chuyến không báo trước (\textit{No-Show}) duy trì ở mức rất thấp (1,4\%--1,6\%) ở mọi phân hạng.
+
+\textit{Ý nghĩa kinh doanh:} Áp lực mất toàn bộ tiền vé tạo ra cam kết tài chính mạnh mẽ buộc khách hàng phải tuân thủ hành trình. Doanh nghiệp cần cơ cấu lại tỷ trọng vé Semi-Flexible để dung hòa giữa tính linh hoạt của khách hàng và bài toán tối ưu hóa tỷ lệ lấp đầy ghế.
+\end{insightbox}
+
+\begin{insightbox}{Phát hiện 3: Nghịch lý kênh Online OTA --- Doanh số cao nhất đi kèm tỷ lệ hủy chỗ cao nhất}
+Trong 9.968 đặt chỗ khảo sát, kênh đại lý trực tuyến (\textbf{Online OTA}) chiếm thị phần áp đảo với \pct{39,17} tổng lượng giao dịch (3.906 vé). Tuy nhiên, đây cũng chính là phân khúc ghi nhận rủi ro hủy vé cao nhất hệ thống với \pct{29,47} (1.151 vé hủy). Con số này vượt xa kênh khách hàng doanh nghiệp (\textbf{Corporate}) vốn có tỷ lệ hủy thấp nhất chỉ \pct{21,45} (chênh lệch **8,02 điểm phần trăm**) và kênh đặt trực tiếp (\textbf{Direct}: \pct{27,21}).
+
+\textit{Ý nghĩa kinh doanh:} Các công cụ tìm kiếm và so sánh giá trên nền tảng OTA giúp người dùng dễ dàng chuyển đổi sang chuyến bay rẻ hơn vào phút chót. Hãng cần thắt chặt thỏa thuận mức dịch vụ (SLA) với các đối tác OTA, rút ngắn thời gian giữ chỗ chờ thanh toán nhằm hạn chế tối đa các đơn đặt giữ chỗ ảo.
+\end{insightbox}
+
+\begin{insightbox}{Phát hiện 4: Tính mùa vụ hai đỉnh đồng pha đòi hỏi năng lực điều tiết tải bay linh hoạt}
+Phân tích 5.753 đặt chỗ trong năm 2025 xác nhận mô hình biến động nhu cầu hai đỉnh diễn ra song hành ở cả hai hãng: đỉnh cao điểm du lịch hè (Tháng 7--8) và đỉnh lễ hội thăm thân cuối năm (Tháng 12). Lượng đặt chỗ trong tháng đỉnh điểm cao gấp **1,53 lần** ở Aurora Air (383 so với 251 vé) và **1,61 lần** ở Horizon Wings (229 so với 142 vé) so với tháng thấp điểm nhất.
+
+\textit{Ý nghĩa kinh doanh:} Tính tương đồng về chu kỳ khẳng định nhu cầu đi lại chịu tác động của quy luật thị trường chung. Doanh nghiệp cần triển khai giải pháp định giá động (\textit{Dynamic Pricing}) nhằm tối đa hóa doanh thu trong hai giai đoạn cao điểm, đồng thời chủ động bố trí lịch bảo dưỡng đội tàu bay vào các tháng thấp điểm (Tháng 5 và Tháng 10).
+\end{insightbox}
+
+\begin{insightbox}{Phát hiện 5: Phân phối giá vé lệch phải và sự phân hóa định vị giữa hai hãng hàng không}
+Khảo sát 7.224 giao dịch thương mại thành công chỉ ra rằng phân phối giá vé bị lệch phải mạnh do sự chi phối của các vé khoang Thương gia và Hạng nhất có giá vượt trên 2.100 USD. Do đó, trung vị là thước đo khách quan phản ánh mức giá phổ thông: trung vị của Aurora Air là **149,54 USD**, cao hơn mức **135,26 USD** của Horizon Wings là **14,28 USD** (chênh lệch \pct{10,56}).
+
+\textit{Ý nghĩa kinh doanh:} Khoảng cách giá vé phản ánh đúng định vị chiến lược của một hãng hàng không truyền thống cung cấp dịch vụ đầy đủ so với mô hình hàng không tối ưu chi phí. Tuy nhiên, do số liệu chưa bao gồm các khoản phụ thu dịch vụ (hành lý, suất ăn), hãng Horizon Wings có thể thu hẹp khoảng cách doanh thu thực tế bằng các gói dịch vụ phụ trợ.
+\end{insightbox}
+
+\begin{insightbox}{Phát hiện 6: Ổn định trong phân bổ chỗ ngồi với tần suất tái sắp xếp tập trung tại khoang Thương gia}
+Dữ liệu 9.921 đặt chỗ ghi nhận tỷ lệ đổi hạng cabin ở cả Aurora Air (\pct{11,39}) và Horizon Wings (\pct{11,74}) đều duy trì quanh ngưỡng 11,5\%, minh chứng cho quy trình điều phối ghế ngồi hoạt động hiệu quả khi gần 89\% hành khách được bố trí đúng khoang mong muốn. Đáng chú ý, tỷ lệ đổi ghế xuất hiện cao nhất ở phân khúc Thương gia với mã **B3** đạt \pct{13,56} và **B2** đạt \pct{12,96}---cao hơn khoang Phổ thông E3 (\pct{10,61}) gần 3 điểm phần trăm.
+
+\textit{Ý nghĩa kinh doanh:} Tỷ lệ thay đổi ở khoang Thương gia phần lớn là kết quả của nghiệp vụ nâng hạng dịch vụ (\textit{Operational Upgrade}) cho khách hàng thân thiết nhằm giải tỏa áp lực quá tải ghế ở khoang Phổ thông. Doanh nghiệp cần chuẩn hóa quy trình nâng hạng để gia tăng mức độ hài lòng của khách hàng mà không làm phát sinh chi phí vận hành.
+\end{insightbox}
+
+% =========================================================
+\chapter{GIỚI HẠN DỮ LIỆU \& KHUYẾN NGHỊ QUẢN TRỊ}
+% =========================================================
+
+\section{Giới hạn của nghiên cứu}
+
+Nhóm nghiên cứu ghi nhận một số giới hạn khách quan gắn liền với đặc tính của bộ dữ liệu:
+\begin{enumerate}
+  \item \textbf{Đặc trưng dữ liệu mô phỏng:} Dữ liệu được thiết lập nhân tạo nhằm đánh giá kỹ năng xử lý dữ liệu và tư duy thống kê. Các mối tương quan quan sát được phản ánh cấu trúc thuật toán phát sinh dữ liệu, do đó cần được kiểm chứng thêm trước khi khái quát hóa thành quy luật cho thị trường hàng không thực tế.
+  \item \textbf{Khung thời gian không liên tục:} Trong 26 tháng thu thập (07/2024 đến 08/2026), chỉ riêng năm 2025 là có trọn vẹn 12 tháng dữ liệu. Do đó, phân tích tính mùa vụ bắt buộc phải giới hạn trên năm 2025 để tránh sai lệch mẫu, đồng thời chưa thể thực hiện phân tích tăng trưởng theo năm (\textit{Year-over-Year}).
+  \item \textbf{Thiếu hụt dữ liệu chi phí và phụ thu:} Thuộc tính \code{avg\_ticket\_fare} chỉ đo lường giá vé danh nghĩa cơ bản, chưa bao gồm các khoản thu phụ trợ (hành lý, suất ăn, bảo hiểm) cũng như các biến phí khai thác (nhiên liệu, nhân công, dịch vụ mặt đất). Do đó, chỉ số \code{booking\_value\_est} chỉ phản ánh giá trị đặt chỗ danh nghĩa, không đại diện cho lợi nhuận ròng của chuyến bay.
+\end{enumerate}
+
+\section{Khuyến nghị quản trị cho hãng hàng không}
+
+Từ các phát hiện định lượng, nhóm đề xuất 4 nhóm giải pháp chiến lược dành cho bộ phận Quản trị Doanh thu:
+
+\begin{itemize}
+  \item \textbf{Kiểm soát rủi ro hủy vé đặt xa (Lead Time $>$ 90 ngày):} Thiết lập cơ chế thanh toán lũy tiến hoặc thu phí hủy tăng dần theo thời gian giữ chỗ đối với các giao dịch phát sinh sớm hơn ngày bay trên 3 tháng, nhằm hạn chế tình trạng chiếm dụng ghế ảo.
+  \item \textbf{Tối ưu hóa chính sách hợp tác với kênh Online OTA:} Rút ngắn thời hạn thanh toán giữ chỗ của các đại lý trực tuyến xuống trong vòng 24 giờ sau khi tạo mã đặt chỗ; đồng thời áp dụng chính sách chiết khấu linh hoạt để khuyến khích khách hàng chuyển đổi sang đặt vé trực tiếp qua website/ứng dụng chính thức của hãng.
+  \item \textbf{Chiến lược định giá thích ứng theo mùa vụ:} Vận hành hệ thống định giá động (\textit{Dynamic Pricing}) trong các tháng cao điểm hè và tháng 12; đồng thời phối hợp với các công ty du lịch phát hành các gói sản phẩm trọn gói (\textit{Package Tour}) nhằm kích cầu hành khách trong các tháng thấp điểm Tháng 5 và Tháng 10.
+  \item \textbf{Phát triển gói tiện ích cho chặng bay ngắn ngày:} Với hơn 50\% lượng khách thực hiện các chuyến đi có thời gian lưu trú từ 1 đến 4 ngày, hãng nên đẩy mạnh đóng gói bán kèm các dịch vụ tiện ích nhanh (lối đi ưu tiên, hành lý xách tay bổ sung, đưa đón sân bay) để tối ưu hóa biên lợi nhuận trên mỗi ghế bay.
+\end{itemize}
+
+% =========================================================
+\chapter{PHÂN CÔNG CÔNG VIỆC \& ĐÁNH GIÁ ĐÓNG GÓP}
+% =========================================================
+
+Quá trình triển khai dự án được tổ chức chặt chẽ thông qua hệ thống quản lý phiên bản Git/GitHub, tuân thủ nguyên tắc phân nhánh, commit theo quy chuẩn và thực hiện kiểm thử tự động chéo trước khi tích hợp vào nhánh chính.
+
+\begin{table}[H]
+  \centering
+  \caption{Bảng phân công nhiệm vụ và mức độ hoàn thành của các thành viên}
+  \label{tab:team}
+  \renewcommand{\arraystretch}{1.45}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{2.6cm}
+                               >{\raggedright\arraybackslash}p{2.8cm}
+                               >{\raggedright\arraybackslash}X
+                               >{\raggedright\arraybackslash}p{3.2cm}
+                               c}
+    \toprule
+    \rowcolor{TableHead}
+    \textbf{Thành viên} & \textbf{Vai trò chính} & \textbf{Nhiệm vụ đảm nhiệm cụ thể} & \textbf{Sản phẩm nghiệm thu} & \textbf{Đóng góp} \\
+    \midrule
+    Trần Thế Tùng
+      & Tiền xử lý \& Kỹ thuật Dữ liệu
+      & Khảo sát ô thiếu Giai đoạn A, phân loại 12 nhóm lỗi. Thực thi chuỗi tiền xử lý B1--B5: chuẩn hóa mã khóa, chuyển ngày lệch cột, xử lý ký tự rác, ánh xạ danh mục, phân tích ngày tháng ISO. Soạn thảo Chương 2 Báo cáo.
+      & \code{a\_missing\_survey.csv}, \code{a\_issue\_catalog.csv}, pipeline Ô 0--B5 trong notebook, nội dung Chương 2
+      & \textbf{100\%} \\
+    \rowcolor{TableAlt}
+    Tạ Minh Quân
+      & Quản trị CSDL \& Đảm bảo Chất lượng
+      & Thực thi bước B6--B8: làm sạch số đo, xử lý giá vé (bảo toàn vé 0đ), chuẩn hóa mã ISO quốc gia, hợp nhất 117 dòng trùng mã, lập bảng \code{row\_lineage.csv}. Tạo 7 cột dẫn xuất C1--C3, tổng hợp \code{monthly\_summary.csv}, thực thi bộ kiểm thử tự động C4 (51/51 test đạt). Soạn thảo Chương 1 và 4.
+      & \code{reservations\_clean.csv}, \code{monthly\_summary.csv}, \code{cleaning\_log.csv}, \code{row\_lineage.csv}, \code{quality\_report.csv}, \code{q01\_before\_after.csv}, 51 bài test
+      & \textbf{100\%} \\
+    Thành viên BI \& Phân tích
+      & Phân tích Dữ liệu \& Trực quan hóa
+      & Tính toán chính xác mẫu số cho 9 bài toán vận hành (Câu 2 đến 10). Thiết kế 8 biểu đồ trực quan hóa chuẩn kỹ thuật (\code{fig01}--\code{fig08}). Đúc kết luận chứng cho 6 phát hiện kinh doanh chuyên sâu. Soạn thảo Chương 3 Báo cáo.
+      & 11 tệp dữ liệu phân tích (\code{q02}--\code{q10}), 8 biểu đồ PNG chất lượng cao, hệ thống 6 Insight kinh doanh
+      & \textbf{100\%} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\vspace{0.8em}
+\begin{tcolorbox}[colback=TableAlt, colframe=NavyBlue, arc=1.5mm, left=10pt, right=10pt, top=7pt, bottom=7pt]
+\textbf{Cam kết đồng thuận:} Toàn thể các thành viên đã tham gia nghiêm túc trong mọi giai đoạn thảo luận, kiểm tra chéo tính chính xác của các quyết định xử lý và tự tin giải trình bảo vệ mọi nội dung chuyên môn của đề tài.
+\end{tcolorbox}
+
+% =========================================================
+\end{document}
