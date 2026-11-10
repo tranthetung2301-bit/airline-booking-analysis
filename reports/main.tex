@@ -145,7 +145,7 @@
   \vspace*{1.0cm}
 
   {\large\sffamily\bfseries\color{NavyBlue}
-    TRƯỜNG ĐẠI HỌC --- KHOA KHOA HỌC DỮ LIỆU\\
+    TRƯỜNG ĐẠI HỌC KINH TẾ QUỐC DÂN --- KHOA KHOA HỌC DỮ LIỆU\\
     BỘ MÔN: PHÂN TÍCH DỮ LIỆU (DATA ANALYTICS)\\[0.4em]
   }
 
@@ -172,7 +172,7 @@
     \midrule
     \textbf{Thành viên đề tài}       & Trần Thế Tùng --- Tiền xử lý \& Kỹ thuật Dữ liệu \\
                                      & Tạ Minh Quân --- Quản trị CSDL \& Kiểm thử Chất lượng \\
-                                     & BI \& Phân tích Trực quan hóa \\
+                                     & Nguyễn Đình Phan Anh --- BI \& Phân tích Trực quan hóa \\
     \midrule
     \textbf{Thời điểm chốt sổ}       & 15/09/2026 (\textit{Snapshot Date}) \\
     \textbf{Quy mô dữ liệu gốc}      & 10.325 bản ghi $\times$ 24 trường thông tin \\
@@ -181,11 +181,6 @@
   \end{tabular}
 
   \vfill
-
-  {\small\color{gray}\sffamily
-    Báo cáo khoa học phục vụ học phần Phân tích Dữ liệu.\\
-    Nguồn dữ liệu mô phỏng theo đặc thù vận hành của ngành hàng không dân dụng thương mại.
-  }
 \end{titlepage}
 
 % ---- MỤC LỤC ----
@@ -899,49 +894,6 @@ Từ các phát hiện định lượng, nhóm đề xuất 4 nhóm giải pháp
 \end{itemize}
 
 % =========================================================
-\chapter{PHÂN CÔNG CÔNG VIỆC \& ĐÁNH GIÁ ĐÓNG GÓP}
-% =========================================================
 
-Quá trình triển khai dự án được tổ chức chặt chẽ thông qua hệ thống quản lý phiên bản Git/GitHub, tuân thủ nguyên tắc phân nhánh, commit theo quy chuẩn và thực hiện kiểm thử tự động chéo trước khi tích hợp vào nhánh chính.
-
-\begin{table}[H]
-  \centering
-  \caption{Bảng phân công nhiệm vụ và mức độ hoàn thành của các thành viên}
-  \label{tab:team}
-  \renewcommand{\arraystretch}{1.45}
-  \begin{tabularx}{\textwidth}{>{\bfseries}p{2.6cm}
-                               >{\raggedright\arraybackslash}p{2.8cm}
-                               >{\raggedright\arraybackslash}X
-                               >{\raggedright\arraybackslash}p{3.2cm}
-                               c}
-    \toprule
-    \rowcolor{TableHead}
-    \textbf{Thành viên} & \textbf{Vai trò chính} & \textbf{Nhiệm vụ đảm nhiệm cụ thể} & \textbf{Sản phẩm nghiệm thu} & \textbf{Đóng góp} \\
-    \midrule
-    Trần Thế Tùng
-      & Tiền xử lý \& Kỹ thuật Dữ liệu
-      & Khảo sát ô thiếu Giai đoạn A, phân loại 12 nhóm lỗi. Thực thi chuỗi tiền xử lý B1--B5: chuẩn hóa mã khóa, chuyển ngày lệch cột, xử lý ký tự rác, ánh xạ danh mục, phân tích ngày tháng ISO. Soạn thảo Chương 2 Báo cáo.
-      & \code{a\_missing\_survey.csv}, \code{a\_issue\_catalog.csv}, pipeline Ô 0--B5 trong notebook, nội dung Chương 2
-      & \textbf{100\%} \\
-    \rowcolor{TableAlt}
-    Tạ Minh Quân
-      & Quản trị CSDL \& Đảm bảo Chất lượng
-      & Thực thi bước B6--B8: làm sạch số đo, xử lý giá vé (bảo toàn vé 0đ), chuẩn hóa mã ISO quốc gia, hợp nhất 117 dòng trùng mã, lập bảng \code{row\_lineage.csv}. Tạo 7 cột dẫn xuất C1--C3, tổng hợp \code{monthly\_summary.csv}, thực thi bộ kiểm thử tự động C4 (51/51 test đạt). Soạn thảo Chương 1 và 4.
-      & \code{reservations\_clean.csv}, \code{monthly\_summary.csv}, \code{cleaning\_log.csv}, \code{row\_lineage.csv}, \code{quality\_report.csv}, \code{q01\_before\_after.csv}, 51 bài test
-      & \textbf{100\%} \\
-    Thành viên BI \& Phân tích
-      & Phân tích Dữ liệu \& Trực quan hóa
-      & Tính toán chính xác mẫu số cho 9 bài toán vận hành (Câu 2 đến 10). Thiết kế 8 biểu đồ trực quan hóa chuẩn kỹ thuật (\code{fig01}--\code{fig08}). Đúc kết luận chứng cho 6 phát hiện kinh doanh chuyên sâu. Soạn thảo Chương 3 Báo cáo.
-      & 11 tệp dữ liệu phân tích (\code{q02}--\code{q10}), 8 biểu đồ PNG chất lượng cao, hệ thống 6 Insight kinh doanh
-      & \textbf{100\%} \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
-\vspace{0.8em}
-\begin{tcolorbox}[colback=TableAlt, colframe=NavyBlue, arc=1.5mm, left=10pt, right=10pt, top=7pt, bottom=7pt]
-\textbf{Cam kết đồng thuận:} Toàn thể các thành viên đã tham gia nghiêm túc trong mọi giai đoạn thảo luận, kiểm tra chéo tính chính xác của các quyết định xử lý và tự tin giải trình bảo vệ mọi nội dung chuyên môn của đề tài.
-\end{tcolorbox}
-
-% =========================================================
 \end{document}
+
