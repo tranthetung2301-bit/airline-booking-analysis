@@ -72,6 +72,12 @@
 \DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
 \graphicspath{{figures/}{./}}
 
+% ---- Quy chuẩn hiển thị Table và Figure bằng Tiếng Anh ----
+\addto\captionsvietnamese{%
+  \renewcommand{\tablename}{Table}%
+  \renewcommand{\figurename}{Figure}%
+}
+
 % ---- Danh sách thụt lề ----
 \usepackage{enumitem}
 \setlist[itemize]{noitemsep, topsep=4pt, leftmargin=1.5em}
@@ -138,6 +144,8 @@
 % =========================================================
 \begin{document}
 % =========================================================
+\renewcommand{\tablename}{Table}
+\renewcommand{\figurename}{Figure}
 
 % ---- TRANG BÌA HỌC THUẬT CHUẨN ----
 \begin{titlepage}
@@ -145,7 +153,7 @@
   \vspace*{1.0cm}
 
   {\large\sffamily\bfseries\color{NavyBlue}
-    TRƯỜNG ĐẠI HỌC --- KHOA KHOA HỌC DỮ LIỆU\\
+    TRƯỜNG ĐẠI HỌC KINH TẾ QUỐC DÂN --- KHOA KHOA HỌC DỮ LIỆU\\
     BỘ MÔN: PHÂN TÍCH DỮ LIỆU (DATA ANALYTICS)\\[0.4em]
   }
 
@@ -168,24 +176,19 @@
 
   \begin{tabular}{@{}ll@{}}
     \toprule
-    \textbf{Nhóm thực hiện}          & Nhóm Nghiên cứu Phân tích Dữ liệu \\
+    \textbf{Project Team}          & Data Analytics Research Team \\
     \midrule
-    \textbf{Thành viên đề tài}       & Trần Thế Tùng (11258756) --- Tiền xử lý \& Kỹ thuật Dữ liệu \\
-                                     & Tạ Minh Quân (11257141) --- Quản trị CSDL \& Kiểm thử Chất lượng \\
-                                     & Nguyễn Đình Phan Anh (11250492) --- BI \& Phân tích Trực quan hóa \\
+    \textbf{Team Members}       & Trần Thế Tùng --- Preprocessing \& Data Engineering \\
+                                     & Tạ Minh Quân --- Database Administration \& QA \\
+                                     & Nguyễn Đình Phan Anh --- BI \& Data Visualization \\
     \midrule
-    \textbf{Thời điểm chốt sổ}       & 15/09/2026 (\textit{Snapshot Date}) \\
-    \textbf{Quy mô dữ liệu gốc}      & 10.325 bản ghi $\times$ 24 trường thông tin \\
-    \textbf{Cơ sở dữ liệu phân tích} & 10.000 đặt chỗ độc lập $\times$ 30 trường thuộc tính \\
+    \textbf{Snapshot Date}       & 15 September 2026 \\
+    \textbf{Raw Dataset}      & 10,325 records $\times$ 24 fields \\
+    \textbf{Analysis Dataset} & 10,000 unique bookings $\times$ 30 fields \\
     \bottomrule
   \end{tabular}
 
   \vfill
-
-  {\small\color{gray}\sffamily
-    Báo cáo khoa học phục vụ học phần Phân tích Dữ liệu.\\
-    Nguồn dữ liệu mô phỏng theo đặc thù vận hành của ngành hàng không dân dụng thương mại.
-  }
 \end{titlepage}
 
 % ---- MỤC LỤC ----
@@ -245,34 +248,34 @@ Trước khi thực hiện các bước can thiệp biến đổi, nhóm đã ti
 
 \subsection{Hiện trạng ô thiếu trên các thuộc tính chính}
 
-Kết quả thống kê ô thiếu được trình bày tại Bảng \ref{tab:missing_survey}, phân định rõ giữa ô trống hoàn toàn và ô chứa ký tự rác phi quy ước.
+Kết quả thống kê ô thiếu được trình bày tại Table \ref{tab:missing_survey}, phân định rõ giữa ô trống hoàn toàn và ô chứa ký tự rác phi quy ước.
 
 \begin{table}[H]
   \centering
-  \caption{Thống kê tỷ lệ ô thiếu trên các trường dữ liệu trọng yếu (Tổng 10.325 bản ghi)}
+  \caption{Missing Data Statistics Across Key Attributes ($N = 10,325$ Records)}
   \label{tab:missing_survey}
   \renewcommand{\arraystretch}{1.25}
   \begin{tabularx}{\textwidth}{>{\ttfamily\small}l XXXXX r}
     \toprule
     \rowcolor{TableHead}
-    \normalfont\textbf{Trường dữ liệu} & \textbf{Tổng bản ghi} & \textbf{Ô trống} & \textbf{Ký tự rác} & \textbf{Tổng thiếu} & \textbf{Tỷ lệ (\%)} \\
+    \normalfont\textbf{Attribute} & \textbf{Total Records} & \textbf{Empty / Blank} & \textbf{Junk String} & \textbf{Total Missing} & \textbf{Missing Rate (\%)} \\
     \midrule
-    record\_id          & 10.325 & 0  & 0  & 0   & 0,00 \\
+    record\_id          & 10,325 & 0  & 0  & 0   & 0.00 \\
     \rowcolor{TableAlt}
-    reservation\_id     & 10.325 & 0  & 0  & 0   & 0,00 \\
-    airline             & 10.325 & 0  & 0  & 0   & 0,00 \\
+    reservation\_id     & 10,325 & 0  & 0  & 0   & 0.00 \\
+    airline             & 10,325 & 0  & 0  & 0   & 0.00 \\
     \rowcolor{TableAlt}
-    departure\_date     & 10.325 & 15 & 10 & 25  & 0,24 \\
-    passenger\_country  & 10.325 & 68 & 39 & 107 & 1,04 \\
+    departure\_date     & 10,325 & 15 & 10 & 25  & 0.24 \\
+    passenger\_country  & 10,325 & 68 & 39 & 107 & 1.04 \\
     \rowcolor{TableAlt}
-    market\_segment     & 10.325 & 18 & 14 & 32  & 0,31 \\
-    fare\_policy        & 10.325 & 12 & 10 & 22  & 0,21 \\
+    market\_segment     & 10,325 & 18 & 14 & 32  & 0.31 \\
+    fare\_policy        & 10,325 & 12 & 10 & 22  & 0.21 \\
     \rowcolor{TableAlt}
-    avg\_ticket\_fare   & 10.325 & 28 & 15 & 43  & 0,42 \\
-    booking\_status     & 10.325 & 14 & 8  & 22  & 0,21 \\
+    avg\_ticket\_fare   & 10,325 & 28 & 15 & 43  & 0.42 \\
+    booking\_status     & 10,325 & 14 & 8  & 22  & 0.21 \\
     \rowcolor{TableAlt}
-    booked\_cabin\_code   & 10.325 & 29 & 18 & 47 & 0,46 \\
-    assigned\_cabin\_code & 10.325 & 31 & 16 & 47 & 0,46 \\
+    booked\_cabin\_code   & 10,325 & 29 & 18 & 47 & 0.46 \\
+    assigned\_cabin\_code & 10,325 & 31 & 16 & 47 & 0.46 \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -319,11 +322,11 @@ Nhóm đã xây dựng đường ống xử lý tự động gồm 8 bước tu�
 
 \section{Đánh giá chất lượng dữ liệu Trước và Sau làm sạch}
 
-Bảng \ref{tab:before_after} tổng hợp sự chuyển biến về mặt chất lượng dữ liệu, minh chứng cho sự chuẩn xác của quy trình làm sạch.
+Table \ref{tab:before_after} tổng hợp sự chuyển biến về mặt chất lượng dữ liệu, minh chứng cho sự chuẩn xác của quy trình làm sạch.
 
 \begin{table}[H]
   \centering
-  \caption{Đối chiếu chất lượng dữ liệu trước và sau tiền xử lý (\code{q01\_before\_after.csv})}
+  \caption{Data Quality Audit Before and After Preprocessing (\code{q01\_before\_after.csv})}
   \label{tab:before_after}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.2cm}
@@ -332,32 +335,32 @@ Bảng \ref{tab:before_after} tổng hợp sự chuyển biến về mặt chấ
                                >{\raggedright\arraybackslash}X}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Chỉ tiêu kiểm định} & \textbf{Trước làm sạch} & \textbf{Sau làm sạch} & \textbf{Đánh giá kết quả} \\
+    \textbf{Audit Metric} & \textbf{Before Cleaning} & \textbf{After Cleaning} & \textbf{Assessment \& Outcome} \\
     \midrule
-    Tổng số dòng bản ghi
-      & 10.325 & 10.000
-      & Giảm 325 dòng (loại 208 bản sao dư thừa, gộp 117 dòng trùng mã) \\
+    Total records
+      & 10,325 & 10,000
+      & Reduced by 325 rows (208 exact duplicates removed, 117 merged by reservation ID) \\
     \rowcolor{TableAlt}
-    Số mã đặt chỗ duy nhất
-      & 10.000 & 10.000
-      & Bảo toàn 100\% tập khách hàng độc lập \\
-    Số dòng trùng lặp 23 cột
+    Unique reservation IDs
+      & 10,000 & 10,000
+      & 100\% unique passenger reservation set preserved \\
+    Exact 23-column duplicate rows
       & 360 & 0
-      & Khử sạch hoàn toàn các bản ghi dư thừa \\
+      & Complete elimination of redundant copies \\
     \rowcolor{TableAlt}
-    Định dạng \code{departure\_date}
-      & Lẫn 4 định dạng & 100\% \code{YYYY-MM-DD}
-      & Thống nhất theo tiêu chuẩn ISO \\
-    Trường giá \code{avg\_ticket\_fare}
-      & Nhiễm \$, USD, EUR & 100\% \texttt{float64} (0--5.000)
-      & Làm sạch tiền tệ, giữ nguyên 9 vé 0 đồng hợp lệ \\
+    Format of \code{departure\_date}
+      & 4 mixed formats & 100\% \code{YYYY-MM-DD}
+      & Standardized to international ISO standard \\
+    Fare field \code{avg\_ticket\_fare}
+      & Contaminated with \$, USD, EUR & 100\% \texttt{float64} (0--5,000)
+      & Currency symbols cleaned; 9 valid \$0 bookings preserved \\
     \rowcolor{TableAlt}
-    Trường mã \code{passenger\_country}
-      & Lẫn chữ thường, text & 100\% mã ISO Alpha-3
-      & Chuẩn hóa theo danh mục ISO quốc tế \\
-    Xung đột \code{is\_cancelled}
-      & 42 bản ghi mâu thuẫn & 0 bản ghi mâu thuẫn
-      & Nhất quán tuyệt đối giữa cờ hủy và trạng thái \\
+    Country field \code{passenger\_country}
+      & Mixed lowercase, raw text & 100\% ISO Alpha-3
+      & Standardized via ISO-3166 international catalog \\
+    Business conflict on \code{is\_cancelled}
+      & 42 conflicting records & 0 conflicting records
+      & Absolute consistency between cancellation flag and status \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -377,17 +380,17 @@ Phân tích được tiến hành trên toàn bộ $N = 10.000$ đặt chỗ s�
 
 \begin{table}[H]
   \centering
-  \caption{Quy mô thị phần và tỷ lệ hủy vé theo hãng hàng không (\code{q02\_airline\_cancel.csv})}
+  \caption{Booking Share and Cancellation Rate by Airline (\code{q02\_airline\_cancel.csv})}
   \label{tab:q02}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{l XXXXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Hãng hàng không} & \textbf{Số đặt chỗ (n)} & \textbf{Thị phần (\%)} & \textbf{Số vé hủy (n)} & \textbf{Mẫu xác định} & \textbf{Tỷ lệ hủy (\%)} \\
+    \textbf{Airline} & \textbf{Bookings (n)} & \textbf{Booking Share (\%)} & \textbf{Cancelled (n)} & \textbf{Known Status Count} & \textbf{Cancel Rate (\%)} \\
     \midrule
-    Aurora Air    & 6.522 & 65,22 & 1.768 & 6.522 & 27,11 \\
+    Aurora Air    & 6,522 & 65.22 & 1,768 & 6,522 & 27.11 \\
     \rowcolor{TableAlt}
-    Horizon Wings & 3.478 & 34,78 & 969   & 3.478 & 27,86 \\
+    Horizon Wings & 3,478 & 34.78 & 969   & 3,478 & 27.86 \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -395,7 +398,7 @@ Phân tích được tiến hành trên toàn bộ $N = 10.000$ đặt chỗ s�
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{fig01_airline_cancel}
-  \caption{So sánh thị phần đặt chỗ và tỷ lệ hủy vé giữa Aurora Air và Horizon Wings}
+  \caption{Booking Cancellation Rates for Aurora Air and Horizon Wings}
   \label{fig:q02}
 \end{figure}
 
@@ -413,51 +416,51 @@ Nhằm cô lập tác động của việc thiếu tháng trong năm 2024 và 20
 
 \begin{table}[H]
   \centering
-  \caption{Phân phối lượng đặt chỗ theo tháng khởi hành trong năm 2025 (\code{q03\_monthly\_departures\_2025.csv})}
+  \caption{Bookings by Departure Month in 2025 (\code{q03\_monthly\_departures\_2025.csv})}
   \label{tab:q03}
   \renewcommand{\arraystretch}{1.15}
   \begin{tabular}{llrr}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Hãng hàng không} & \textbf{Tháng} & \textbf{Số lượng đặt chỗ} & \textbf{Tỷ trọng trong năm (\%)} \\
+    \textbf{Airline} & \textbf{Month} & \textbf{Bookings} & \textbf{Share of Annual Bookings (\%)} \\
     \midrule
-    Aurora Air & Tháng 1  & 337 & 9,03  \\
+    Aurora Air & January  & 337 & 9.03  \\
     \rowcolor{TableAlt}
-    Aurora Air & Tháng 2  & 299 & 8,01  \\
-    Aurora Air & Tháng 3  & 266 & 7,13  \\
+    Aurora Air & February  & 299 & 8.01  \\
+    Aurora Air & March  & 266 & 7.13  \\
     \rowcolor{TableAlt}
-    Aurora Air & Tháng 4  & 277 & 7,42  \\
-    Aurora Air & Tháng 5  & 300 & 8,04  \\
+    Aurora Air & April  & 277 & 7.42  \\
+    Aurora Air & May  & 300 & 8.04  \\
     \rowcolor{TableAlt}
-    Aurora Air & Tháng 6  & 323 & 8,66  \\
-    Aurora Air & \textbf{Tháng 7}  & \textbf{383} & \textbf{10,27} \\
+    Aurora Air & June  & 323 & 8.66  \\
+    Aurora Air & \textbf{July}  & \textbf{383} & \textbf{10.27} \\
     \rowcolor{TableAlt}
-    Aurora Air & Tháng 8  & 364 & 9,76  \\
-    Aurora Air & Tháng 9  & 281 & 7,53  \\
+    Aurora Air & August  & 364 & 9.76  \\
+    Aurora Air & September  & 281 & 7.53  \\
     \rowcolor{TableAlt}
-    Aurora Air & Tháng 10 & 251 & 6,73  \\
-    Aurora Air & Tháng 11 & 268 & 7,18  \\
+    Aurora Air & October & 251 & 6.73  \\
+    Aurora Air & November & 268 & 7.18  \\
     \rowcolor{TableAlt}
-    Aurora Air & \textbf{Tháng 12} & \textbf{382} & \textbf{10,24} \\
+    Aurora Air & \textbf{December} & \textbf{382} & \textbf{10.24} \\
     \midrule
-    Horizon Wings & Tháng 1  & 165 & 8,19  \\
+    Horizon Wings & January  & 165 & 8.19  \\
     \rowcolor{TableAlt}
-    Horizon Wings & Tháng 2  & 160 & 7,94  \\
-    Horizon Wings & Tháng 3  & 146 & 7,25  \\
+    Horizon Wings & February  & 160 & 7.94  \\
+    Horizon Wings & March  & 146 & 7.25  \\
     \rowcolor{TableAlt}
-    Horizon Wings & Tháng 4  & 154 & 7,64  \\
-    Horizon Wings & Tháng 5  & 142 & 7,05  \\
+    Horizon Wings & April  & 154 & 7.64  \\
+    Horizon Wings & May  & 142 & 7.05  \\
     \rowcolor{TableAlt}
-    Horizon Wings & Tháng 6  & 172 & 8,54  \\
-    Horizon Wings & Tháng 7  & 189 & 9,38  \\
+    Horizon Wings & June  & 172 & 8.54  \\
+    Horizon Wings & July  & 189 & 9.38  \\
     \rowcolor{TableAlt}
-    Horizon Wings & \textbf{Tháng 8}  & \textbf{229} & \textbf{11,36} \\
-    Horizon Wings & Tháng 9  & 145 & 7,20  \\
+    Horizon Wings & \textbf{August}  & \textbf{229} & \textbf{11.36} \\
+    Horizon Wings & September  & 145 & 7.20  \\
     \rowcolor{TableAlt}
-    Horizon Wings & Tháng 10 & 153 & 7,59  \\
-    Horizon Wings & Tháng 11 & 150 & 7,44  \\
+    Horizon Wings & October & 153 & 7.59  \\
+    Horizon Wings & November & 150 & 7.44  \\
     \rowcolor{TableAlt}
-    Horizon Wings & \textbf{Tháng 12} & \textbf{210} & \textbf{10,42} \\
+    Horizon Wings & \textbf{December} & \textbf{210} & \textbf{10.42} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -465,7 +468,7 @@ Nhằm cô lập tác động của việc thiếu tháng trong năm 2024 và 20
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.90\textwidth]{fig02_monthly_departures_2025}
-  \caption{Biểu đồ đường xu hướng mùa vụ đặt chỗ theo các tháng trong năm 2025}
+  \caption{Monthly Booking Trends in 2025}
   \label{fig:q03}
 \end{figure}
 
@@ -483,38 +486,38 @@ Khảo sát được thực hiện trên $N = 9.978$ bản ghi có thông tin \c
 
 \begin{table}[H]
   \centering
-  \caption{Thống kê mô tả thời gian đặt trước theo hãng bay (\code{q04\_leadtime\_stats.csv})}
+  \caption{Booking Lead Time Statistics by Airline (\code{q04\_leadtime\_stats.csv})}
   \label{tab:q04_stats}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{l XXXXXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Hãng hàng không} & \textbf{Số lượng (n)} & \textbf{Trung bình} & \textbf{Trung vị} & \textbf{Q1} & \textbf{Q3} & \textbf{Tối đa} \\
+    \textbf{Airline} & \textbf{Count (n)} & \textbf{Mean} & \textbf{Median} & \textbf{Q1} & \textbf{Q3} & \textbf{Max.} \\
     \midrule
-    Aurora Air    & 6.506 & 71,10 ngày & 57 ngày & 27 ngày & 98 ngày & 365 ngày \\
+    Aurora Air    & 6,506 & 71.10 days & 57 days & 27 days & 98 days & 365 days \\
     \rowcolor{TableAlt}
-    Horizon Wings & 3.472 & 71,89 ngày & 58 ngày & 28 ngày & 99 ngày & 365 ngày \\
+    Horizon Wings & 3,472 & 71.89 days & 58 days & 28 days & 99 days & 365 days \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
 \begin{table}[H]
   \centering
-  \caption{Tỷ lệ hủy đặt chỗ theo phân nhóm thời gian đặt trước (\code{q04\_leadtime_cancel.csv})}
+  \caption{Cancellation Rates by Booking Lead Time Group (\code{q04\_leadtime\_cancel.csv})}
   \label{tab:q04_cancel}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{l XXXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Khoảng Lead Time (ngày)} & \textbf{Số đặt chỗ} & \textbf{Số vé hủy} & \textbf{Mẫu xác định} & \textbf{Tỷ lệ hủy (\%)} \\
+    \textbf{Lead Time Group (days)} & \textbf{Bookings} & \textbf{Cancelled} & \textbf{Known Status Count} & \textbf{Cancel Rate (\%)} \\
     \midrule
-    0--7 ngày    & 774   & 172   & 774   & 22,22 \\
+    0--7 days    & 774   & 172   & 774   & 22.22 \\
     \rowcolor{TableAlt}
-    8--30 ngày   & 2.005 & 485   & 2.005 & 24,19 \\
-    31--90 ngày  & 4.327 & 1.115 & 4.327 & 25,77 \\
+    8--30 days   & 2,005 & 485   & 2,005 & 24.19 \\
+    31--90 days  & 4,327 & 1,115 & 4,327 & 25.77 \\
     \rowcolor{TableAlt}
-    91--180 ngày & 2.276 & 693   & 2.276 & 30,45 \\
-    \textbf{Trên 180 ngày (181+)} & \textbf{596} & \textbf{266} & \textbf{596} & \textbf{44,63} \\
+    91--180 days & 2,276 & 693   & 2,276 & 30.45 \\
+    \textbf{181+ days} & \textbf{596} & \textbf{266} & \textbf{596} & \textbf{44.63} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -522,7 +525,7 @@ Khảo sát được thực hiện trên $N = 9.978$ bản ghi có thông tin \c
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{fig03_leadtime_cancel}
-  \caption{Mối quan hệ phi tuyến giữa thời gian đặt trước và tỷ lệ hủy chỗ}
+  \caption{Nonlinear Relationship Between Booking Lead Time and Cancellation Rate}
   \label{fig:q04}
 \end{figure}
 
@@ -539,29 +542,29 @@ Phân tích trên $N = 9.895$ bản ghi có mã quốc gia hợp lệ (loại 10
 
 \begin{table}[H]
   \centering
-  \caption{Top 10 quốc gia có lượng đặt chỗ lớn nhất (\code{q05\_top10\_country.csv})}
+  \caption{Top 10 Passenger Countries by Booking Volume (\code{q05\_top10\_country.csv})}
   \label{tab:q05}
   \renewcommand{\arraystretch}{1.25}
   \begin{tabular}{cc rc}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Thứ hạng} & \textbf{Mã ISO Alpha-3} & \textbf{Số lượng đặt chỗ} & \textbf{Tỷ trọng thị phần (\%)} \\
+    \textbf{Rank} & \textbf{ISO Alpha-3 Code} & \textbf{Bookings} & \textbf{Booking Share (\%)} \\
     \midrule
-    1 & \textbf{VNM (Việt Nam)}   & \textbf{2.080} & \textbf{21,02} \\
+    1 & \textbf{VNM (Vietnam)}   & \textbf{2,080} & \textbf{21.02} \\
     \rowcolor{TableAlt}
-    2 & CHN (Trung Quốc) & 906   & 9,16  \\
-    3 & JPN (Nhật Bản)   & 663   & 6,70  \\
+    2 & CHN (China) & 906   & 9.16  \\
+    3 & JPN (Japan)   & 663   & 6.70  \\
     \rowcolor{TableAlt}
-    4 & KOR (Hàn Quốc)   & 526   & 5,32  \\
-    5 & THA (Thái Lan)   & 515   & 5,20  \\
+    4 & KOR (South Korea)   & 526   & 5.32  \\
+    5 & THA (Thailand)   & 515   & 5.20  \\
     \rowcolor{TableAlt}
-    6 & USA (Hoa Kỳ)     & 489   & 4,94  \\
-    7 & SGP (Singapore)  & 398   & 4,02  \\
+    6 & USA (United States)     & 489   & 4.94  \\
+    7 & SGP (Singapore)  & 398   & 4.02  \\
     \rowcolor{TableAlt}
-    8 & AUS (Úc)         & 362   & 3,66  \\
-    9 & IND (Ấn Độ)      & 349   & 3,53  \\
+    8 & AUS (Australia)         & 362   & 3.66  \\
+    9 & IND (India)      & 349   & 3.53  \\
     \rowcolor{TableAlt}
-    10 & GBR (Vương quốc Anh) & 347 & 3,51 \\
+    10 & GBR (United Kingdom) & 347 & 3.51 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -569,7 +572,7 @@ Phân tích trên $N = 9.895$ bản ghi có mã quốc gia hợp lệ (loại 10
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{fig04_top10_country}
-  \caption{Cơ cấu Top 10 quốc tịch hành khách đặt chỗ}
+  \caption{Booking Volume for the Top 10 Passenger Countries}
   \label{fig:q05}
 \end{figure}
 
@@ -582,24 +585,24 @@ Việt Nam (VNM) giữ vị trí thị trường nội địa hạt nhân với 
 
 \begin{table}[H]
   \centering
-  \caption{Quy mô đặt chỗ và tỷ lệ hủy theo phân khúc thị trường (\code{q06\_segment\_cancel.csv})}
+  \caption{Booking Volume and Cancellation Rate by Market Segment (\code{q06\_segment\_cancel.csv})}
   \label{tab:q06}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{l XXXXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Phân khúc khách hàng} & \textbf{Số đặt chỗ} & \textbf{Tỷ trọng (\%)} & \textbf{Vé hủy} & \textbf{Mẫu xác định} & \textbf{Tỷ lệ hủy (\%)} \\
+    \textbf{Market Segment} & \textbf{Bookings} & \textbf{Booking Share (\%)} & \textbf{Cancelled} & \textbf{Known Status Count} & \textbf{Cancel Rate (\%)} \\
     \midrule
-    Online OTA    & 3.906 & 39,17 & 1.151 & 3.906 & \textbf{29,47} \\
+    Online OTA    & 3,906 & 39.17 & 1,151 & 3,906 & \textbf{29.47} \\
     \rowcolor{TableAlt}
-    Group         & 579   & 5,81  & 161   & 579   & 27,81 \\
-    Offline Agent & 1.596 & 16,00 & 440   & 1.596 & 27,57 \\
+    Group         & 579   & 5.81  & 161   & 579   & 27.81 \\
+    Offline Agent & 1,596 & 16.00 & 440   & 1,596 & 27.57 \\
     \rowcolor{TableAlt}
-    Direct        & 1.834 & 18,39 & 499   & 1.834 & 27,21 \\
-    Loyalty       & 417   & 4,18  & 111   & 417   & 26,62 \\
+    Direct        & 1,834 & 18.39 & 499   & 1,834 & 27.21 \\
+    Loyalty       & 417   & 4.18  & 111   & 417   & 26.62 \\
     \rowcolor{TableAlt}
-    Package Tour  & 717   & 7,19  & 174   & 717   & 24,27 \\
-    \textbf{Corporate} & \textbf{923} & \textbf{9,26} & \textbf{198} & \textbf{923} & \textbf{21,45} \\
+    Package Tour  & 717   & 7.19  & 174   & 717   & 24.27 \\
+    \textbf{Corporate} & \textbf{923} & \textbf{9.26} & \textbf{198} & \textbf{923} & \textbf{21.45} \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -607,7 +610,7 @@ Việt Nam (VNM) giữ vị trí thị trường nội địa hạt nhân với 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.88\textwidth]{fig05_segment_cancel}
-  \caption{So sánh tỷ lệ hủy đặt chỗ giữa các phân khúc thị trường}
+  \caption{Booking Cancellation Rates by Market Segment}
   \label{fig:q06}
 \end{figure}
 
@@ -620,28 +623,28 @@ Khảo sát mối liên hệ giữa điều kiện hoàn/hủy vé với kết q
 
 \begin{table}[H]
   \centering
-  \caption{Bảng chéo chính sách giá vé $\times$ trạng thái đặt chỗ (\code{q07\_fare\_policy\_status.csv})}
+  \caption{Booking Status by Fare Policy (\code{q07\_fare\_policy\_status.csv})}
   \label{tab:q07}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{ll XX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Chính sách giá vé} & \textbf{Trạng thái thực tế} & \textbf{Số lượng đặt chỗ} & \textbf{Tỷ lệ trong nhóm (\%)} \\
+    \textbf{Fare Policy} & \textbf{Booking Status} & \textbf{Bookings} & \textbf{Share Within Fare Policy (\%)} \\
     \midrule
-    Flexible (Linh hoạt)     & Flown (Đã bay)     & 2.519 & 69,91 \\
+    Flexible     & Flown     & 2,519 & 69.91 \\
     \rowcolor{TableAlt}
-    Flexible                 & Cancelled (Hủy)   & 1.029 & 28,56 \\
-    Flexible                 & No-Show (Bỏ chuyến)& 55    & 1,53  \\
+    Flexible                 & Cancelled   & 1,029 & 28.56 \\
+    Flexible                 & No-Show& 55    & 1.53  \\
     \midrule
-    Semi-Flexible (Bán linh hoạt) & Flown         & 2.632 & 71,97 \\
+    Semi-Flexible & Flown         & 2,632 & 71.97 \\
     \rowcolor{TableAlt}
-    Semi-Flexible            & Cancelled          & 965   & 26,39 \\
-    Semi-Flexible            & No-Show            & 60    & 1,64  \\
+    Semi-Flexible            & Cancelled          & 965   & 26.39 \\
+    Semi-Flexible            & No-Show            & 60    & 1.64  \\
     \midrule
-    \textbf{Non-Refundable (Không hoàn)} & \textbf{Flown} & \textbf{2.089} & \textbf{77,26} \\
+    \textbf{Non-Refundable} & \textbf{Flown} & \textbf{2,089} & \textbf{77.26} \\
     \rowcolor{TableAlt}
-    Non-Refundable           & Cancelled          & 576   & 21,30 \\
-    Non-Refundable           & No-Show            & 39    & 1,44  \\
+    Non-Refundable           & Cancelled          & 576   & 21.30 \\
+    Non-Refundable           & No-Show            & 39    & 1.44  \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -649,7 +652,7 @@ Khảo sát mối liên hệ giữa điều kiện hoàn/hủy vé với kết q
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.88\textwidth]{fig06_fare_policy_status}
-  \caption{Cơ cấu trạng thái chuyến bay theo từng loại chính sách giá vé}
+  \caption{Booking Status Distribution by Fare Policy}
   \label{fig:q07}
 \end{figure}
 
@@ -662,18 +665,18 @@ Khảo sát trên $N = 7.224$ giao dịch thương mại thành công không h�
 
 \begin{table}[H]
   \centering
-  \caption{Các chỉ số thống kê mô tả giá vé theo hãng bay (\code{q08\_fare\_stats\_by\_airline.csv})}
+  \caption{Ticket Fare Statistics by Airline (\code{q08\_fare\_stats\_by\_airline.csv})}
   \label{tab:q08}
   \renewcommand{\arraystretch}{1.3}
   \resizebox{\textwidth}{!}{%
   \begin{tabular}{lrrrrrrrcc}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Hãng bay} & \textbf{Mẫu (n)} & \textbf{TB (\$)} & \textbf{Trung vị (\$)} & \textbf{Q1 (\$)} & \textbf{Q3 (\$)} & \textbf{Min (\$)} & \textbf{Max (\$)} & \textbf{Vé 0đ loại} & \textbf{Khuyết giá} \\
+    \textbf{Airline} & \textbf{Sample Size (n)} & \textbf{Mean (\$)} & \textbf{Median (\$)} & \textbf{Q1 (\$)} & \textbf{Q3 (\$)} & \textbf{Min (\$)} & \textbf{Max (\$)} & \textbf{Zero-Fare Exclusions} & \textbf{Missing Fares} \\
     \midrule
-    Aurora Air    & 4.736 & 208,76 & 149,54 & 123,30 & 190,26 & 56,49 & 2.258,21 & 5 & 13 \\
+    Aurora Air    & 4,736 & 208.76 & 149.54 & 123.30 & 190.26 & 56.49 & 2,258.21 & 5 & 13 \\
     \rowcolor{TableAlt}
-    Horizon Wings & 2.488 & 194,95 & 135,26 & 112,52 & 171,42 & 48,77 & 2.117,76 & 4 & 17 \\
+    Horizon Wings & 2,488 & 194.95 & 135.26 & 112.52 & 171.42 & 48.77 & 2,117.76 & 4 & 17 \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -681,7 +684,7 @@ Khảo sát trên $N = 7.224$ giao dịch thương mại thành công không h�
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.88\textwidth]{fig07_fare_hist}
-  \caption{Phân phối mật độ giá vé theo hãng (cắt tại phân vị 99 nhằm hạn chế nhiễu ngoại lai)}
+  \caption{Ticket Fare Density by Airline (Truncated at the 99th Percentile)}
   \label{fig:q08}
 \end{figure}
 
@@ -694,46 +697,46 @@ Khảo sát tổng thời gian lưu trú (đêm cuối tuần + đêm trong tu�
 
 \begin{table}[H]
   \centering
-  \caption{Thống kê độ dài chuyến đi của hành khách (\code{q09\_trip\_days.csv})}
+  \caption{Passenger Trip Duration Statistics (\code{q09\_trip\_days.csv})}
   \label{tab:q09}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{l XXXXXXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Hãng bay} & \textbf{Số lượng (n)} & \textbf{Trung bình} & \textbf{Trung vị} & \textbf{Q1} & \textbf{Q3} & \textbf{Tối đa} & \textbf{Chuyến 0 ngày} \\
+    \textbf{Airline} & \textbf{Count (n)} & \textbf{Mean} & \textbf{Median} & \textbf{Q1} & \textbf{Q3} & \textbf{Max.} & \textbf{Zero-Day Trips} \\
     \midrule
-    Aurora Air    & 4.733 & 5,76 ngày & 4,00 ngày & 3,00 ngày & 7,00 ngày & 45,00 ngày & 0 \\
+    Aurora Air    & 4,733 & 5.76 days & 4.00 days & 3.00 days & 7.00 days & 45.00 days & 0 \\
     \rowcolor{TableAlt}
-    Horizon Wings & 2.499 & 5,95 ngày & 4,00 ngày & 3,00 ngày & 7,00 ngày & 45,00 ngày & 0 \\
+    Horizon Wings & 2,499 & 5.95 days & 4.00 days & 3.00 days & 7.00 days & 45.00 days & 0 \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
 \begin{table}[H]
   \centering
-  \caption{Cơ cấu đặt chỗ theo phân nhóm thời gian lưu trú}
+  \caption{Bookings by Trip Duration Group}
   \label{tab:q09_groups}
   \renewcommand{\arraystretch}{1.3}
-  \begin{tabular}{l rrrr}
+  \begin{tabularx}{\textwidth}{X rrrr}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Khoảng ngày lưu trú} & \textbf{Aurora Air (n)} & \textbf{Tỷ lệ (\%)} & \textbf{Horizon Wings (n)} & \textbf{Tỷ lệ (\%)} \\
+    \textbf{Trip Duration Group} & \textbf{Aurora Air (n)} & \textbf{Share (\%)} & \textbf{Horizon Wings (n)} & \textbf{Share (\%)} \\
     \midrule
-    1--2 ngày          & 969   & 20,47 & 500 & 20,01 \\
+    1--2 days          & 969   & 20.47 & 500 & 20.01 \\
     \rowcolor{TableAlt}
-    \textbf{3--4 ngày} & \textbf{1.540} & \textbf{32,54} & \textbf{776} & \textbf{31,05} \\
-    5--7 ngày          & 1.253 & 26,47 & 678 & 27,13 \\
+    \textbf{3--4 days} & \textbf{1,540} & \textbf{32.54} & \textbf{776} & \textbf{31.05} \\
+    5--7 days          & 1,253 & 26.47 & 678 & 27.13 \\
     \rowcolor{TableAlt}
-    8--14 ngày         & 725   & 15,32 & 407 & 16,29 \\
-    15+ ngày           & 246   & 5,20  & 138 & 5,52  \\
+    8--14 days         & 725   & 15.32 & 407 & 16.29 \\
+    15+ days           & 246   & 5.20  & 138 & 5.52  \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.88\textwidth]{fig08_trip_days}
-  \caption{Phân phối tần suất thời gian lưu trú của hành khách}
+  \caption{Passenger Trip Duration Distribution}
   \label{fig:q09}
 \end{figure}
 
@@ -746,51 +749,51 @@ Gần 80\% hành khách thực hiện các chuyến đi có độ dài từ 1 đ
 
 \begin{table}[H]
   \centering
-  \caption{Tỷ lệ thay đổi hạng khoang theo hãng hàng không (\code{q10\_cabin\_change\_by\_airline.csv})}
+  \caption{Cabin Change Rates by Airline (\code{q10\_cabin\_change\_by\_airline.csv})}
   \label{tab:q10_airline}
   \renewcommand{\arraystretch}{1.3}
   \begin{tabularx}{\textwidth}{l XXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Hãng hàng không} & \textbf{Mẫu hợp lệ (n)} & \textbf{Số lượt đổi khoang} & \textbf{Tỷ lệ đổi khoang (\%)} \\
+    \textbf{Airline} & \textbf{Valid Sample Size (n)} & \textbf{Cabin Changes} & \textbf{Cabin Change Rate (\%)} \\
     \midrule
-    Aurora Air    & 6.472 & 737 & 11,39 \\
+    Aurora Air    & 6,472 & 737 & 11.39 \\
     \rowcolor{TableAlt}
-    Horizon Wings & 3.449 & 405 & 11,74 \\
+    Horizon Wings & 3,449 & 405 & 11.74 \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
 \begin{table}[H]
   \centering
-  \caption{Tỷ lệ thay đổi khoang theo từng phân hạng cabin (\code{q10\_cabin\_change\_by\_booked\_code.csv})}
+  \caption{Cabin Change Rates by Booked Cabin Code (\code{q10\_cabin\_change\_by\_booked\_code.csv})}
   \label{tab:q10_cabin}
   \renewcommand{\arraystretch}{1.25}
-  \begin{tabular}{l rrr p{3.2cm}}
+  \begin{tabularx}{\textwidth}{l rrr >{\raggedright\arraybackslash}X}
     \toprule
     \rowcolor{TableHead}
-    \textbf{Mã cabin} & \textbf{Số lượng (n)} & \textbf{Lượt đổi} & \textbf{Tỷ lệ đổi (\%)} & \textbf{Độ tin cậy mẫu} \\
+    \textbf{Booked Cabin Code} & \textbf{Count (n)} & \textbf{Cabin Changes} & \textbf{Change Rate (\%)} & \textbf{Sample Notes} \\
     \midrule
-    B1 & 314   & 37  & 11,78 & Mẫu chuẩn ($n > 100$) \\
+    B1 & 314   & 37  & 11.78 & Standard Sample ($n > 100$) \\
     \rowcolor{TableAlt}
-    B2 & 247   & 32  & 12,96 & Mẫu chuẩn ($n > 100$) \\
-    \textbf{B3} & \textbf{177} & \textbf{24} & \textbf{13,56} & \textbf{Tỷ lệ cao nhất} \\
+    B2 & 247   & 32  & 12.96 & Standard Sample ($n > 100$) \\
+    \textbf{B3} & \textbf{177} & \textbf{24} & \textbf{13.56} & \textbf{Highest Rate} \\
     \rowcolor{TableAlt}
-    E1 & 2.323 & 257 & 11,06 & Mẫu chuẩn lớn \\
-    E2 & 2.363 & 283 & 11,98 & Mẫu chuẩn lớn \\
+    E1 & 2,323 & 257 & 11.06 & Large Sample \\
+    E2 & 2,363 & 283 & 11.98 & Large Sample \\
     \rowcolor{TableAlt}
-    E3 & 1.923 & 204 & 10,61 & Mẫu chuẩn lớn \\
-    E4 & 1.470 & 185 & 12,59 & Mẫu chuẩn lớn \\
+    E3 & 1,923 & 204 & 10.61 & Large Sample \\
+    E4 & 1,470 & 185 & 12.59 & Large Sample \\
     \rowcolor{TableAlt}
-    F1 & 55    & 7   & 12,73 & \textcolor{AccentRed}{Cảnh báo: $n < 100$} \\
-    F2 & 34    & 3   & 8,82  & \textcolor{AccentRed}{Cảnh báo: $n < 100$} \\
+    F1 & 55    & 7   & 12.73 & \textcolor{AccentRed}{Caution: $n < 100$} \\
+    F2 & 34    & 3   & 8.82  & \textcolor{AccentRed}{Caution: $n < 100$} \\
     \rowcolor{TableAlt}
-    F3 & 38    & 4   & 10,53 & \textcolor{AccentRed}{Cảnh báo: $n < 100$} \\
-    P1 & 530   & 61  & 11,51 & Mẫu chuẩn ($n > 100$) \\
+    F3 & 38    & 4   & 10.53 & \textcolor{AccentRed}{Caution: $n < 100$} \\
+    P1 & 530   & 61  & 11.51 & Standard Sample ($n > 100$) \\
     \rowcolor{TableAlt}
-    P2 & 447   & 45  & 10,07 & Mẫu chuẩn ($n > 100$) \\
+    P2 & 447   & 45  & 10.07 & Standard Sample ($n > 100$) \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table}
 
 Quy trình quản lý chỗ ngồi duy trì tính ổn định cao khi gần \pct{89} hành khách được phục vụ đúng khoang ghế đã đặt. Tỷ lệ tái sắp xếp tập trung đáng kể tại khoang Thương gia (mã **B3** đạt \pct{13,56} và **B2** đạt \pct{12,96}), phản ánh nghiệp vụ nâng hạng thương quyền (\textit{Operational Upgrade}) để giải quyết tình trạng quá tải khoang phổ thông.
@@ -803,35 +806,35 @@ Bảng \ref{tab:insights_summary} hệ thống hóa 6 phát hiện thực nghi�
 
 \begin{table}[H]
   \centering
-  \caption{Tổng hợp 6 phát hiện kinh doanh then chốt}
+  \caption{Six Key Business Findings}
   \label{tab:insights_summary}
   \renewcommand{\arraystretch}{1.4}
   \begin{tabularx}{\textwidth}{c XXX}
     \toprule
     \rowcolor{TableHead}
-    \textbf{\#} & \textbf{Chủ đề phân tích} & \textbf{Bằng chứng số liệu} & \textbf{Phát hiện cốt lõi} \\
+    \textbf{\#} & \textbf{Analysis Topic} & \textbf{Supporting Evidence} & \textbf{Key Finding} \\
     \midrule
-    \textbf{1} & Thời gian đặt trước
-      & Bảng \ref{tab:q04_cancel}, Hình \ref{fig:q04}
-      & Tỷ lệ hủy tăng phi tuyến theo lead time, chạm đỉnh 44,63\% ở nhóm đặt xa trên 6 tháng. \\
+    \textbf{1} & Booking Lead Time
+      & Table \ref{tab:q04_cancel}, Figure \ref{fig:q04}
+      & Cancellation rates rise nonlinearly with lead time, peaking at 44.63\% for bookings made more than six months in advance. \\
     \rowcolor{TableAlt}
-    \textbf{2} & Chính sách giá vé
-      & Bảng \ref{tab:q07}, Hình \ref{fig:q07}
-      & Vé Non-Refundable có tỷ lệ bay cao nhất (77,26\%) và tỷ lệ hủy thấp nhất (21,30\%). \\
-    \textbf{3} & Phân khúc thị trường
-      & Bảng \ref{tab:q06}, Hình \ref{fig:q06}
-      & Kênh Online OTA dẫn đầu về doanh số (39,17\%) nhưng rủi ro hủy cao nhất mạng bay (29,47\%). \\
+    \textbf{2} & Fare Policy
+      & Table \ref{tab:q07}, Figure \ref{fig:q07}
+      & Non-refundable fares have the highest flown rate (77.26\%) and the lowest cancellation rate (21.30\%). \\
+    \textbf{3} & Market Segment
+      & Table \ref{tab:q06}, Figure \ref{fig:q06}
+      & Online OTAs account for the largest booking share (39.17\%) and have the highest cancellation rate (29.47\%). \\
     \rowcolor{TableAlt}
-    \textbf{4} & Chu kỳ mùa vụ
-      & Bảng \ref{tab:q03}, Hình \ref{fig:q03}
-      & Biến động nhu cầu theo mô hình hai đỉnh đồng pha (mùa hè và tháng 12) ở cả hai hãng. \\
-    \textbf{5} & Định vị giá vé
-      & Bảng \ref{tab:q08}, Hình \ref{fig:q08}
-      & Giá vé phân phối lệch phải mạnh; giá trung vị Aurora Air cao hơn Horizon Wings 10,56\%. \\
+    \textbf{4} & Seasonality
+      & Table \ref{tab:q03}, Figure \ref{fig:q03}
+      & Demand for both airlines peaks in summer and December. \\
+    \textbf{5} & Fare Positioning
+      & Table \ref{tab:q08}, Figure \ref{fig:q08}
+      & Fares are strongly right-skewed. Aurora Air's median fare is 10.56\% higher than Horizon Wings'. \\
     \rowcolor{TableAlt}
-    \textbf{6} & Biến động hạng khoang
-      & Bảng \ref{tab:q10_cabin}
-      & Tỷ lệ đổi cabin bình quân đạt $\sim$11,5\%, tần suất cao nhất tại khoang Thương gia (B3 đạt 13,56\%). \\
+    \textbf{6} & Cabin Changes
+      & Table \ref{tab:q10_cabin}
+      & The cabin change rate averages $\sim$11.5\% and is highest in business class (13.56\% for B3). \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -899,49 +902,6 @@ Từ các phát hiện định lượng, nhóm đề xuất 4 nhóm giải pháp
 \end{itemize}
 
 % =========================================================
-\chapter{PHÂN CÔNG CÔNG VIỆC \& ĐÁNH GIÁ ĐÓNG GÓP}
-% =========================================================
 
-Quá trình triển khai dự án được tổ chức chặt chẽ thông qua hệ thống quản lý phiên bản Git/GitHub, tuân thủ nguyên tắc phân nhánh, commit theo quy chuẩn và thực hiện kiểm thử tự động chéo trước khi tích hợp vào nhánh chính.
-
-\begin{table}[H]
-  \centering
-  \caption{Bảng phân công nhiệm vụ và mức độ hoàn thành của các thành viên}
-  \label{tab:team}
-  \renewcommand{\arraystretch}{1.45}
-  \begin{tabularx}{\textwidth}{>{\bfseries}p{2.6cm}
-                               >{\raggedright\arraybackslash}p{2.8cm}
-                               >{\raggedright\arraybackslash}X
-                               >{\raggedright\arraybackslash}p{3.2cm}
-                               c}
-    \toprule
-    \rowcolor{TableHead}
-    \textbf{Thành viên} & \textbf{Vai trò chính} & \textbf{Nhiệm vụ đảm nhiệm cụ thể} & \textbf{Sản phẩm nghiệm thu} & \textbf{Đóng góp} \\
-    \midrule
-    Trần Thế Tùng
-      & Tiền xử lý \& Kỹ thuật Dữ liệu
-      & Khảo sát ô thiếu Giai đoạn A, phân loại 12 nhóm lỗi. Thực thi chuỗi tiền xử lý B1--B5: chuẩn hóa mã khóa, chuyển ngày lệch cột, xử lý ký tự rác, ánh xạ danh mục, phân tích ngày tháng ISO. Soạn thảo Chương 2 Báo cáo.
-      & \code{a\_missing\_survey.csv}, \code{a\_issue\_catalog.csv}, pipeline Ô 0--B5 trong notebook, nội dung Chương 2
-      & \textbf{100\%} \\
-    \rowcolor{TableAlt}
-    Tạ Minh Quân
-      & Quản trị CSDL \& Đảm bảo Chất lượng
-      & Thực thi bước B6--B8: làm sạch số đo, xử lý giá vé (bảo toàn vé 0đ), chuẩn hóa mã ISO quốc gia, hợp nhất 117 dòng trùng mã, lập bảng \code{row\_lineage.csv}. Tạo 7 cột dẫn xuất C1--C3, tổng hợp \code{monthly\_summary.csv}, thực thi bộ kiểm thử tự động C4 (51/51 test đạt). Soạn thảo Chương 1 và 4.
-      & \code{reservations\_clean.csv}, \code{monthly\_summary.csv}, \code{cleaning\_log.csv}, \code{row\_lineage.csv}, \code{quality\_report.csv}, \code{q01\_before\_after.csv}, 51 bài test
-      & \textbf{100\%} \\
-    Nguyễn Đình Phan Anh
-      & Phân tích Dữ liệu \& Trực quan hóa
-      & Tính toán chính xác mẫu số cho 9 bài toán vận hành (Câu 2 đến 10). Thiết kế 8 biểu đồ trực quan hóa chuẩn kỹ thuật (\code{fig01}--\code{fig08}). Đúc kết luận chứng cho 6 phát hiện kinh doanh chuyên sâu. Soạn thảo Chương 3 Báo cáo.
-      & 11 tệp dữ liệu phân tích (\code{q02}--\code{q10}), 8 biểu đồ PNG chất lượng cao, hệ thống 6 Insight kinh doanh
-      & \textbf{100\%} \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
-\vspace{0.8em}
-\begin{tcolorbox}[colback=TableAlt, colframe=NavyBlue, arc=1.5mm, left=10pt, right=10pt, top=7pt, bottom=7pt]
-\textbf{Cam kết đồng thuận:} Toàn thể các thành viên đã tham gia nghiêm túc trong mọi giai đoạn thảo luận, kiểm tra chéo tính chính xác của các quyết định xử lý và tự tin giải trình bảo vệ mọi nội dung chuyên môn của đề tài.
-\end{tcolorbox}
-
-% =========================================================
 \end{document}
+

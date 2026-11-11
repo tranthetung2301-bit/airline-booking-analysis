@@ -276,54 +276,54 @@ def create_q01_table(raw_df: pd.DataFrame, clean_df: pd.DataFrame) -> pd.DataFra
     metrics = []
     # 1. Tổng số dòng
     metrics.append({
-        'chi_tieu': 'Tổng số dòng bản ghi',
-        'truoc_lam_sach': f'{len(raw_df):,}',
-        'sau_lam_sach': f'{len(clean_df):,}',
-        'thay_doi': f'-{len(raw_df) - len(clean_df):,} dòng (loại 208 trùng lặp tuyệt đối, gộp 117 dòng cùng mã)'
+        'metric': 'Total record rows',
+        'before_cleaning': f'{len(raw_df):,}',
+        'after_cleaning': f'{len(clean_df):,}',
+        'change': f'-{len(raw_df) - len(clean_df):,} rows (dropped 208 exact duplicates, merged 117 duplicate ID rows)'
     })
     # 2. Số reservation_id duy nhất
     metrics.append({
-        'chi_tieu': 'Số mã đặt chỗ (reservation_id) duy nhất',
-        'truoc_lam_sach': f"{raw_df['reservation_id'].str.strip().str.upper().nunique():,}",
-        'sau_lam_sach': f"{clean_df['reservation_id'].nunique():,}",
-        'thay_doi': 'Giữ nguyên 100% (10,000 đặt chỗ độc lập)'
+        'metric': 'Unique booking codes (reservation_id)',
+        'before_cleaning': f"{raw_df['reservation_id'].str.strip().str.upper().nunique():,}",
+        'after_cleaning': f"{clean_df['reservation_id'].nunique():,}",
+        'change': '100% preserved (10,000 independent bookings)'
     })
     # 3. Bản ghi trùng lặp tuyệt đối 23 cột
     biz_cols = [c for c in raw_df.columns if c != 'record_id']
     raw_dup = raw_df.duplicated(subset=biz_cols, keep=False).sum()
     metrics.append({
-        'chi_tieu': 'Số dòng trùng lặp tuyệt đối trên 23 cột',
-        'truoc_lam_sach': f'{raw_dup:,}',
-        'sau_lam_sach': '0',
-        'thay_doi': 'Đã loại bỏ toàn bộ bản sao dư thừa'
+        'metric': 'Exact duplicate rows across 23 columns',
+        'before_cleaning': f'{raw_dup:,}',
+        'after_cleaning': '0',
+        'change': 'All redundant duplicate copies removed'
     })
     # 4. Cột ngày tháng định dạng chuẩn YYYY-MM-DD
     metrics.append({
-        'chi_tieu': 'Định dạng ngày (departure_date)',
-        'truoc_lam_sach': 'Lẫn 4 định dạng khác nhau',
-        'sau_lam_sach': '100% chuẩn YYYY-MM-DD',
-        'thay_doi': 'Đã chuyển đổi thống nhất định dạng ISO'
+        'metric': 'Date format (departure_date)',
+        'before_cleaning': 'Mixed across 4 different formats',
+        'after_cleaning': '100% standard YYYY-MM-DD',
+        'change': 'Unified to ISO standard format'
     })
     # 5. Giá vé có ký tự tiền tệ/dấu phẩy
     metrics.append({
-        'chi_tieu': 'Giá vé (avg_ticket_fare)',
-        'truoc_lam_sach': 'Lẫn $, USD, EUR, dấu phẩy thập phân',
-        'sau_lam_sach': '100% số thực Float64 trong khoảng 0-5000',
-        'thay_doi': 'Làm sạch tiền tệ, giữ nguyên vé 0 đồng hợp lệ'
+        'metric': 'Ticket fare (avg_ticket_fare)',
+        'before_cleaning': 'Contained $, USD, EUR, decimal commas',
+        'after_cleaning': '100% Float64 within 0-5000',
+        'change': 'Stripped currency artifacts, preserved valid $0 fares'
     })
     # 6. Mã quốc gia chuẩn hóa
     metrics.append({
-        'chi_tieu': 'Mã quốc gia (passenger_country)',
-        'truoc_lam_sach': 'Lẫn tên tiếng Anh, chữ thường, ký tự lạ',
-        'sau_lam_sach': '100% mã ISO 2-3 chữ in hoa (hoặc NaN)',
-        'thay_doi': 'Ánh xạ chuẩn hóa quốc tế, ký tự lạ chuyển NaN'
+        'metric': 'Country code (passenger_country)',
+        'before_cleaning': 'Mixed English names, lowercase, corrupted tokens',
+        'after_cleaning': '100% ISO 2-3 uppercase letters (or NaN)',
+        'change': 'Mapped to international standard, noise tokens to NaN'
     })
     # 7. Mâu thuẫn trạng thái is_cancelled vs booking_status
     metrics.append({
-        'chi_tieu': 'Nhất quán is_cancelled và booking_status',
-        'truoc_lam_sach': '42 dòng mâu thuẫn nghiệp vụ',
-        'sau_lam_sach': '0 dòng mâu thuẫn (100% nhất quán)',
-        'thay_doi': 'Đồng bộ cờ hủy với trạng thái bay'
+        'metric': 'Consistency between is_cancelled and booking_status',
+        'before_cleaning': '42 operational contradiction rows',
+        'after_cleaning': '0 contradictions (100% consistent)',
+        'change': 'Synchronized cancellation flags with flight status'
     })
 
     return pd.DataFrame(metrics)
