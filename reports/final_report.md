@@ -38,8 +38,9 @@ Mục tiêu trung tâm của dự án là chuyển đổi bộ dữ liệu đặ
 ### 2.1. Khảo sát chất lượng dữ liệu ban đầu (Giai đoạn A)
 Trước khi tiến hành can thiệp hay chỉnh sửa dữ liệu, nhóm đã thực hiện khảo sát toàn diện trên 10.325 dòng dữ liệu thô. Kết quả khảo sát đã phân loại các vấn đề chất lượng thành **12 nhóm lỗi cốt lõi** (`a_issue_catalog.csv`) và lập bảng tỷ lệ ô thiếu cho toàn bộ 24 cột (`a_missing_survey.csv`).
 
-#### Bảng khảo sát tỷ lệ ô thiếu trên các trường dữ liệu chính:
-| Cột dữ liệu | Tổng số dòng | Số dòng trống | Ký hiệu rác (NA, ?, unknown, -) | Tổng số ô thiếu | Tỷ lệ thiếu (%) |
+#### Missing Data Across Key Fields
+
+| Data Column | Total Records | Blank Records | Placeholder Values (NA, ?, unknown, -) | Total Missing | Missing Rate (%) |
 |---|:---:|:---:|:---:|:---:|:---:|
 | `record_id` | 10,325 | 0 | 0 | 0 | 0.00% |
 | `reservation_id` | 10,325 | 0 | 0 | 0 | 0.00% |
@@ -79,17 +80,17 @@ Nhóm đã triển khai chuỗi 8 bước xử lý tự động, ghi nhận minh
 * **Bước B8 (Hợp nhất bản ghi trùng reservation_id):** Đối với 117 dòng trùng mã đặt chỗ, nhóm áp dụng thuật toán gộp thông minh: chọn dòng có ít ô thiếu nhất làm dòng chính (`kept`), bổ sung thông tin từ dòng phụ (`merged`), đảm bảo bảng cuối cùng đạt chuẩn chính xác **10.000 đặt chỗ độc lập**.
 
 ### 2.3. Đánh giá chất lượng dữ liệu Trước và Sau làm sạch (Câu 1)
-Bảng tổng hợp đối chiếu chất lượng Trước và Sau làm sạch (`outputs/tables/q01_before_after.csv`):
+Data Quality Audit Before and After Cleaning (`outputs/tables/q01_before_after.csv`)
 
-| Chỉ tiêu đánh giá | Trước làm sạch | Sau làm sạch | Kết quả thay đổi & Diễn giải |
+| Audit Metric | Before Cleaning | After Cleaning | Change and Explanation |
 | --- | --- | --- | --- |
-| Tổng số dòng bản ghi | 10,325 | 10,000 | -325 dòng (loại 208 trùng lặp 23 cột, gộp 117 dòng cùng mã) |
-| Số mã đặt chỗ (reservation_id) duy nhất | 10,000 | 10,000 | Giữ nguyên 100% (10,000 đặt chỗ độc lập) |
-| Số dòng trùng lặp tuyệt đối trên 23 cột | 360 | 0 | Đã loại bỏ toàn bộ bản sao dư thừa |
-| Định dạng ngày (departure_date) | Lẫn 4 định dạng khác nhau | 100% chuẩn YYYY-MM-DD | Đã chuyển đổi thống nhất định dạng ISO |
-| Giá vé (avg_ticket_fare) | Lẫn $, USD, EUR, dấu phẩy thập phân | 100% số thực Float64 trong khoảng 0-5000 | Làm sạch tiền tệ, giữ nguyên vé 0 đồng hợp lệ |
-| Mã quốc gia (passenger_country) | Lẫn tên tiếng Anh, chữ thường, ký tự lạ | 100% mã ISO 2-3 chữ in hoa (hoặc NaN) | Ánh xạ chuẩn hóa quốc tế, ký tự lạ chuyển NaN |
-| Nhất quán is_cancelled và booking_status | 42 dòng mâu thuẫn nghiệp vụ | 0 dòng mâu thuẫn (100% nhất quán) | Đồng bộ cờ hủy với trạng thái bay |
+| Total Records | 10,325 | 10,000 | 325 fewer rows (208 exact duplicates removed and 117 rows merged by reservation ID) |
+| Unique Reservation IDs (reservation_id) | 10,000 | 10,000 | All 10,000 distinct bookings retained |
+| Exact Duplicate Rows Across 23 Columns | 360 | 0 | All redundant copies removed |
+| Date Format (departure_date) | Four mixed formats | 100% YYYY-MM-DD | Standardized to ISO date format |
+| Ticket Fare (avg_ticket_fare) | Mixed $, USD, EUR and decimal commas | 100% Float64 in the range 0–5,000 | Currency values cleaned and valid zero fares retained |
+| Country Code (passenger_country) | Mixed English names, lowercase codes and stray characters | 100% uppercase two- or three-letter ISO codes (or NaN) | Mapped to standard codes and converted invalid values to NaN |
+| Consistency Between is_cancelled and booking_status | 42 inconsistent records | 0 inconsistent records (100% consistency) | Aligned cancellation flags with booking status |
 
 ---
 
@@ -105,16 +106,16 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 2: Thị phần đặt chỗ và tỷ lệ hủy theo hãng hàng không
 * **Mục tiêu:** Xác định quy mô thị phần đặt chỗ giữa hai hãng và so sánh tỷ lệ hủy đặt chỗ tương ứng.
 * **Điều kiện lọc & Mẫu số:** Tính toán trên toàn bộ $N = 10.000$ đặt chỗ sạch có trạng thái xác định.
-* **Bảng số liệu kết quả (`q02_airline_cancel.csv`):**
+* **Booking Volume and Cancellation Rate by Airline (`q02_airline_cancel.csv`)**
 
-| Hãng hàng không | Số đặt chỗ (n) | Thị phần (%) | Số vé hủy (n) | Mẫu số xác định | Tỷ lệ hủy (%) |
+| Airline | Bookings (n) | Booking Share (%) | Cancellations (n) | Known Status Count | Cancellation Rate (%) |
 | --- | --- | --- | --- | --- | --- |
 | Aurora Air | 6522 | 65.22 | 1768 | 6522 | 27.11 |
 | Horizon Wings | 3478 | 34.78 | 969 | 3478 | 27.86 |
 
-* **Biểu đồ trực quan hóa:**
+![Booking Cancellation Rates for Aurora Air and Horizon Wings](../outputs/figures/fig01_airline_cancel.png)
 
-![fig01_airline_cancel](../outputs/figures/fig01_airline_cancel.png)
+*Figure 1. Booking Cancellation Rates for Aurora Air and Horizon Wings.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Quy mô thị phần chênh lệch lớn:** Aurora Air chiếm ưu thế vượt trội với **65,22%** tổng lượng đặt chỗ (6.522/10.000), gấp gần **1,88 lần** so với Horizon Wings (**34,78%** tương ứng 3.478 đặt chỗ). Điều này phản ánh vị thế hãng hàng không truyền thống có mạng lưới khai thác rộng lớn của Aurora Air.
@@ -126,9 +127,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 3: Số đặt chỗ theo tháng khởi hành trong năm 2025 (Phân tích mùa vụ)
 * **Mục tiêu:** Đo lường biến động nhu cầu di chuyển theo các tháng trong năm dương lịch 2025 để nhận diện chu kỳ mùa vụ.
 * **Điều kiện lọc & Mẫu số:** Lọc các đặt chỗ có năm khởi hành $2025$ và có tháng khởi hành xác định ($N = 5.753$ đặt chỗ, gồm 3.737 của Aurora Air và 2.016 của Horizon Wings). Đối chiếu khớp 100% với tệp `monthly_summary.csv`.
-* **Bảng số liệu kết quả (`q03_monthly_departures_2025.csv`):**
+* **Bookings by Departure Month in 2025 (`q03_monthly_departures_2025.csv`)**
 
-| Hãng hàng không | Tháng khởi hành | Số đặt chỗ | Tỷ trọng trong năm 2025 (%) |
+| Airline | Departure Month | Bookings | Share of Annual Bookings 2025 (%) |
 | --- | --- | --- | --- |
 | Aurora Air | 1 | 337 | 9.03 |
 | Aurora Air | 2 | 299 | 8.01 |
@@ -155,9 +156,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 | Horizon Wings | 11 | 150 | 7.44 |
 | Horizon Wings | 12 | 210 | 10.42 |
 
-* **Biểu đồ trực quan hóa:**
+![Monthly Booking Trends in 2025](../outputs/figures/fig02_monthly_departures_2025.png)
 
-![fig02_monthly_departures_2025](../outputs/figures/fig02_monthly_departures_2025.png)
+*Figure 2. Monthly Booking Trends in 2025.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Chu kỳ mùa vụ hai đỉnh (Double-Peak Seasonality):** Cả hai hãng đều thể hiện rõ hai đợt cao điểm trong năm:
@@ -171,16 +172,16 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 4: Thời gian đặt trước (Lead Time) và rủi ro hủy đặt chỗ
 * **Mục tiêu:** Thống kê phân phối thời gian đặt trước giữa hai hãng và phân tích mối liên hệ giữa khoảng cách đặt vé với tỷ lệ hủy.
 * **Điều kiện lọc & Mẫu số:** Bảng thống kê tính trên các dòng có `booking_lead_days` hợp lệ ($N = 9.978$ dòng, loại 22 dòng thiếu). Bảng tỷ lệ hủy tính trên 5 nhóm lead time chuẩn ($N = 9.978$).
-* **Bảng thống kê mô tả lead time (`q04_leadtime_stats.csv`):**
+* **Booking Lead Time Statistics by Airline (`q04_leadtime_stats.csv`)**
 
-| Hãng hàng không | Mẫu số (n) | Trung bình (ngày) | Trung vị (ngày) | Phân vị 25% (Q1) | Phân vị 75% (Q3) | Tối đa (ngày) |
+| Airline | Sample Size (n) | Mean (days) | Median (days) | 25th Percentile (Q1) | 75th Percentile (Q3) | Maximum (days) |
 | --- | --- | --- | --- | --- | --- | --- |
 | Aurora Air | 6506 | 71.10 | 57.00 | 27.00 | 98.00 | 365.00 |
 | Horizon Wings | 3472 | 71.89 | 58.00 | 28.00 | 99.00 | 365.00 |
 
-* **Bảng tỷ lệ hủy theo nhóm thời gian đặt trước (`q04_leadtime_cancel.csv`):**
+* **Cancellation Rate by Booking Lead Time Group (`q04_leadtime_cancel.csv`)**
 
-| Nhóm Lead Time (ngày) | Số đặt chỗ | Số vé hủy | Mẫu xác định | Tỷ lệ hủy (%) |
+| Lead Time Group (days) | Bookings | Cancellations | Known Status Count | Cancellation Rate (%) |
 | --- | --- | --- | --- | --- |
 | 0-7 | 774 | 172 | 774 | 22.22 |
 | 8-30 | 2005 | 485 | 2005 | 24.19 |
@@ -188,9 +189,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 | 91-180 | 2276 | 693 | 2276 | 30.45 |
 | 181+ | 596 | 266 | 596 | 44.63 |
 
-* **Biểu đồ trực quan hóa:**
+![Nonlinear Relationship Between Booking Lead Time and Cancellation Rate](../outputs/figures/fig03_leadtime_cancel.png)
 
-![fig03_leadtime_cancel](../outputs/figures/fig03_leadtime_cancel.png)
+*Figure 3. Nonlinear Relationship Between Booking Lead Time and Cancellation Rate.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Đặc tính phân phối lead time:** Trung vị thời gian đặt trước của hai hãng gần như đồng nhất: Aurora Air là **57 ngày** và Horizon Wings là **58 ngày** (trung bình ~71-72 ngày, kéo dài tối đa đến 365 ngày). Khoảng 50% khách hàng đặt vé trong khoảng 27–99 ngày trước khởi hành.
@@ -205,9 +206,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 5: Cơ cấu thị trường quốc tế - Top 10 quốc gia của hành khách
 * **Mục tiêu:** Nhận diện thị trường trọng điểm dựa trên quốc tịch của hành khách đặt chỗ.
 * **Điều kiện lọc & Mẫu số:** Lọc các bản ghi có mã quốc gia hợp lệ ($N = 9.895$ đặt chỗ; loại trừ 105 dòng bị thiếu mã quốc gia).
-* **Bảng số liệu kết quả (`q05_top10_country.csv`):**
+* **Top 10 Passenger Countries by Booking Volume (`q05_top10_country.csv`)**
 
-| Thứ hạng | Mã quốc gia ISO | Số lượng đặt chỗ | Tỷ trọng thị phần (%) |
+| Rank | ISO Country Code | Bookings | Booking Share (%) |
 | --- | --- | --- | --- |
 | 1 | VNM | 2080 | 21.02 |
 | 2 | CHN | 906 | 9.16 |
@@ -220,9 +221,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 | 9 | IND | 349 | 3.53 |
 | 10 | GBR | 347 | 3.51 |
 
-* **Biểu đồ trực quan hóa:**
+![Booking Volume for the Top 10 Passenger Countries](../outputs/figures/fig04_top10_country.png)
 
-![fig04_top10_country](../outputs/figures/fig04_top10_country.png)
+*Figure 4. Booking Volume for the Top 10 Passenger Countries.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Việt Nam (VNM) là thị trường cốt lõi:** Việt Nam dẫn đầu áp đảo với **2.080 đặt chỗ**, chiếm **21,02%** thị phần toàn mạng bay, gấp **2,30 lần** so với thị trường xếp thứ hai là Trung Quốc (CHN - 906 đặt chỗ, 9,16%).
@@ -234,9 +235,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 6: Phân khúc thị trường (Market Segment) và tỷ lệ hủy đặt chỗ
 * **Mục tiêu:** Đo lường quy mô và mức độ rủi ro hủy vé giữa các kênh phân phối và đối tượng khách hàng.
 * **Điều kiện lọc & Mẫu số:** Lọc các dòng có phân khúc thị trường hợp lệ ($N = 9.968$ đặt chỗ; loại 32 dòng thiếu). Nhóm Corporate, Group, Loyalty, Package Tour đều có $n > 100$ nên không bị gắn cờ cảnh báo mẫu nhỏ.
-* **Bảng số liệu kết quả (`q06_segment_cancel.csv`):**
+* **Booking Volume and Cancellation Rate by Market Segment (`q06_segment_cancel.csv`)**
 
-| Phân khúc thị trường | Số đặt chỗ (n) | Tỷ trọng (%) | Số vé hủy (n) | Mẫu xác định | Tỷ lệ hủy (%) | Cảnh báo mẫu nhỏ |
+| Market Segment | Bookings (n) | Booking Share (%) | Cancellations (n) | Known Status Count | Cancellation Rate (%) | Small Sample Flag |
 | --- | --- | --- | --- | --- | --- | --- |
 | Online OTA | 3906 | 39.17 | 1151 | 3906 | 29.47 | False |
 | Group | 579 | 5.81 | 161 | 579 | 27.81 | False |
@@ -246,9 +247,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 | Package Tour | 717 | 7.19 | 174 | 717 | 24.27 | False |
 | Corporate | 923 | 9.26 | 198 | 923 | 21.45 | False |
 
-* **Biểu đồ trực quan hóa:**
+![Booking Cancellation Rates by Market Segment](../outputs/figures/fig05_segment_cancel.png)
 
-![fig05_segment_cancel](../outputs/figures/fig05_segment_cancel.png)
+*Figure 5. Booking Cancellation Rates by Market Segment.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Online OTA chiếm tỷ trọng lớn nhất và rủi ro hủy cao nhất:** Kênh đại lý trực tuyến (Online OTA) chiếm tới **39,17%** tổng số đặt chỗ (3.906 vé), nhưng đồng thời cũng ghi nhận tỷ lệ hủy vé cao nhất mạng bay ở mức **29,47%** (1.151 vé hủy). Khách đặt qua OTA thường có xu hướng so sánh giá dễ dàng và hủy phòng/vé khi tìm thấy lựa chọn rẻ hơn.
@@ -260,9 +261,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 7: Chính sách giá vé (Fare Policy) tác động đến trạng thái đặt chỗ
 * **Mục tiêu:** Khảo sát cơ cấu trạng thái vé (*Flown, Cancelled, No-Show*) dưới tác động của điều kiện hoàn/hủy vé.
 * **Điều kiện lọc & Mẫu số:** Lọc các bản ghi có đầy đủ chính sách giá và trạng thái đặt chỗ ($N = 9.957$ đặt chỗ; loại 43 dòng thiếu thông tin).
-* **Bảng chéo số lượng và tỷ lệ (`q07_fare_policy_status.csv`):**
+* **Booking Status by Fare Policy (`q07_fare_policy_status.csv`)**
 
-| Chính sách giá vé | Trạng thái đặt chỗ | Số lượng đặt chỗ | Tỷ lệ trong chính sách (%) |
+| Fare Policy | Booking Status | Bookings | Share Within Fare Policy (%) |
 | --- | --- | --- | --- |
 | Flexible | Flown | 2519 | 69.91 |
 | Flexible | Cancelled | 1029 | 28.56 |
@@ -274,9 +275,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 | Non-Refundable | Cancelled | 576 | 21.30 |
 | Non-Refundable | No-Show | 39 | 1.44 |
 
-* **Biểu đồ trực quan hóa:**
+![Booking Status Distribution by Fare Policy](../outputs/figures/fig06_fare_policy_status.png)
 
-![fig06_fare_policy_status](../outputs/figures/fig06_fare_policy_status.png)
+*Figure 6. Booking Status Distribution by Fare Policy.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Ràng buộc tài chính định hình tỷ lệ hoàn thành chuyến bay (Flown):** Vé không hoàn tiền (**Non-Refundable**) đạt tỷ lệ hoàn thành chuyến bay cao nhất với **77,26%** (2.089/2.704 vé), cao hơn vé **Semi-Flexible** (71,97%) và vượt trội so với vé linh hoạt **Flexible** (69,91%) một khoảng **+7,35 điểm phần trăm**.
@@ -288,16 +289,16 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 8: Giá vé trung bình theo hãng (Đặt chỗ không hủy, giá > 0)
 * **Mục tiêu:** So sánh mức giá vé bình quân giữa hai hãng hàng không trên các giao dịch thương mại hợp lệ.
 * **Điều kiện lọc & Mẫu số:** Lọc nghiêm ngặt các đặt chỗ **không hủy** (`is_cancelled == 0`) và có **giá vé thương mại dương** (`avg_ticket_fare > 0`). Loại bỏ 9 dòng vé 0 đồng (vé thưởng) và 30 dòng thiếu giá vé. Mẫu số hợp lệ: Aurora Air có $4.736$ dòng, Horizon Wings có $2.488$ dòng.
-* **Bảng thống kê mô tả giá vé (`q08_fare_stats_by_airline.csv`):**
+* **Ticket Fare Statistics by Airline (`q08_fare_stats_by_airline.csv`)**
 
-| Hãng hàng không | Mẫu hợp lệ (n) | Trung bình ($) | Trung vị ($) | Phân vị 25% ($) | Phân vị 75% ($) | Tối thiểu ($) | Tối đa ($) | Vé 0đ loại trừ | Dòng thiếu giá |
+| Airline | Valid Sample Size (n) | Mean ($) | Median ($) | 25th Percentile ($) | 75th Percentile ($) | Minimum ($) | Maximum ($) | Zero-Fare Bookings Excluded | Missing Fares |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aurora Air | 4736 | 208.76 | 149.54 | 123.30 | 190.26 | 56.49 | 2258.21 | 5 | 13 |
 | Horizon Wings | 2488 | 194.95 | 135.26 | 112.52 | 171.42 | 48.77 | 2117.76 | 4 | 17 |
 
-* **Biểu đồ trực quan hóa:**
+![Ticket Fare Density by Airline (Truncated at the 99th Percentile)](../outputs/figures/fig07_fare_hist.png)
 
-![fig07_fare_hist](../outputs/figures/fig07_fare_hist.png)
+*Figure 7. Ticket Fare Density by Airline (Truncated at the 99th Percentile).*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Phân phối lệch phải mạnh (Positive Skewness):** Ở cả hai hãng, giá trị trung bình (Mean: $208,76 và $194,95) đều cao hơn đáng kể so với trung vị (Median: $149,54 và $135,26). Điều này do tác động của một lượng nhỏ vé khoang hạng Thương gia và Hạng nhất có giá rất cao (lên tới $2.100 - $2.258) kéo lệch phân phối về phía phải. Do đó, **trung vị là thước đo tin cậy hơn** để phản ánh mức giá vé phổ thông điển hình.
@@ -309,9 +310,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 9: Phân phối độ dài chuyến đi (Total Trip Days - Đặt chỗ không hủy)
 * **Mục tiêu:** Đo lường tổng thời gian chuyến đi (tổng ngày cuối tuần + ngày trong tuần) của hành khách.
 * **Điều kiện lọc & Mẫu số:** Lọc trên các đặt chỗ **không hủy** ($N = 7.232$ dòng; Aurora Air: 4.733 dòng, Horizon Wings: 2.499 dòng; loại 2 dòng thiếu dữ liệu ngày). Toàn bộ chuyến đi 0 ngày (bay trong ngày/transit) đều được bảo toàn.
-* **Bảng thống kê độ dài chuyến đi (`q09_trip_days.csv`):**
+* **Passenger Trip Duration Statistics (`q09_trip_days.csv`)**
 
-| Hãng hàng không | Mẫu số (n) | Trung bình (ngày) | Trung vị (ngày) | Phân vị 25% (Q1) | Phân vị 75% (Q3) | Tối đa (ngày) | Số chuyến 0 ngày |
+| Airline | Sample Size (n) | Mean (days) | Median (days) | 25th Percentile (Q1) | 75th Percentile (Q3) | Maximum (days) | Zero-Day Trips |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Aurora Air | 4733 | 5.76 | 4.00 | 3.00 | 7.00 | 45.00 | 0 |
 | Horizon Wings | 2499 | 5.95 | 4.00 | 3.00 | 7.00 | 45.00 | 0 |
@@ -323,9 +324,9 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
   * **Nhóm 8-14 ngày:** Aurora Air chiếm 15,32% (725 chuyến); Horizon Wings chiếm 16,29% (407 chuyến).
   * **Nhóm dài ngày (15+ ngày):** Aurora Air chiếm 5,20% (246 chuyến); Horizon Wings chiếm 5,52% (138 chuyến).
 
-* **Biểu đồ trực quan hóa:**
+![Passenger Trip Duration Distribution](../outputs/figures/fig08_trip_days.png)
 
-![fig08_trip_days](../outputs/figures/fig08_trip_days.png)
+*Figure 8. Passenger Trip Duration Distribution.*
 
 * **Nhận xét phân tích sâu sắc:**
   1. **Chuyến đi ngắn ngày chiếm tỷ trọng áp đảo:** Trung vị độ dài chuyến đi của cả hai hãng đều là **4,0 ngày** (trung bình ~5,8–5,9 ngày). Gần 80% lượng khách di chuyển trong khoảng từ 1 đến 7 ngày, trong đó nhóm 3–4 ngày là phân khúc cao nhất (~32%), đặc trưng cho các chuyến công tác ngắn hạn hoặc du lịch nghỉ dưỡng cuối tuần.
@@ -336,16 +337,16 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 #### Câu 10: Tỷ lệ đổi hạng cabin (Booked Cabin vs Assigned Cabin)
 * **Mục tiêu:** Đánh giá tính ổn định trong việc bố trí chỗ ngồi và tỷ lệ nâng/hạ hạng cabin (`booked_cabin_code != assigned_cabin_code`).
 * **Điều kiện lọc & Mẫu số:** Lọc các đặt chỗ có đầy đủ cả 2 mã cabin đặt và xếp chỗ ($N = 9.921$ dòng; loại trừ 79 dòng thiếu mã).
-* **Bảng tỷ lệ đổi cabin theo hãng (`q10_cabin_change_by_airline.csv`):**
+* **Cabin Change Rates by Airline (`q10_cabin_change_by_airline.csv`)**
 
-| Hãng hàng không | Mẫu số hợp lệ | Số lượt đổi cabin | Tỷ lệ đổi cabin (%) |
+| Airline | Valid Sample Size | Cabin Changes | Cabin Change Rate (%) |
 | --- | --- | --- | --- |
 | Aurora Air | 6472 | 737 | 11.39 |
 | Horizon Wings | 3449 | 405 | 11.74 |
 
-* **Bảng tỷ lệ đổi cabin theo mã cabin đã đặt (`q10_cabin_change_by_booked_code.csv`):**
+* **Cabin Change Rates by Booked Cabin Code (`q10_cabin_change_by_booked_code.csv`)**
 
-| Mã cabin đặt | Mẫu số (n) | Số lượt đổi cabin | Tỷ lệ đổi (%) | Cảnh báo mẫu nhỏ |
+| Booked Cabin Code | Sample Size (n) | Cabin Changes | Change Rate (%) | Small Sample Flag |
 | --- | --- | --- | --- | --- |
 | B1 | 314 | 37 | 11.78 | False |
 | B2 | 247 | 32 | 12.96 | False |
@@ -371,14 +372,14 @@ Sau quá trình làm sạch và kỹ thuật tạo đặc trưng (Feature Engine
 *(Biên soạn theo chuẩn cấu trúc `templates/insight_template.md`)*
 
 #### Bảng tổng hợp 6 Insight kinh doanh:
-| # | Chủ đề phân tích | Bằng chứng kiểm chứng | Phát hiện cốt lõi (Core Finding) |
+| # | Analysis Topic | Supporting Evidence | Key Finding |
 |:---:|---|---|---|
-| **1** | Thời gian đặt trước (Lead Time) | Bảng `q04_leadtime_cancel`<br>Hình `fig03_leadtime_cancel` | Tỷ lệ hủy vé tăng phi tuyến theo lead time, đạt đỉnh 44,63% ở nhóm đặt trước trên 6 tháng. |
-| **2** | Chính sách giá vé (Fare Policy) | Bảng `q07_fare_policy_status`<br>Hình `fig06_fare_policy_status` | Vé Non-Refundable có tỷ lệ bay thành công cao nhất (77,26%) và tỷ lệ hủy thấp nhất (21,30%). |
-| **3** | Phân khúc thị trường (Market Segment) | Bảng `q06_segment_cancel`<br>Hình `fig05_segment_cancel` | Kênh Online OTA dẫn đầu về quy mô (39,17%) nhưng đồng thời có tỷ lệ hủy cao nhất mạng bay (29,47%). |
-| **4** | Chu kỳ mùa vụ (Seasonality) | Bảng `q03_monthly_departures_2025`<br>Hình `fig02_monthly_departures_2025` | Nhu cầu bay biến động theo chu kỳ hai đỉnh mùa hè (T7-T8) và cuối năm (T12) đồng pha giữa hai hãng. |
-| **5** | Giá vé bình quân (Ticket Fare) | Bảng `q08_fare_stats_by_airline`<br>Hình `fig07_fare_hist` | Giá vé có phân phối lệch phải mạnh; Aurora Air có trung vị giá vé cao hơn Horizon Wings 10,56%. |
-| **6** | Đổi hạng cabin (Cabin Change) | Bảng `q10_cabin_change_by_booked_code`<br>Bảng `q10_cabin_change_by_airline` | Tỷ lệ đổi cabin bình quân đạt ~11,5%, xuất hiện tần suất cao nhất tại khoang hạng Thương gia (B3 đạt 13,56%). |
+| **1** | Booking Lead Time | Table `q04_leadtime_cancel`<br>Figure `fig03_leadtime_cancel` | Cancellation rates rise nonlinearly with lead time, peaking at 44.63% for bookings made more than six months in advance. |
+| **2** | Fare Policy | Table `q07_fare_policy_status`<br>Figure `fig06_fare_policy_status` | Non-refundable fares have the highest flown rate (77.26%) and the lowest cancellation rate (21.30%). |
+| **3** | Market Segment | Table `q06_segment_cancel`<br>Figure `fig05_segment_cancel` | Online OTAs account for the largest booking share (39.17%) and have the highest cancellation rate (29.47%). |
+| **4** | Seasonality | Table `q03_monthly_departures_2025`<br>Figure `fig02_monthly_departures_2025` | Demand for both airlines peaks in July–August and December. |
+| **5** | Average Ticket Fare | Table `q08_fare_stats_by_airline`<br>Figure `fig07_fare_hist` | Fares are strongly right-skewed. Aurora Air's median fare is 10.56% higher than Horizon Wings'. |
+| **6** | Cabin Changes | Table `q10_cabin_change_by_booked_code`<br>Table `q10_cabin_change_by_airline` | The cabin change rate averages about 11.5% and is highest in business class (13.56% for B3). |
 
 ---
 
@@ -488,10 +489,10 @@ Dựa trên các phát hiện định lượng, nhóm đề xuất các định 
 
 Nhóm gồm 3 thành viên, phối hợp chặt chẽ qua hệ thống quản lý phiên bản Git/GitHub, tuân thủ nghiêm ngặt quy trình pull trước khi code, commit đúng quy ước và kiểm thử tự động chéo trước khi tích hợp.
 
-| Thành viên | Vai trò chính | Nhiệm vụ đảm nhiệm cụ thể | Sản phẩm đầu ra nghiệm thu | Tỷ lệ đóng góp |
+| Team Member | Primary Role | Responsibilities | Deliverables | Contribution |
 |---|---|---|---|:---:|
-| **Trần Thế Tùng** | Kỹ sư Làm sạch Dữ liệu (*Data Cleaning Specialist*) | • Phụ trách Giai đoạn A: khảo sát ô thiếu, phân loại 12 nhóm vấn đề.<br>• Phụ trách Giai đoạn B1–B5: chuẩn hóa khóa, chuyển ngày nhầm cột, xử lý ký hiệu rác, chuẩn hóa nhãn phân loại, parse ngày tháng.<br>• Viết nội dung Phần 2 Báo cáo Word. | • `a_missing_survey.csv`<br>• `a_issue_catalog.csv`<br>• Code sạch từ Ô 0 đến B5 trong notebook<br>• Ghi nhật ký các bước B1–B5 | **100%** |
-| **Tạ Minh Quân** | Quản trị CSDL & Kiểm soát Chất lượng (*QA & Data Architect*) | • Phụ trách Giai đoạn B6–B8: làm sạch số đo, xử lý giá vé (giữ vé 0đ), chuẩn hóa mã quốc gia, gộp 117 dòng trùng `reservation_id`, lập `row_lineage.csv` đủ 10.325 dòng.<br>• Phụ trách Giai đoạn C1–C4: tạo 7 cột dẫn xuất, tổng hợp `monthly_summary.csv`, xuất 5 tệp cốt lõi, chạy bộ kiểm thử C4 (51/51 test đạt ✅).<br>• Phụ trách Câu 1 (Before/After), viết `README.md`, soạn Phần 1 & 5 Báo cáo. | • `reservations_clean.csv`<br>• `monthly_summary.csv`<br>• `cleaning_log.csv` (15 quy tắc)<br>• `row_lineage.csv` (10.325 dòng)<br>• `quality_report.csv`<br>• `q01_before_after.csv`<br>• `src/feature_engineering.py`<br>• `tests/test_cleaning.py`<br>• Tệp `README.md` hoàn chỉnh | **100%** |
-| **Nguyễn Đình Phan Anh** | Chuyên viên Phân tích & Trực quan hóa (*BI & Data Analyst*) | • Phụ trách Giai đoạn D: tính toán chính xác mẫu số cho 9 câu hỏi nghiệp vụ (Câu 2 đến 10).<br>• Thiết kế 8 biểu đồ chuẩn kỹ thuật (`fig01` đến `fig08`).<br>• Soạn thảo bản nháp 6 Insight kinh doanh và hoàn thiện Phần 3 Báo cáo. | • 11 bảng phân tích CSV (`q02` đến `q10`)<br>• 8 biểu đồ PNG đạt chuẩn<br>• 6 Insight kinh doanh có bằng chứng<br>• Nội dung Phần 3 Báo cáo | **100%** |
+| **Trần Thế Tùng** | Data Cleaning Specialist | • Phase A: surveyed missing values and classified 12 issue groups.<br>• Steps B1–B5: normalized keys, moved misplaced dates, handled placeholders, standardized category labels, and parsed dates.<br>• Wrote Section 2 of the Word report. | • `a_missing_survey.csv`<br>• `a_issue_catalog.csv`<br>• Notebook code from Cell 0 through B5<br>• Cleaning log entries for B1–B5 | **100%** |
+| **Tạ Minh Quân** | QA and Data Architect | • Steps B6–B8: cleaned numeric fields and fares, retained valid zero fares, standardized country codes, merged 117 rows by reservation ID, and traced all 10,325 raw rows.<br>• Steps C1–C4: derived seven columns, created the monthly summary, exported five core files, and passed 51 of 51 checks.<br>• Answered Question 1, wrote the README, and drafted Sections 1 and 5. | • `reservations_clean.csv`<br>• `monthly_summary.csv`<br>• `cleaning_log.csv` (15 rules)<br>• `row_lineage.csv` (10,325 rows)<br>• `quality_report.csv`<br>• `q01_before_after.csv`<br>• `src/feature_engineering.py`<br>• `tests/test_cleaning.py`<br>• `README.md` | **100%** |
+| **Nguyễn Đình Phan Anh** | BI and Data Analyst | • Phase D: calculated denominators for nine business questions (Questions 2–10).<br>• Designed eight figures (fig01–fig08).<br>• Drafted six business findings and completed Section 3. | • 11 analysis CSV tables for Questions 2–10<br>• Eight PNG figures<br>• Six evidence-backed business findings<br>• Section 3 of the report | **100%** |
 
 **Cam kết của nhóm:** Tất cả các thành viên đều tham gia tích cực, thảo luận đồng thuận về mọi quyết định làm sạch và tự tin giải thích toàn bộ quy trình cũng như kết quả phân tích trong buổi bảo vệ trước giảng viên.

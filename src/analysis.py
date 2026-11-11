@@ -190,10 +190,10 @@ def cau2(df, show=True):
     bars = ax.bar(t["airline"], t["cancel_rate_pct"], color=[_color(a) for a in t["airline"]], width=0.55)
     ax.bar_label(bars, fmt="%.1f%%", padding=3, fontsize=11)
     ax.set_ylim(0, t["cancel_rate_pct"].max() * 1.3)
-    _style(ax, "Tỷ lệ hủy đặt chỗ theo hãng", ylabel="Tỷ lệ hủy (%)")
+    _style(ax, "Booking Cancellation Rate by Airline", ylabel="Cancellation Rate (%)")
     _finish(fig, "fig01_airline_cancel",
-            f"n = {int(t['n_known'].sum()):,} đặt chỗ có trạng thái hủy xác định | "
-            f"Nguồn: outputs/tables/q02_airline_cancel.csv", show)
+            f"n = {int(t['n_known'].sum()):,} bookings with resolved cancellation status | "
+            f"Source: outputs/tables/q02_airline_cancel.csv", show)
 
     top = t.sort_values("n_reservations", ascending=False).iloc[0]
     ranked = t.sort_values("cancel_rate_pct", ascending=False)
@@ -231,13 +231,13 @@ def cau3(df, monthly=None, show=True):
         ax.annotate(f"{int(pk.n_reservations)}", (pk.departure_month, pk.n_reservations),
                     textcoords="offset points", xytext=(0, 8), ha="center", fontsize=9, color=_color(a))
     ax.set_xticks(range(1, 13))
-    ax.set_xticklabels([f"T{m}" for m in range(1, 13)])
-    ax.set_ylim(bottom=0)
+    ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+    ax.set_ylim(0, t["n_reservations"].max() * 1.15)
     ax.legend(frameon=False)
-    _style(ax, "Số đặt chỗ theo tháng khởi hành, năm 2025", "Tháng khởi hành", "Số đặt chỗ")
+    _style(ax, "Booking Volume by Departure Month (2025)", "Departure Month", "Number of Bookings")
     _finish(fig, "fig02_monthly_departures_2025",
-            f"n = {len(d):,} đặt chỗ khởi hành năm 2025 (loại dòng thiếu ngày khởi hành) | "
-            f"Nguồn: outputs/tables/q03_monthly_departures_2025.csv", show)
+            f"n = {len(d):,} bookings departing in 2025 (missing departure dates excluded) | "
+            f"Source: outputs/tables/q03_monthly_departures_2025.csv", show)
 
     for a in airlines:
         s = t[t["airline"] == a].sort_values("n_reservations", ascending=False)
@@ -268,14 +268,14 @@ def cau4(df, show=True):
     labels = [f"{r.lead_time_group}\n(n={r.n_known:,})" for r in t.itertuples()]
     bars = ax.bar(labels, t["cancel_rate_pct"], color=NEUTRAL, width=0.6)
     ax.bar_label(bars, fmt="%.1f%%", padding=3, fontsize=10)
-    ax.axhline(overall, color=HIGHLIGHT, ls="--", lw=1.3, label=f"Trung bình chung {overall:.1f}%")
+    ax.axhline(overall, color=HIGHLIGHT, ls="--", lw=1.3, label=f"Overall Average: {overall:.1f}%")
     ax.set_ylim(0, np.nanmax(t["cancel_rate_pct"]) * 1.3)
     ax.legend(frameon=False)
-    _style(ax, "Tỷ lệ hủy theo nhóm thời gian đặt trước (lead time)",
-           "Số ngày đặt trước khi bay", "Tỷ lệ hủy (%)")
+    _style(ax, "Cancellation Rate by Booking Lead Time Group",
+           "Days Booked in Advance", "Cancellation Rate (%)")
     _finish(fig, "fig03_leadtime_cancel",
-            f"n = {int(t['n_known'].sum()):,} đặt chỗ có lead time và trạng thái hủy xác định | "
-            f"Nguồn: outputs/tables/q04_leadtime_cancel.csv | Mô tả liên hệ, không phải quan hệ nhân quả", show)
+            f"n = {int(t['n_known'].sum()):,} bookings with valid lead time and cancellation status | "
+            f"Source: outputs/tables/q04_leadtime_cancel.csv | Descriptive association, not causal", show)
 
     print("[Câu 4] Thống kê lead time (ngày):")
     print(stats.to_string(index=False))
@@ -304,10 +304,10 @@ def cau5(df, show=True):
     ax.bar_label(bars, labels=[f"{n:,} ({p:.1f}%)" for n, p in zip(r["n_reservations"], r["share_pct"])],
                  padding=3, fontsize=9)
     ax.set_xlim(0, r["n_reservations"].max() * 1.2)
-    _style(ax, "Top 10 quốc gia của hành khách theo số đặt chỗ", "Số đặt chỗ", grid_axis="x")
+    _style(ax, "Top 10 Passenger Origin Countries by Bookings", "Number of Bookings", grid_axis="x")
     _finish(fig, "fig04_top10_country",
-            f"n = {len(c):,} đặt chỗ có quốc gia; loại {n_missing:,} dòng thiếu quốc gia | "
-            f"Mã quốc gia giữ nguyên như dữ liệu sạch | Nguồn: outputs/tables/q05_top10_country.csv", show)
+            f"n = {len(c):,} bookings with country data; {n_missing:,} missing rows excluded | "
+            f"ISO Alpha-3 country codes | Source: outputs/tables/q05_top10_country.csv", show)
 
     print(f"[Câu 5] Top 3: " + ", ".join(f"{r.passenger_country} {r.share_pct:.1f}%" for r in t.head(3).itertuples())
           + f" | thiếu quốc gia: {n_missing:,} dòng. Kiểm tra: có mã trùng nghĩa (vd CN/CHN) trong top 10 không?")
@@ -334,11 +334,11 @@ def cau6(df, show=True):
     bars = ax.barh(labels, r["cancel_rate_pct"], color=colors)
     ax.bar_label(bars, fmt="%.1f%%", padding=3, fontsize=10)
     ax.set_xlim(0, r["cancel_rate_pct"].max() * 1.2)
-    _style(ax, "Tỷ lệ hủy theo phân khúc thị trường", "Tỷ lệ hủy (%)", grid_axis="x")
+    _style(ax, "Cancellation Rate by Market Segment", "Cancellation Rate (%)", grid_axis="x")
     _finish(fig, "fig05_segment_cancel",
-            f"n = {int(t['n_known'].sum()):,}; loại {n_missing:,} dòng thiếu phân khúc | "
-            f"* mẫu số < {MIN_N_WARNING}, cần thận trọng khi diễn giải | "
-            f"Nguồn: outputs/tables/q06_segment_cancel.csv", show)
+            f"n = {int(t['n_known'].sum()):,}; {n_missing:,} missing segment rows excluded | "
+            f"* sample size < {MIN_N_WARNING}, interpret with caution | "
+            f"Source: outputs/tables/q06_segment_cancel.csv", show)
 
     big = t.sort_values("n_reservations", ascending=False).iloc[0]
     hi = t.iloc[0]
@@ -380,10 +380,10 @@ def cau7(df, show=True):
     ax.invert_yaxis()
     ax.set_xlim(0, 100)
     ax.legend(ncol=3, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.12))
-    _style(ax, "Cơ cấu trạng thái đặt chỗ theo chính sách giá vé", "Tỷ lệ trong từng chính sách (%)", grid_axis="x")
+    _style(ax, "Booking Status Breakdown by Fare Policy", "Percentage within Fare Policy (%)", grid_axis="x")
     _finish(fig, "fig06_fare_policy_status",
-            f"n = {len(d):,}; loại {n_missing:,} dòng thiếu fare_policy hoặc booking_status | "
-            f"No-Show tách riêng khỏi Cancelled | Nguồn: outputs/tables/q07_fare_policy_status.csv", show)
+            f"n = {len(d):,}; {n_missing:,} missing fare_policy or booking_status rows excluded | "
+            f"No-Show separated from Cancelled | Source: outputs/tables/q07_fare_policy_status.csv", show)
 
     canc = t[t["booking_status"] == "Cancelled"].sort_values("pct_within_policy", ascending=False)
     if len(canc):
@@ -422,13 +422,13 @@ def cau8(df, show=True):
                 color=_color(a), label=f"{a} (n={len(s):,})")
         ax.axvline(s.median(), color=_color(a), ls="--", lw=1.5)
     ax.set_xlim(0, cap)
-    ax.legend(frameon=False, title="Đường nét đứt = trung vị")
-    _style(ax, "Phân phối giá vé trung bình theo hãng (đặt chỗ không hủy)",
-           "Giá vé trung bình", "Tỷ lệ trong hãng (%)")
+    ax.legend(frameon=False, title="Dashed line = Median")
+    _style(ax, "Average Ticket Fare Distribution by Airline (Non-Cancelled)",
+           "Average Ticket Fare (USD)", "Percentage within Airline (%)")
     _finish(fig, "fig07_fare_hist",
-            f"n = {len(v):,}; chỉ đặt chỗ không hủy, giá > 0 | loại {int(excl_zero.sum()):,} dòng giá = 0 "
-            f"và {int(excl_missing.sum()):,} dòng thiếu giá | trục x cắt ở phân vị 99 ({cap:,.0f}), "
-            f"{n_above} dòng cao hơn không hiển thị | Nguồn: q08_fare_stats_by_airline.csv", show)
+            f"n = {len(v):,}; non-cancelled bookings with fare > 0 | excluded {int(excl_zero.sum()):,} fare = 0 "
+            f"and {int(excl_missing.sum()):,} missing fare rows | x-axis capped at 99th percentile ({cap:,.0f}), "
+            f"{n_above} higher values not displayed | Source: outputs/tables/q08_fare_stats_by_airline.csv", show)
 
     print("[Câu 8] Giá vé (không hủy, giá > 0):")
     print(t.to_string(index=False))
@@ -474,11 +474,11 @@ def cau9(df, show=True):
     ax.set_xticks(x)
     ax.set_xticklabels(TRIP_LABELS)
     ax.legend(frameon=False)
-    _style(ax, "Phân phối độ dài chuyến đi (đặt chỗ không hủy)", "Tổng số ngày chuyến đi",
-           "Tỷ lệ trong hãng (%)")
+    _style(ax, "Trip Duration Distribution by Airline (Non-Cancelled)", "Total Trip Days",
+           "Percentage within Airline (%)")
     _finish(fig, "fig08_trip_days",
-            f"n = {len(d):,}; chỉ đặt chỗ không hủy, loại {n_missing:,} dòng thiếu độ dài chuyến đi | "
-            f"giữ nhóm 0 ngày | Nguồn: outputs/tables/q09_trip_days.csv", show)
+            f"n = {len(d):,}; non-cancelled bookings only, {n_missing:,} missing trip duration rows excluded | "
+            f"0-day trip group retained | Source: outputs/tables/q09_trip_days.csv", show)
 
     print("[Câu 9] Độ dài chuyến đi (ngày):")
     print(t.to_string(index=False))

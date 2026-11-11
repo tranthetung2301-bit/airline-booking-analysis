@@ -184,8 +184,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i01_mask = ~airline_valid & (raw_df['airline'].str.strip() != '')
     issues.append({
         'issue_id': 'I01', 'field': 'airline',
-        'issue': 'Nhãn airline không chuẩn (AURORA AIR, aurora air, Horizon, Aurora)',
-        'detection_rule': 'airline.strip() không thuộc {Aurora Air, Horizon Wings}',
+        'issue': 'Non-standard airline labels (AURORA AIR, aurora air, Horizon, Aurora)',
+        'detection_rule': 'airline.strip() not in {Aurora Air, Horizon Wings}',
         'affected_rows': int(i01_mask.sum()),
         'example_record_ids': get_examples(i01_mask),
     })
@@ -196,8 +196,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i02_mask = bs_is_date & bsd_empty
     issues.append({
         'issue_id': 'I02', 'field': 'booking_status / booking_status_date',
-        'issue': 'Ngày YYYY-MM-DD nằm nhầm ở booking_status thay vì booking_status_date',
-        'detection_rule': 'booking_status fullmatch YYYY-MM-DD AND booking_status_date rỗng',
+        'issue': 'YYYY-MM-DD date misplaced in booking_status instead of booking_status_date',
+        'detection_rule': 'booking_status fullmatch YYYY-MM-DD AND booking_status_date is empty',
         'affected_rows': int(i02_mask.sum()),
         'example_record_ids': get_examples(i02_mask),
     })
@@ -209,8 +209,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i03_mask = ~bs_valid & bs_not_date & bs_not_empty
     issues.append({
         'issue_id': 'I03', 'field': 'booking_status',
-        'issue': 'Nhãn trạng thái không chuẩn (flown, FLOWN, Completed, Canceled, CANCELLED)',
-        'detection_rule': 'booking_status.strip() không thuộc {Flown, Cancelled, No-Show} và không phải ngày',
+        'issue': 'Non-standard status labels (flown, FLOWN, Completed, Canceled, CANCELLED)',
+        'detection_rule': 'booking_status.strip() not in {Flown, Cancelled, No-Show} and not a date',
         'affected_rows': int(i03_mask.sum()),
         'example_record_ids': get_examples(i03_mask),
     })
@@ -221,8 +221,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i04_mask = ~canc_valid & canc_not_empty
     issues.append({
         'issue_id': 'I04', 'field': 'is_cancelled',
-        'issue': 'Giá trị không chuẩn: yes/no/True/False/0.0/1.0',
-        'detection_rule': 'is_cancelled.strip() không thuộc {0, 1}',
+        'issue': 'Non-standard values: yes/no/True/False/0.0/1.0',
+        'detection_rule': 'is_cancelled.strip() not in {0, 1}',
         'affected_rows': int(i04_mask.sum()),
         'example_record_ids': get_examples(i04_mask),
     })
@@ -234,8 +234,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i05_mask = dep_noniso & dep_not_empty & dep_not_token
     issues.append({
         'issue_id': 'I05', 'field': 'departure_date',
-        'issue': 'Nhiều định dạng ngày: DD/MM/YYYY, DD-Mon-YYYY, Month DD, YYYY',
-        'detection_rule': r'departure_date không khớp \d{4}-\d{2}-\d{2}',
+        'issue': 'Multiple date formats: DD/MM/YYYY, DD-Mon-YYYY, Month DD, YYYY',
+        'detection_rule': r'departure_date does not match \d{4}-\d{2}-\d{2}',
         'affected_rows': int(i05_mask.sum()),
         'example_record_ids': get_examples(i05_mask),
     })
@@ -249,7 +249,7 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     fare_outrange = fare_num.notna() & (~fare_num.between(0, 5000))
     issues.append({
         'issue_id': 'I06', 'field': 'avg_ticket_fare',
-        'issue': 'Ký hiệu thiếu (null/N/A/-), ký hiệu tiền tệ ($), giá bất hợp lý (9999)',
+        'issue': 'Missing tokens (null/N/A/-), currency symbols ($), unreasonable values (9999)',
         'detection_rule': 'to_numeric fails OR value not in [0, 5000]',
         'affected_rows': int(i06_mask.sum() + fare_outrange.sum()),
         'example_record_ids': get_examples(i06_mask | fare_outrange),
@@ -262,8 +262,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i07_mask = country_bad & country_not_empty & country_not_token
     issues.append({
         'issue_id': 'I07', 'field': 'passenger_country',
-        'issue': 'Mã quốc gia không chuẩn: 2 chữ (CN→CHN), chữ thường, ký hiệu thiếu',
-        'detection_rule': 'passenger_country không khớp [A-Z]{3}',
+        'issue': 'Non-standard country codes: 2-letter (CN→CHN), lowercase, missing tokens',
+        'detection_rule': 'passenger_country does not match [A-Z]{3}',
         'affected_rows': int(i07_mask.sum()),
         'example_record_ids': get_examples(i07_mask),
     })
@@ -272,8 +272,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     biz_cols = [c for c in raw_df.columns if c != 'record_id']
     dup_mask = raw_df.duplicated(subset=biz_cols, keep=False)
     issues.append({
-        'issue_id': 'I08', 'field': 'ALL (23 cột nghiệp vụ)',
-        'issue': 'Bản ghi trùng tuyệt đối trên 23 cột nghiệp vụ (không tính record_id)',
+        'issue_id': 'I08', 'field': 'ALL (23 business columns)',
+        'issue': 'Exact duplicate records across all 23 business columns (excluding record_id)',
         'detection_rule': 'duplicated(subset=23_biz_cols, keep=False)',
         'affected_rows': int(dup_mask.sum()),
         'example_record_ids': get_examples(dup_mask),
@@ -288,8 +288,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     meal_empty_mask = raw_df['meal_option'].str.strip() == ''
     issues.append({
         'issue_id': 'I09', 'field': 'meal_option',
-        'issue': 'Nhãn không chuẩn (Undefined→No Meal), ký hiệu thiếu, ô rỗng',
-        'detection_rule': 'meal_option.strip() không thuộc MEALS hoặc là token/rỗng',
+        'issue': 'Non-standard labels (Undefined→No Meal), missing tokens, empty cells',
+        'detection_rule': 'meal_option.strip() not in MEALS or is token/empty',
         'affected_rows': int(i09_mask.sum() + meal_token_mask.sum() + meal_empty_mask.sum()),
         'example_record_ids': get_examples(i09_mask | meal_token_mask | meal_empty_mask),
     })
@@ -300,8 +300,8 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i10_mask = child_token | child_empty
     issues.append({
         'issue_id': 'I10', 'field': 'child_passengers',
-        'issue': 'Giá trị thiếu: ký hiệu NULL/NA/? hoặc ô rỗng',
-        'detection_rule': 'child_passengers là MISSING_TOKEN hoặc rỗng',
+        'issue': 'Missing values: NULL/NA/? tokens or empty cells',
+        'detection_rule': 'child_passengers is MISSING_TOKEN or empty',
         'affected_rows': int(i10_mask.sum()),
         'example_record_ids': get_examples(i10_mask),
     })
@@ -312,7 +312,7 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i11_mask = seg_undef | ch_undef
     issues.append({
         'issue_id': 'I11', 'field': 'market_segment / sales_channel',
-        'issue': 'Nhãn Undefined = không xác định → cần đưa về NaN',
+        'issue': 'Undefined label = unknown → convert to NaN',
         'detection_rule': 'value.strip().lower() == "undefined"',
         'affected_rows': int(i11_mask.sum()),
         'example_record_ids': get_examples(i11_mask),
@@ -328,7 +328,7 @@ def catalog_issues(raw_df: pd.DataFrame) -> pd.DataFrame:
     i12_mask = (status_flown_r & canc_1) | (status_cancelled_r & canc_0)
     issues.append({
         'issue_id': 'I12', 'field': 'is_cancelled / booking_status',
-        'issue': 'is_cancelled mâu thuẫn với booking_status (Flown↔1 hoặc Cancelled↔0)',
+        'issue': 'is_cancelled contradicts booking_status (Flown↔1 or Cancelled↔0)',
         'detection_rule': '(status==Flown AND is_cancelled==1) OR '
                           '(status==Cancelled/No-Show AND is_cancelled==0)',
         'affected_rows': int(i12_mask.sum()),

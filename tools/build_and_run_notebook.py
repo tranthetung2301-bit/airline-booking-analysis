@@ -466,56 +466,56 @@ c_md = '''> **✍️ Quyết định và lý do của nhóm — C1–C4** *(Thà
 > - **Kết quả kiểm thử:** Toàn bộ 5 tệp dữ liệu cốt lõi đã được xuất ra thư mục `outputs/`, vượt qua 100% (51/51) bài kiểm tra chất lượng tự động của hệ thống ở ô C4.
 '''
 
-q01_code = '''# Câu 1 · So sánh chất lượng trước/sau làm sạch (Thành viên 2)
+q01_code = '''# Question 1 · Pre/Post-cleaning quality comparison (Member 2)
 
 metrics = [
     {
-        'chi_tieu': 'Tổng số dòng bản ghi',
-        'truoc_lam_sach': f'{len(raw_df):,}',
-        'sau_lam_sach': f'{len(clean_to_save):,}',
-        'thay_doi': f'-{len(raw_df) - len(clean_to_save):,} dòng (loại 208 trùng lặp 23 cột, gộp 117 dòng cùng mã)'
+        'metric': 'Total record rows',
+        'before_cleaning': f'{len(raw_df):,}',
+        'after_cleaning': f'{len(clean_to_save):,}',
+        'change': f'-{len(raw_df) - len(clean_to_save):,} rows (dropped 208 23-column duplicates, merged 117 duplicate ID rows)'
     },
     {
-        'chi_tieu': 'Số mã đặt chỗ (reservation_id) duy nhất',
-        'truoc_lam_sach': f"{raw_df['reservation_id'].str.strip().str.upper().nunique():,}",
-        'sau_lam_sach': f"{clean_to_save['reservation_id'].nunique():,}",
-        'thay_doi': 'Giữ nguyên 100% (10,000 đặt chỗ độc lập)'
+        'metric': 'Unique booking codes (reservation_id)',
+        'before_cleaning': f"{raw_df['reservation_id'].str.strip().str.upper().nunique():,}",
+        'after_cleaning': f"{clean_to_save['reservation_id'].nunique():,}",
+        'change': '100% preserved (10,000 independent bookings)'
     },
     {
-        'chi_tieu': 'Số dòng trùng lặp tuyệt đối trên 23 cột',
-        'truoc_lam_sach': f"{raw_df.duplicated(subset=[c for c in raw_df.columns if c != 'record_id'], keep=False).sum():,}",
-        'sau_lam_sach': '0',
-        'thay_doi': 'Đã loại bỏ toàn bộ bản sao dư thừa'
+        'metric': 'Exact duplicate rows across 23 columns',
+        'before_cleaning': f"{raw_df.duplicated(subset=[c for c in raw_df.columns if c != 'record_id'], keep=False).sum():,}",
+        'after_cleaning': '0',
+        'change': 'All redundant duplicate copies removed'
     },
     {
-        'chi_tieu': 'Định dạng ngày (departure_date)',
-        'truoc_lam_sach': 'Lẫn 4 định dạng khác nhau',
-        'sau_lam_sach': '100% chuẩn YYYY-MM-DD',
-        'thay_doi': 'Đã chuyển đổi thống nhất định dạng ISO'
+        'metric': 'Date format (departure_date)',
+        'before_cleaning': 'Mixed across 4 different formats',
+        'after_cleaning': '100% standard YYYY-MM-DD',
+        'change': 'Unified to ISO standard format'
     },
     {
-        'chi_tieu': 'Giá vé (avg_ticket_fare)',
-        'truoc_lam_sach': 'Lẫn $, USD, EUR, dấu phẩy thập phân',
-        'sau_lam_sach': '100% số thực Float64 trong khoảng 0-5000',
-        'thay_doi': 'Làm sạch tiền tệ, giữ nguyên vé 0 đồng hợp lệ'
+        'metric': 'Ticket fare (avg_ticket_fare)',
+        'before_cleaning': 'Contained $, USD, EUR, decimal commas',
+        'after_cleaning': '100% Float64 within 0-5000',
+        'change': 'Stripped currency artifacts, preserved valid $0 fares'
     },
     {
-        'chi_tieu': 'Mã quốc gia (passenger_country)',
-        'truoc_lam_sach': 'Lẫn tên tiếng Anh, chữ thường, ký tự lạ',
-        'sau_lam_sach': '100% mã ISO 2-3 chữ in hoa (hoặc NaN)',
-        'thay_doi': 'Ánh xạ chuẩn hóa quốc tế, ký tự lạ chuyển NaN'
+        'metric': 'Country code (passenger_country)',
+        'before_cleaning': 'Mixed English names, lowercase, corrupted tokens',
+        'after_cleaning': '100% ISO 2-3 uppercase letters (or NaN)',
+        'change': 'Mapped to international standard, noise tokens to NaN'
     },
     {
-        'chi_tieu': 'Nhất quán is_cancelled và booking_status',
-        'truoc_lam_sach': '42 dòng mâu thuẫn nghiệp vụ',
-        'sau_lam_sach': '0 dòng mâu thuẫn (100% nhất quán)',
-        'thay_doi': 'Đồng bộ cờ hủy với trạng thái bay'
+        'metric': 'Consistency between is_cancelled and booking_status',
+        'before_cleaning': '42 operational contradiction rows',
+        'after_cleaning': '0 contradictions (100% consistent)',
+        'change': 'Synchronized cancellation flags with flight status'
     }
 ]
 
 q01_df = pd.DataFrame(metrics)
 save_table(q01_df, 'q01_before_after')
-print('\\nBảng tổng hợp chất lượng trước và sau làm sạch (Câu 1):')
+print('\\nPre/Post-Cleaning Quality Comparison Summary (Question 1):')
 print(q01_df.to_string(index=False))
 '''
 
