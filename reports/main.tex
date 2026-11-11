@@ -1,44 +1,44 @@
 % =========================================================
-%  BÁO CÁO GIỮA KỲ: PHÂN TÍCH & LÀM SẠCH DỮ LIỆU ĐẶT VÉ MÁY BAY
-%  Học phần: Phân tích Dữ liệu (Data Analytics)
-%  Dự án: Aurora Air & Horizon Wings (Giai đoạn 2024–2026)
+%  MIDTERM REPORT: AIRLINE BOOKING DATA CLEANING & ANALYSIS
+%  Course: Data Analytics
+%  Project: Aurora Air & Horizon Wings (Period: 2024--2026)
 % =========================================================
 \documentclass[12pt, a4paper]{report}
 
-% ---- Bảng mã & Ngôn ngữ tiếng Việt ----
+% ---- Character Encoding & Language Configuration ----
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T5]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage[vietnamese]{babel}
+  \usepackage[vietnamese,english]{babel}
 \else
   \usepackage{fontspec}
-  \usepackage[vietnamese]{babel}
+  \usepackage[vietnamese,english]{babel}
 \fi
 
-% ---- Font chữ học thuật chuyên nghiệp ----
-\usepackage{mathpazo}            % Palatino thanh lịch cho nội dung
-\usepackage[scaled=0.92]{helvet} % Helvetica cho tiêu đề không chân
-\usepackage{courier}             % Courier cho mã code
+% ---- Academic Typography ----
+\usepackage{mathpazo}            % Palatino for body text
+\usepackage[scaled=0.92]{helvet} % Helvetica for sans-serif headings
+\usepackage{courier}             % Courier for inline code
 
-% ---- Căn lề trang văn bản ----
+% ---- Page Margins ----
 \usepackage[
   top=2.5cm, bottom=2.5cm,
   left=3.0cm, right=2.5cm,
   headheight=15pt
 ]{geometry}
 
-% ---- Định dạng dòng & đoạn văn ----
+% ---- Line Spacing & Paragraph Formatting ----
 \usepackage{microtype}
 \usepackage{setspace}
 \setstretch{1.25}
 \usepackage{parskip}
 \setlength{\parindent}{0pt}
 
-% ---- Toán học & Ký hiệu ----
+% ---- Mathematics & Symbols ----
 \usepackage{amsmath, amssymb}
 
-% ---- Bảng màu chuyên nghiệp ----
+% ---- Academic Color Palette ----
 \usepackage[table]{xcolor}
 \definecolor{NavyBlue}{RGB}{0,40,100}
 \definecolor{DarkSlate}{RGB}{35,70,105}
@@ -51,7 +51,7 @@
 \definecolor{InsightBg}{RGB}{238,245,254}
 \definecolor{BoxBorder}{RGB}{45,95,150}
 
-% ---- Bảng biểu ----
+% ---- Tables ----
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{longtable}
@@ -59,7 +59,7 @@
 \usepackage{array}
 \usepackage{makecell}
 
-% ---- Hình ảnh & Trực quan hóa ----
+% ---- Graphics & Visualization ----
 \PassOptionsToPackage{final}{graphicx}
 \usepackage[final]{graphicx}
 \makeatletter
@@ -72,31 +72,31 @@
 \DeclareGraphicsExtensions{.png,.jpg,.jpeg,.pdf}
 \graphicspath{{figures/}{./}}
 
-% ---- Quy chuẩn hiển thị Table và Figure bằng Tiếng Anh ----
-\addto\captionsvietnamese{%
+% ---- Caption Labels (English Standard) ----
+\addto\captionsenglish{%
   \renewcommand{\tablename}{Table}%
   \renewcommand{\figurename}{Figure}%
 }
 
-% ---- Danh sách thụt lề ----
+% ---- Indented Lists ----
 \usepackage{enumitem}
 \setlist[itemize]{noitemsep, topsep=4pt, leftmargin=1.5em}
 \setlist[enumerate]{noitemsep, topsep=4pt, leftmargin=1.5em}
 
-% ---- Tiêu đề đầu trang & chân trang ----
+% ---- Running Headers & Footers ----
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\sffamily\textit{Báo cáo Giữa kỳ --- Phân tích Dữ liệu Đặt vé Máy bay}}
+\fancyhead[L]{\small\sffamily\textit{Midterm Report --- Airline Booking Data Analysis}}
 \fancyhead[R]{\small\sffamily\textit{Aurora Air \& Horizon Wings}}
 \fancyfoot[C]{\sffamily\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
-% ---- Định dạng tiêu đề chương mục ----
+% ---- Chapter & Section Formatting ----
 \usepackage{titlesec}
 \titleformat{\chapter}[block]
   {\normalfont\Large\bfseries\sffamily\color{NavyBlue}}
-  {CHƯƠNG \thechapter.}{0.8em}{}[\vspace{0.3em}{\color{NavyBlue}\hrule height 1pt}\vspace{0.5em}]
+  {CHAPTER \thechapter.}{0.8em}{}[\vspace{0.3em}{\color{NavyBlue}\hrule height 1pt}\vspace{0.5em}]
 \titlespacing*{\chapter}{0pt}{-10pt}{15pt}
 \titleformat{\section}
   {\normalfont\large\bfseries\sffamily\color{NavyBlue}}
@@ -105,7 +105,7 @@
   {\normalfont\normalsize\bfseries\sffamily\color{DarkSlate}}
   {\thesubsection.}{0.5em}{}
 
-% ---- Liên kết siêu văn bản ----
+% ---- Hyperlinks ----
 \usepackage[
   colorlinks=true,
   unicode=true,
@@ -113,11 +113,11 @@
   citecolor=NavyBlue,
   urlcolor=DarkSlate,
   bookmarks=true,
-  pdftitle={Báo cáo Phân tích & Làm sạch Dữ liệu Đặt vé Máy bay},
-  pdfauthor={Nhóm Nghiên cứu --- Phân tích Dữ liệu}
+  pdftitle={Airline Booking Data Cleaning & Analysis Report},
+  pdfauthor={Data Analytics Research Team}
 ]{hyperref}
 
-% ---- Hộp đúc kết Insight & Khuyến nghị ----
+% ---- Insight & Recommendation Callout Box ----
 \usepackage{tcolorbox}
 \tcbuselibrary{skins, breakable}
 
@@ -136,7 +136,7 @@
   #1
 }
 
-% ---- Lệnh tùy chỉnh ----
+% ---- Custom Macros ----
 \newcommand{\code}[1]{\texttt{\small\color{DarkSlate}#1}}
 \newcommand{\airline}[1]{\textbf{\textsf{#1}}}
 \newcommand{\pct}[1]{\textbf{#1\%}}
@@ -147,27 +147,27 @@
 \renewcommand{\tablename}{Table}
 \renewcommand{\figurename}{Figure}
 
-% ---- TRANG BÌA HỌC THUẬT CHUẨN ----
+% ---- ACADEMIC TITLE PAGE ----
 \begin{titlepage}
   \centering
   \vspace*{1.0cm}
 
   {\large\sffamily\bfseries\color{NavyBlue}
-    TRƯỜNG ĐẠI HỌC KINH TẾ QUỐC DÂN --- KHOA KHOA HỌC DỮ LIỆU\\
-    BỘ MÔN: PHÂN TÍCH DỮ LIỆU (DATA ANALYTICS)\\[0.4em]
+    NATIONAL ECONOMICS UNIVERSITY --- FACULTY OF DATA SCIENCE\\
+    COURSE: DATA ANALYTICS\\[0.4em]
   }
 
   \vspace{1.5cm}
   {\color{NavyBlue}\rule{\textwidth}{2pt}}\\[0.6em]
 
   {\LARGE\sffamily\bfseries\color{NavyBlue}
-    BÁO CÁO GIỮA KỲ\\[0.3em]
-    PHÂN TÍCH \& LÀM SẠCH DỮ LIỆU ĐẶT VÉ MÁY BAY
+    MIDTERM REPORT\\[0.3em]
+    AIRLINE BOOKING DATA CLEANING \& ANALYSIS
   }\\[0.6em]
 
   {\large\sffamily\color{DarkSlate}
-    Nghiên cứu mô phỏng hành vi đặt vé: \airline{Aurora Air} \& \airline{Horizon Wings}\\
-    Giai đoạn thu thập: 2024\,--\,2026
+    Empirical Study of Simulated Booking Behavior: \airline{Aurora Air} \& \airline{Horizon Wings}\\
+    Collection Period: 2024\,--\,2026
   }
 
   {\color{NavyBlue}\rule{\textwidth}{2pt}}
@@ -191,64 +191,64 @@
   \vfill
 \end{titlepage}
 
-% ---- MỤC LỤC ----
+% ---- TABLE OF CONTENTS ----
 \tableofcontents
 \clearpage
 
 % =========================================================
-\chapter{TỔNG QUAN, BỐI CẢNH \& NGUỒN DỮ LIỆU}
+\chapter{OVERVIEW, BUSINESS CONTEXT \& DATA SOURCES}
 % =========================================================
 
-\section{Bối cảnh bài toán kinh doanh}
+\section{Business Context}
 
-Trong ngành hàng không dân dụng hiện đại, bộ phận \textbf{Quản trị Doanh thu (Revenue Management)} đóng vai trò hạt nhân trong việc bảo đảm sự cân bằng giữa tối đa hóa giá vé bán ra và tối ưu hóa hệ số lấp đầy ghế (\textit{load factor}). Bất kỳ sự chênh lệch nào giữa dự báo nhu cầu và thực tế khai thác đều có thể dẫn tới thiệt hại kinh tế nghiêm trọng: nếu định giá quá cao sẽ phát sinh ghế trống không thể thu hồi giá trị sau giờ cất cánh, trong khi định giá quá thấp hoặc kiểm soát lỏng lẻo chính sách đặt chỗ sẽ dẫn đến tình trạng quá tải ảo và tỷ lệ hủy vé cao.
+In modern commercial aviation, \textbf{Revenue Management} plays a central role in balancing ticket yield maximization against cabin seat occupancy (\textit{load factor}). Any mismatch between demand forecasts and actual flight operations can create material economic losses: overpricing results in perishable empty seats whose value vanishes at departure, whereas underpricing or weak reservation controls can trigger artificial overbooking and elevated cancellation rates.
 
-Dự án này tập trung khảo sát hành vi đặt chỗ của hai hãng hàng không mang hai mô hình vận hành tiêu biểu:
+This project investigates reservation behavior across two airlines representing distinct operating models:
 
 \begin{itemize}
-  \item \airline{Aurora Air:} Đại diện cho mô hình hãng hàng không truyền thống với dịch vụ đầy đủ (Full-Service Carrier --- FSC). Hãng khai thác mạng lưới đường bay rộng khắp, cung cấp cấu hình dịch vụ đa tầng từ khoang Phổ thông (Economy: E1, E2, E3, E4), Phổ thông đặc biệt (Premium Economy: P1, P2), Thương gia (Business: B1, B2, B3) đến Hạng nhất (First Class: F1, F2, F3). Phân khúc khách hàng mục tiêu của hãng có độ nhạy cảm dịch vụ cao, yêu cầu sự tin cậy và tiện ích đi kèm.
+  \item \airline{Aurora Air:} Represents a traditional Full-Service Carrier (FSC). The airline operates an extensive route network with a multi-tier cabin configuration spanning Economy (E1, E2, E3, E4), Premium Economy (P1, P2), Business (B1, B2, B3), and First Class (F1, F2, F3). Its target customer base exhibits high service sensitivity and expects strong reliability alongside bundled amenities.
 
-  \item \airline{Horizon Wings:} Đại diện cho mô hình hãng hàng không thế hệ mới, vận hành linh hoạt với chi phí tối ưu. Hãng hướng tới phục vụ lượng khách du lịch cá nhân, nhóm khách gia đình (Group) và các hợp đồng đối tác doanh nghiệp lớn (Corporate Contract) với phương châm cạnh tranh bằng sự thuận tiện và giá vé hợp lý.
+  \item \airline{Horizon Wings:} Represents a next-generation carrier operating with a flexible, cost-optimized business model. It targets leisure travelers, family/group itineraries (Group), and large Corporate Contract accounts by competing on convenience and competitive fares.
 \end{itemize}
 
-Dữ liệu đặt chỗ vé máy bay là nguồn tài sản số lưu trữ toàn diện vòng đời giao dịch: từ thời điểm xuất vé, khoảng cách ngày đặt trước (\textit{lead time}), phân khúc khách hàng, kênh bán vé đến trạng thái thực tế cuối cùng (\textit{Flown, Cancelled, No-Show}). Khai phá khoa học nguồn dữ liệu này là tiền đề then chốt để doanh nghiệp tối ưu hóa kế hoạch mở bán, xây dựng biểu giá động (\textit{dynamic pricing}) và chủ động dự phòng rủi ro hủy vé.
+Airline reservation data captures the end-to-end transaction lifecycle: ticketing timestamps, booking horizon (\textit{lead time}), customer segments, distribution channels, and final operational status (\textit{Flown, Cancelled, No-Show}). Rigorous analysis of this dataset provides the analytical foundation for optimizing inventory release schedules, dynamic pricing structures, and proactive cancellation risk mitigation.
 
-\section{Mục tiêu nghiên cứu}
+\section{Research Objectives}
 
-Đề tài được triển khai nhằm đạt được ba mục tiêu cốt lõi:
+This study is designed around three core objectives:
 
 \begin{enumerate}
-  \item \textbf{Làm sạch dữ liệu khoa học và truy vết thông tin tuyệt đối (100\% Lineage):} Thiết kế và thực thi chuỗi tiền xử lý tự động bằng mã Python, loại bỏ các bản ghi trùng lặp tuyệt đối, xử lý dị thường số đo, đồng bộ các mâu thuẫn nghiệp vụ và bảo đảm bảng truy vết \code{row\_lineage.csv} ghi nhận đầy đủ 10.325 dòng gốc mà không gây thất thoát thông tin.
+  \item \textbf{Systematic Data Cleaning and Full Lineage Traceability (100\% Lineage):} Design and execute an automated Python preprocessing pipeline that resolves exact duplicates, normalizes numeric anomalies, reconciles business-logic conflicts, and guarantees that the lineage table \code{row\_lineage.csv} accounts for all 10,325 raw records with zero information loss.
 
-  \item \textbf{Chuẩn hóa cấu trúc cơ sở dữ liệu:} Xây dựng bảng dữ liệu sạch tiêu chuẩn \code{reservations\_clean.csv} với đúng 10.000 đặt chỗ độc lập, làm giàu dữ liệu bằng 7 cột dẫn xuất nghiệp vụ và tổng hợp báo cáo chỉ số vận hành theo chu kỳ tháng \code{monthly\_summary.csv}.
+  \item \textbf{Database Schema Standardization:} Produce the standardized clean dataset \code{reservations\_clean.csv} containing exactly 10,000 unique bookings, enrich it with 7 business-derived columns, and compile a monthly operational summary table in \code{monthly\_summary.csv}.
 
-  \item \textbf{Phân tích thực nghiệm và đề xuất hàm ý quản trị:} Giải quyết định lượng 9 bài toán nghiệp vụ từ Câu 2 đến Câu 10, phân tích mối quan hệ giữa các yếu tố vận hành với rủi ro hủy chỗ; từ đó đúc kết 6 phát hiện kinh doanh chuyên sâu làm căn cứ cho ban điều hành ra quyết định.
+  \item \textbf{Empirical Analysis and Managerial Implications:} Quantitatively address nine analytical business questions (Questions 2--10), examine how operational attributes associate with cancellation risk, and synthesize six actionable business insights to support executive decision-making.
 \end{enumerate}
 
-\section{Mô tả nguồn dữ liệu và đặc điểm lỗi hệ thống}
+\section{Data Source Description and System Anomaly Profile}
 
-Tệp dữ liệu đầu vào \code{data/airline\_bookings\_dirty.csv} bao gồm **10.325 bản ghi giao dịch $\times$ 24 trường thông tin**, phản ánh các giao dịch đặt chỗ có ngày khởi hành trải dài từ tháng 07/2024 đến tháng 08/2026. Mọi phân tích trong báo cáo được căn cứ trên ngày chốt sổ hệ thống (\textit{Snapshot Date}) là **15/09/2026**.
+The input dataset \code{data/airline\_bookings\_dirty.csv} contains \textbf{10,325 transaction records $\times$ 24 fields}, capturing bookings with departure dates spanning July 2024 through August 2026. All analyses in this report are anchored to the system cut-off date (\textit{Snapshot Date}) of \textbf{15 September 2026}.
 
-Qua rà soát kỹ thuật, bộ dữ liệu thô phản ánh chân thực các sai số thường phát sinh trong quá trình đồng bộ giữa các hệ thống đặt chỗ toàn cầu (GDS), các nền tảng OTA và máy chủ hãng:
+Technical auditing reveals that the raw dataset mirrors common data integrity errors arising during synchronization across Global Distribution Systems (GDS), Online Travel Agencies (OTAs), and airline reservation hosts:
 \begin{itemize}
-  \item \textbf{Trùng lặp dữ liệu:} Xuất hiện 416 dòng liên quan đến trùng lặp tuyệt đối trên 23 cột thuộc tính (chứa 208 bản sao dư thừa) và 117 dòng chia sẻ chung mã \code{reservation\_id} nhưng mang thông tin phân tán.
-  \item \textbf{Lẫn lộn định dạng ngày tháng:} Tồn tại song song 4 mẫu định dạng ngày (\code{YYYY-MM-DD}, \code{DD/MM/YYYY}, \code{Month DD, YYYY}, \code{DD-Mon-YYYY}).
-  \item \textbf{Lệch cột dữ liệu:} Dữ liệu ngày tháng bị đẩy nhầm sang cột chuỗi trạng thái \code{booking\_status}.
-  \item \textbf{Nhiễm tạp ký tự văn bản:} Các trường số đo bị gộp đuôi đơn vị (\textit{days, pax, requests}); trường giá vé bị lẫn ký hiệu tiền tệ (\$, USD, EUR) và dấu phẩy phân cách.
-  \item \textbf{Mâu thuẫn logic nghiệp vụ:} 42 bản ghi ghi nhận cờ hủy \code{is\_cancelled} không khớp với trạng thái thực tế \code{booking\_status}.
+  \item \textbf{Duplicate Records:} 416 rows are involved in exact duplicates across the 23 attribute columns (containing 208 redundant duplicate copies), and 117 rows share a \code{reservation\_id} while holding fragmented attribute values across rows.
+  \item \textbf{Mixed Date Formats:} Four heterogeneous date formats coexist across records (\code{YYYY-MM-DD}, \code{DD/MM/YYYY}, \code{Month DD, YYYY}, and \code{DD-Mon-YYYY}).
+  \item \textbf{Column Misalignment:} Date values were inadvertently shifted into the status string field \code{booking\_status}.
+  \item \textbf{Text and Unit Contamination:} Quantitative fields contain trailing text units (\textit{days, pax, requests}), while fare columns mix currency symbols (\$, USD, EUR) and thousand-separator commas.
+  \item \textbf{Business-Logic Contradictions:} 42 records exhibit a mismatch between the cancellation flag \code{is\_cancelled} and the observed operational status \code{booking\_status}.
 \end{itemize}
 
 % =========================================================
-\chapter{KHẢO SÁT CHẤT LƯỢNG \& QUY TRÌNH TIỀN XỬ LÝ}
+\chapter{DATA QUALITY AUDIT \& PREPROCESSING PIPELINE}
 % =========================================================
 
-\section{Khảo sát chất lượng dữ liệu ban đầu}
+\section{Initial Data Quality Assessment}
 
-Trước khi thực hiện các bước can thiệp biến đổi, nhóm đã tiến hành khảo sát cấu trúc toàn diện trên toàn bộ 10.325 dòng dữ liệu thô. Kết quả khảo sát đã lượng hóa chi tiết mức độ ô thiếu trên từng thuộc tính và hệ thống hóa thành **12 nhóm vấn đề cốt lõi** (\code{a\_issue\_catalog.csv}).
+Prior to applying any data transformations, the team conducted a structural audit across all 10,325 raw records. This survey quantified missingness across each attribute and cataloged \textbf{12 core data quality issues} (\code{a\_issue\_catalog.csv}).
 
-\subsection{Hiện trạng ô thiếu trên các thuộc tính chính}
+\subsection{Missingness Profile Across Key Attributes}
 
-Kết quả thống kê ô thiếu được trình bày tại Table \ref{tab:missing_survey}, phân định rõ giữa ô trống hoàn toàn và ô chứa ký tự rác phi quy ước.
+Missingness statistics are summarized in Table \ref{tab:missing_survey}, distinguishing true empty fields from non-standard junk placeholders.
 
 \begin{table}[H]
   \centering
@@ -280,49 +280,49 @@ Kết quả thống kê ô thiếu được trình bày tại Table \ref{tab:mis
   \end{tabularx}
 \end{table}
 
-\subsection{Hệ thống 12 vấn đề chất lượng dữ liệu phát hiện}
+\subsection{Taxonomy of the 12 Identified Data Quality Issues}
 
-Dựa trên kết quả khảo sát, các lỗi kỹ thuật được phân nhóm theo 12 mã định danh:
+Based on the diagnostic survey, technical anomalies were grouped into 12 issue identifiers:
 \begin{enumerate}
-  \item \textbf{I01 --- Trùng lặp khóa chính và dư thừa bản sao:} 208 bản sao trùng lặp tuyệt đối trên 23 thuộc tính; 117 dòng mang chung mã \code{reservation\_id} cần được hợp nhất.
-  \item \textbf{I02 --- Ngày tháng lệch cột:} 18 bản ghi có cột \code{booking\_status} bị gán nhầm chuỗi ngày thay vì trạng thái chuyến bay.
-  \item \textbf{I03 --- Ký tự thiếu chưa quy chuẩn:} Tồn tại các chuỗi đại diện giá trị rỗng không chuẩn như \code{NULL}, \code{N/A}, \code{NA}, \code{?}, \code{unknown}, \code{-}.
-  \item \textbf{I04 --- Nhãn phân loại không đồng nhất:} Lẫn lộn chữ hoa, chữ thường và khoảng trắng thừa tại các trường danh mục (\code{airline}, \code{market\_segment}, \code{fare\_policy}).
-  \item \textbf{I05 --- Định dạng thời gian phi chuẩn:} Trường ngày tháng bị phân mảnh dưới 4 cấu trúc chuỗi khác nhau.
-  \item \textbf{I06 --- Số đo dính kèm hậu tố văn bản:} Các trường số lượng người, số ngày lưu trú bị gắn hậu tố \code{days}, \code{pax}, \code{requests}.
-  \item \textbf{I07 --- Giá vé nhiễm ký hiệu tiền tệ:} Trường \code{avg\_ticket\_fare} chứa ký tự ngoại tệ (\$, USD, EUR), dấu phẩy và khoảng trắng.
-  \item \textbf{I08 --- Tồn tại giao dịch giá vé bằng 0:} Ghi nhận 9 đặt chỗ có giá vé bằng 0 (xác minh là vé thưởng khách hàng thân thiết hoặc vé công vụ hợp lệ).
-  \item \textbf{I09 --- Mã quốc gia không theo chuẩn ISO:} Trường \code{passenger\_country} ghi nhận tên quốc gia đầy đủ bằng tiếng Anh, viết thường hoặc ký tự bất thường.
-  \item \textbf{I10 --- Xung đột logic nghiệp vụ:} 42 bản ghi có sự bất nhất giữa cờ \code{is\_cancelled} và trạng thái \code{booking\_status}.
-  \item \textbf{I11 --- Dị thường thời gian trạng thái:} Ngày cập nhật trạng thái xuất hiện sau ngày chốt sổ 15/09/2026 hoặc diễn ra trước ngày đặt chỗ.
-  \item \textbf{I12 --- Mã hạng khoang ngoài danh mục:} Xuất hiện các mã khoang không thuộc bảng quy ước 12 mã chuẩn.
+  \item \textbf{I01 --- Primary Key Duplicates and Redundant Copies:} 208 exact duplicate rows across the 23 attribute columns; 117 records sharing a \code{reservation\_id} that require consolidation.
+  \item \textbf{I02 --- Column-Shifted Dates:} 18 records in which \code{booking\_status} erroneously holds a date string rather than a flight status label.
+  \item \textbf{I03 --- Unstandardized Missing Placeholders:} Non-standard null tokens such as \code{NULL}, \code{N/A}, \code{NA}, \code{?}, \code{unknown}, and \code{-}.
+  \item \textbf{I04 --- Inconsistent Categorical Labels:} Mixed letter casing and leading/trailing whitespace across categorical columns (\code{airline}, \code{market\_segment}, \code{fare\_policy}).
+  \item \textbf{I05 --- Non-Standard Date Formats:} Date values fragmented across four distinct string representations.
+  \item \textbf{I06 --- Numeric Fields with Trailing Text Units:} Quantitative counts and durations containing embedded text suffixes such as \code{days}, \code{pax}, and \code{requests}.
+  \item \textbf{I07 --- Fare Field Currency Contamination:} The \code{avg\_ticket\_fare} column contains currency symbols (\$, USD, EUR), thousand commas, and irregular spacing.
+  \item \textbf{I08 --- Zero-Fare Transactions:} 9 bookings recorded with an average ticket fare of 0 (verified as legitimate frequent-flyer award or duty travel tickets).
+  \item \textbf{I09 --- Non-ISO Country Identifiers:} The \code{passenger\_country} field mixes full English country names, lowercase strings, and malformed entries.
+  \item \textbf{I10 --- Business-Logic Contradictions:} 42 records showing conflicting values between the cancellation flag \code{is\_cancelled} and \code{booking\_status}.
+  \item \textbf{I11 --- Status Timestamp Anomalies:} Status update dates occurring after the snapshot cut-off (15 September 2026) or earlier than the reservation date.
+  \item \textbf{I12 --- Out-of-Catalog Cabin Codes:} Cabin codes falling outside the canonical 12-code cabin taxonomy.
 \end{enumerate}
 
-\section{Quy trình xử lý dữ liệu chuẩn hóa (Giai đoạn B1--B8)}
+\section{Standardized Preprocessing Pipeline (Steps B1--B8)}
 
-Nhóm đã xây dựng đường ống xử lý tự động gồm 8 bước tuần tự, mỗi thao tác đều được lưu vết chi tiết trong \code{cleaning\_log.csv}:
+The team implemented an automated eight-stage preprocessing pipeline, logging every transformation step in \code{cleaning\_log.csv}:
 
 \begin{itemize}
-  \item \textbf{B1. Chuẩn hóa khóa chính \& Khử trùng lặp tuyệt đối:} Viết hoa toàn bộ mã đặt chỗ về khuôn mẫu chuẩn \code{ARxxxxxx}. Truy quét 416 dòng có nguy cơ trùng lặp 23 thuộc tính; tiến hành loại bỏ đúng 208 dòng bản sao dư thừa, gắn nhãn \code{dropped} trong bảng truy vết dòng \code{row\_lineage.csv}.
+  \item \textbf{B1. Primary Key Normalization \& Exact Deduplication:} Standardized all reservation codes to uppercase \code{ARxxxxxx} format. Scanned all 416 rows involved in 23-attribute exact matches, removed the 208 redundant duplicate rows, and recorded them as \code{dropped} in \code{row\_lineage.csv}.
 
-  \item \textbf{B2. Tái cấu trúc ngày tháng bị lệch cột:} Quét biểu thức chính quy nhận diện định dạng ngày trong cột \code{booking\_status}; điều chuyển giá trị hợp lệ sang \code{booking\_status\_date} (nếu trường này đang trống) và trả lại giá trị rỗng \code{pd.NA} cho trạng thái.
+  \item \textbf{B2. Recovery of Column-Shifted Dates:} Applied regular-expression detection to identify date strings inside \code{booking\_status}, relocated valid dates to \code{booking\_status\_date} (where missing), and reset \code{booking\_status} to \code{pd.NA}.
 
-  \item \textbf{B3. Chuẩn hóa ký hiệu giá trị thiếu:} Ánh xạ toàn bộ ký tự rác (\code{NULL}, \code{N/A}, \code{?}, \code{unknown}, \code{-}) về định dạng chuẩn \code{pd.NA}. Kiên quyết **không áp dụng phương pháp điền khống bằng số 0** (\textit{zero-imputation}) nhằm bảo toàn tính trung thực của phân phối thống kê.
+  \item \textbf{B3. Missing-Value Standardization:} Normalized all placeholder strings (\code{NULL}, \code{N/A}, \code{?}, \code{unknown}, \code{-}) to canonical \code{pd.NA}. Zero values were strictly \textbf{not imputed into missing numeric cells} (\textit{no zero-imputation}) so that empirical distributions remain unbiased.
 
-  \item \textbf{B4. Đồng bộ nhãn danh mục \& Xử lý xung đột logic hủy vé:} Chuẩn hóa danh mục các biến phân loại. Xử lý dứt điểm 42 trường hợp xung đột: nếu \code{booking\_status == 'Cancelled'} thì đồng bộ \code{is\_cancelled = 1}; nếu trạng thái là \code{'Flown'} hoặc \code{'No-Show'} thì thiết lập \code{is\_cancelled = 0}.
+  \item \textbf{B4. Categorical Synchronization \& Cancellation Conflict Resolution:} Canonicalized categorical labels and resolved all 42 business-logic conflicts: records with \code{booking\_status == 'Cancelled'} were aligned to \code{is\_cancelled = 1}, whereas \code{'Flown'} and \code{'No-Show'} records were set to \code{is\_cancelled = 0}.
 
-  \item \textbf{B5. Phân tích cú pháp ngày chuẩn ISO:} Áp dụng bộ giải mã định dạng linh hoạt để chuyển đổi đồng nhất \code{departure\_date} và \code{booking\_status\_date} sang kiểu \texttt{datetime64[ns]} theo tiêu chuẩn quốc tế ISO \code{YYYY-MM-DD}.
+  \item \textbf{B5. ISO Date Parsing:} Deployed a multi-format parser to convert \code{departure\_date} and \code{booking\_status\_date} consistently into \texttt{datetime64[ns]} under ISO \code{YYYY-MM-DD}.
 
-  \item \textbf{B6. Làm sạch số đo và định dạng giá vé thương mại:} Loại bỏ toàn bộ các ký tự chữ cái khỏi trường số; chuẩn hóa \code{avg\_ticket\_fare} về kiểu số thực \texttt{float64}. Các giao dịch vé 0 đồng hợp lệ được bảo toàn trọn vẹn.
+  \item \textbf{B6. Numeric Extraction and Fare Normalization:} Stripped alphabetic suffixes from numeric fields and coerced \code{avg\_ticket\_fare} to \texttt{float64}, while preserving valid zero-fare bookings intact.
 
-  \item \textbf{B7. Chuẩn hóa mã quốc gia theo chuẩn ISO-3166:} Ánh xạ tên quốc gia tiếng Anh hoặc mã 2 ký tự về mã Alpha-3 quốc tế (ví dụ: \code{VIETNAM}, \code{VN} $\rightarrow$ \code{VNM}; \code{CHINA}, \code{CN} $\rightarrow$ \code{CHN}). Các giá trị không thể nhận dạng được gán \code{pd.NA}.
+  \item \textbf{B7. ISO-3166 Country Standardization:} Mapped full English country names and Alpha-2 codes to ISO Alpha-3 codes (e.g., \code{VIETNAM}, \code{VN} $\rightarrow$ \code{VNM}; \code{CHINA}, \code{CN} $\rightarrow$ \code{CHN}), assigning \code{pd.NA} to unrecognizable tokens.
 
-  \item \textbf{B8. Hợp nhất thông minh các bản ghi trùng mã đặt chỗ:} Đối với 117 dòng chia sẻ mã đặt chỗ, thuật toán lựa chọn bản ghi có lượng thông tin hoàn thiện nhất làm gốc (\code{kept}), sau đó bổ sung thông tin từ các bản ghi phụ (\code{merged}). Kết quả tạo ra đúng **10.000 đặt chỗ độc lập**, tương thích 100\% với yêu cầu đề bài.
+  \item \textbf{B8. Intelligent Record Consolidation by Reservation ID:} Across the 117 multi-row \code{reservation\_id} groups, selected the most complete record as the anchor (\code{kept}) and backfilled missing fields from secondary rows (\code{merged}), yielding exactly \textbf{10,000 unique bookings} in accordance with project specifications.
 \end{itemize}
 
-\section{Đánh giá chất lượng dữ liệu Trước và Sau làm sạch}
+\section{Before-and-After Data Quality Evaluation}
 
-Table \ref{tab:before_after} tổng hợp sự chuyển biến về mặt chất lượng dữ liệu, minh chứng cho sự chuẩn xác của quy trình làm sạch.
+Table \ref{tab:before_after} summarizes the improvement in data integrity before and after preprocessing, confirming the soundness of the pipeline.
 
 \begin{table}[H]
   \centering
@@ -366,17 +366,17 @@ Table \ref{tab:before_after} tổng hợp sự chuyển biến về mặt chất
 \end{table}
 
 % =========================================================
-\chapter{PHÂN TÍCH THỰC NGHIỆM \& PHÁT HIỆN KINH DOANH}
+\chapter{EMPIRICAL ANALYSIS \& BUSINESS INSIGHTS}
 % =========================================================
 
-Sau khi hoàn tất tiền xử lý và xây dựng 7 biến dẫn xuất nghiệp vụ, cơ sở dữ liệu sạch gồm 10.000 bản ghi $\times$ 30 cột được đưa vào phân tích thực nghiệm nhằm giải quyết 9 bài toán vận hành (Câu 2 đến Câu 10) và đúc kết 6 phát hiện kinh doanh cốt lõi.
+After completing preprocessing and constructing 7 business-derived features, the clean dataset comprising 10,000 records $\times$ 30 columns was analyzed empirically to address 9 operational business questions (Questions 2--10) and synthesize 6 core business insights.
 
-\section{Phân tích định lượng chi tiết (Câu 2 đến Câu 10)}
+\section{Detailed Quantitative Analysis (Questions 2--10)}
 
-% ---- CÂU 2 ----
-\subsection{Câu 2: Thị phần đặt chỗ và tỷ lệ hủy theo hãng hàng không}
+% ---- QUESTION 2 ----
+\subsection{Question 2: Booking Share and Cancellation Rate by Airline}
 
-Phân tích được tiến hành trên toàn bộ $N = 10.000$ đặt chỗ sạch có trạng thái xác định nhằm đánh giá tương quan quy mô và rủi ro hủy vé giữa hai hãng bay (Bảng \ref{tab:q02} và Hình \ref{fig:q02}).
+The analysis covers all $N = 10,000$ clean bookings with known operational status to compare market volume and cancellation risk across the two carriers (Table \ref{tab:q02} and Figure \ref{fig:q02}).
 
 \begin{table}[H]
   \centering
@@ -402,17 +402,17 @@ Phân tích được tiến hành trên toàn bộ $N = 10.000$ đặt chỗ s�
   \label{fig:q02}
 \end{figure}
 
-Số liệu thực nghiệm cho thấy sự phân hóa rõ nét về mặt quy mô nhưng lại đồng nhất về rủi ro vận hành:
+Empirical results reveal a sharp contrast in booking scale alongside nearly identical cancellation risk across the two airlines:
 \begin{itemize}
-  \item \textbf{Ưu thế quy mô vượt trội của Aurora Air:} Hãng chiếm tới \pct{65,22} tổng dung lượng thị trường (6.522 vé), cao gấp xấp xỉ \textbf{1,88 lần} so với Horizon Wings (3.478 vé, tương ứng \pct{34,78}). Điều này phản ánh rõ năng lực cung ứng dịch vụ của một hãng hàng không truyền thống có mạng lưới khai thác dày đặc.
-  \item \textbf{Mức độ rủi ro hủy vé tương đồng:} Mặc dù có cấu trúc dịch vụ và quy mô khách hàng khác nhau, tỷ lệ hủy đặt chỗ của hai hãng gần như tương đương: Horizon Wings đạt \pct{27,86} và Aurora Air đạt \pct{27,11} (chênh lệch chỉ \textbf{0,75 điểm phần trăm}).
-  \item \textbf{Hàm ý vận hành:} Tỷ lệ hủy bình quân xấp xỉ 27--28\% đặt ra thách thức lớn cho việc kiểm soát hệ số lấp đầy ghế, đòi hỏi cả hai hãng phải thiết lập quy chế overbooking khoa học để bù đắp ghế trống.
+  \item \textbf{Dominant Market Scale of Aurora Air:} Aurora Air captures \pct{65.22} of total bookings (6,522 bookings), approximately \textbf{1.88 times} the volume of Horizon Wings (3,478 bookings, or \pct{34.78}). This aligns with the broader route network capacity of a Full-Service Carrier.
+  \item \textbf{Comparable Cancellation Risk:} Despite differences in service model and customer scale, cancellation rates are nearly identical across both airlines: Horizon Wings records \pct{27.86} while Aurora Air records \pct{27.11} (a difference of only \textbf{0.75 percentage points}).
+  \item \textbf{Operational Implication:} An average cancellation rate of roughly 27--28\% poses a sustained challenge to cabin load-factor stability, underscoring the need for calibrated overbooking policies to offset expected seat spoilage.
 \end{itemize}
 
-% ---- CÂU 3 ----
-\subsection{Câu 3: Biến động đặt chỗ theo tháng khởi hành năm 2025 (Phân tích mùa vụ)}
+% ---- QUESTION 3 ----
+\subsection{Question 3: Monthly Booking Seasonality in 2025}
 
-Nhằm cô lập tác động của việc thiếu tháng trong năm 2024 và 2026, phân tích mùa vụ được khảo sát trọn vẹn trên 12 tháng của năm dương lịch 2025 với $N = 5.753$ đặt chỗ (Aurora Air: 3.737 vé; Horizon Wings: 2.016 vé), đối chiếu chuẩn xác với \code{monthly\_summary.csv}.
+To isolate true seasonal patterns from partial-year coverage in 2024 and 2026, seasonality analysis is restricted to the 12 full calendar months of 2025 with $N = 5,753$ bookings (Aurora Air: 3,737 bookings; Horizon Wings: 2,016 bookings), verified directly against \code{monthly\_summary.csv}.
 
 \begin{table}[H]
   \centering
@@ -472,17 +472,17 @@ Nhằm cô lập tác động của việc thiếu tháng trong năm 2024 và 20
   \label{fig:q03}
 \end{figure}
 
-Từ Bảng \ref{tab:q03} và Hình \ref{fig:q03}, hai đặc trưng mùa vụ nổi bật được ghi nhận:
+From Table \ref{tab:q03} and Figure \ref{fig:q03}, two prominent seasonal characteristics emerge:
 \begin{itemize}
-  \item \textbf{Mô hình chu kỳ hai đỉnh (Double-Peak Pattern):} Nhu cầu bay bùng nổ tại hai thời điểm: cao điểm du lịch hè (Tháng 7 đối với Aurora Air đạt 383 vé; Tháng 8 đối với Horizon Wings đạt 229 vé) và cao điểm lễ tết cuối năm (Tháng 12 với lần lượt 382 và 210 vé).
-  \item \textbf{Vùng đáy tiêu thụ rõ nét:} Giai đoạn mùa thu (Tháng 9--11) chứng kiến sự suy giảm nhu cầu, chạm đáy vào Tháng 10 ở Aurora Air (251 vé, \pct{6,73}) và Tháng 5 ở Horizon Wings (142 vé, \pct{7,05}).
-  \item \textbf{Xu thế đồng pha:} Biến động của hai hãng diễn ra song hành, chứng minh tính mùa vụ chịu sự chi phối của thị trường vĩ mô hơn là yếu tố chủ quan từ từng hãng.
+  \item \textbf{Double-Peak Seasonal Pattern:} Travel demand surges during two distinct windows: the summer holiday peak (July for Aurora Air at 383 bookings; August for Horizon Wings at 229 bookings) and the year-end holiday peak (December with 382 and 210 bookings, respectively).
+  \item \textbf{Pronounced Off-Peak Troughs:} Autumn months (September--November) exhibit subdued demand, reaching annual lows in October for Aurora Air (251 bookings, \pct{6.73}) and in May for Horizon Wings (142 bookings, \pct{7.05}).
+  \item \textbf{Synchronized Comovement:} Both airlines follow largely parallel monthly trajectories, indicating that demand seasonality is driven primarily by macro-level travel cycles rather than carrier-specific promotions.
 \end{itemize}
 
-% ---- CÂU 4 ----
-\subsection{Câu 4: Thời gian đặt trước (Lead Time) và rủi ro hủy vé}
+% ---- QUESTION 4 ----
+\subsection{Question 4: Booking Lead Time and Cancellation Risk}
 
-Khảo sát được thực hiện trên $N = 9.978$ bản ghi có thông tin \code{booking\_lead\_days} xác định (loại 22 dòng khuyết thiếu), kết quả thể hiện qua Bảng \ref{tab:q04_stats}, Bảng \ref{tab:q04_cancel} và Hình \ref{fig:q04}.
+This analysis evaluates $N = 9,978$ bookings with valid \code{booking\_lead\_days} (excluding 22 missing records), with results summarized in Table \ref{tab:q04_stats}, Table \ref{tab:q04_cancel}, and Figure \ref{fig:q04}.
 
 \begin{table}[H]
   \centering
@@ -529,16 +529,16 @@ Khảo sát được thực hiện trên $N = 9.978$ bản ghi có thông tin \c
   \label{fig:q04}
 \end{figure}
 
-Dữ liệu thực nghiệm xác nhận quy luật: **Đặt vé càng xa ngày bay, xác suất hủy vé càng lớn**:
+Empirical findings confirm a consistent monotonic pattern: \textbf{longer booking lead times are associated with substantially higher cancellation probabilities}:
 \begin{itemize}
-  \item Khách đặt cận ngày bay (0--7 ngày) có tỷ lệ hủy thấp nhất (\pct{22,22}), trong khi nhóm đặt trước trên nửa năm (181+ ngày) ghi nhận tỷ lệ hủy kỷ lục \pct{44,63}.
-  \item Tỷ lệ hủy của nhóm đặt trên 6 tháng cao gấp **2,01 lần** (tăng thêm **+22,41 điểm phần trăm**) so với nhóm đặt cận ngày. Đây là minh chứng cho việc kế hoạch di chuyển dài hạn thường có độ bất định cao.
+  \item Passengers booking close to departure (0--7 days) show the lowest cancellation rate (\pct{22.22}), whereas those booking more than six months in advance (181+ days) exhibit the highest rate at \pct{44.63}.
+  \item The cancellation rate in the 181+ day cohort is \textbf{2.01 times} as high (\textbf{+22.41 percentage points}) as that of the 0--7 day cohort, reflecting greater schedule uncertainty over long planning horizons.
 \end{itemize}
 
-% ---- CÂU 5 ----
-\subsection{Câu 5: Cơ cấu thị trường quốc tế --- Top 10 quốc gia của hành khách}
+% ---- QUESTION 5 ----
+\subsection{Question 5: International Market Structure --- Top 10 Passenger Countries}
 
-Phân tích trên $N = 9.895$ bản ghi có mã quốc gia hợp lệ (loại 105 dòng thiếu) nhằm xác định thị trường trọng điểm cung cấp nguồn khách cho hai hãng.
+The geographic breakdown spans $N = 9,895$ bookings with valid ISO country codes (excluding 105 missing values) to identify primary source markets across both carriers.
 
 \begin{table}[H]
   \centering
@@ -576,12 +576,12 @@ Phân tích trên $N = 9.895$ bản ghi có mã quốc gia hợp lệ (loại 10
   \label{fig:q05}
 \end{figure}
 
-Việt Nam (VNM) giữ vị trí thị trường nội địa hạt nhân với 2.080 đặt chỗ, chiếm \pct{21,02} tổng mạng bay---vượt trội hoàn toàn so với thị trường xếp thứ hai là Trung Quốc (906 vé, 9,16\%). Khu vực Đông Á và Đông Nam Á đóng góp trên 47\% thị phần, khẳng định định hướng mở rộng mạng bay khu vực là chiến lược đúng đắn.
+Vietnam (VNM) stands as the core domestic market with 2,080 bookings, accounting for \pct{21.02} of total network volume---more than double the second-largest source market, China (906 bookings, 9.16\%). Combined, East and Southeast Asian markets contribute over 47\% of total bookings, supporting a regional network expansion focus.
 
-% ---- CÂU 6 ----
-\subsection{Câu 6: Phân khúc thị trường và rủi ro hủy đặt chỗ}
+% ---- QUESTION 6 ----
+\subsection{Question 6: Market Segments and Booking Cancellation Risk}
 
-Đánh giá mức độ ổn định của các kênh phân phối được thực hiện trên $N = 9.968$ đặt chỗ có phân khúc xác định (Bảng \ref{tab:q06} và Hình \ref{fig:q06}).
+Channel stability across distribution segments is evaluated on $N = 9,968$ bookings with identified market segments (Table \ref{tab:q06} and Figure \ref{fig:q06}).
 
 \begin{table}[H]
   \centering
@@ -614,12 +614,12 @@ Việt Nam (VNM) giữ vị trí thị trường nội địa hạt nhân với 
   \label{fig:q06}
 \end{figure}
 
-Kênh trực tuyến **Online OTA** dẫn đầu áp đảo về sản lượng vé bán ra (\pct{39,17}), nhưng lại là kênh có tỷ lệ hủy cao nhất mạng bay (\pct{29,47}). Ngược lại, phân khúc khách hàng doanh nghiệp (**Corporate**) có tính cam kết cao nhất với tỷ lệ hủy chỉ \pct{21,45}---thấp hơn OTA tới \textbf{8,02 điểm phần trăm}.
+The \textbf{Online OTA} channel leads decisively in booking volume (\pct{39.17}), yet it simultaneously records the highest cancellation rate in the network (\pct{29.47}). Conversely, the \textbf{Corporate} segment exhibits the strongest booking commitment with a cancellation rate of just \pct{21.45}---\textbf{8.02 percentage points} lower than Online OTA.
 
-% ---- CÂU 7 ----
-\subsection{Câu 7: Tác động của chính sách giá vé đến trạng thái đặt chỗ}
+% ---- QUESTION 7 ----
+\subsection{Question 7: Fare Policy Association with Booking Outcomes}
 
-Khảo sát mối liên hệ giữa điều kiện hoàn/hủy vé với kết quả chuyến bay trên $N = 9.957$ bản ghi hợp lệ (Bảng \ref{tab:q07} và Hình \ref{fig:q07}).
+This section investigates how refund/cancellation rules correlate with final flight status across $N = 9,957$ valid records (Table \ref{tab:q07} and Figure \ref{fig:q07}).
 
 \begin{table}[H]
   \centering
@@ -656,12 +656,12 @@ Khảo sát mối liên hệ giữa điều kiện hoàn/hủy vé với kết q
   \label{fig:q07}
 \end{figure}
 
-Ràng buộc tài chính thể hiện rõ vai trò điều chỉnh hành vi: vé **Non-Refundable** đạt tỷ lệ bay thành công cao nhất (\pct{77,26}) và tỷ lệ hủy thấp nhất (\pct{21,30}). Vé linh hoạt **Flexible** cho phép hoàn tiền dễ dàng dẫn đến tỷ lệ hủy tăng vọt lên \pct{28,56} (cao hơn \textbf{7,26 điểm phần trăm}). Đáng chú ý, tỷ lệ khách bỏ chuyến không báo trước (\textit{No-Show}) duy trì ở mức tối thiểu (1,44\%--1,64\%) trên toàn bộ các phân hạng.
+Financial restrictions align closely with passenger completion behavior: \textbf{Non-Refundable} fares achieve the highest flown rate (\pct{77.26}) and the lowest cancellation rate (\pct{21.30}). By contrast, \textbf{Flexible} fares allow unrestricted refunds and exhibit a substantially higher cancellation rate of \pct{28.56} (\textbf{7.26 percentage points} higher). Notably, \textit{No-Show} rates remain minimal (1.44\%--1.64\%) across all three fare tiers.
 
-% ---- CÂU 8 ----
-\subsection{Câu 8: Phân tích giá vé trung bình theo hãng (Đặt chỗ không hủy, giá $> 0$)}
+% ---- QUESTION 8 ----
+\subsection{Question 8: Ticket Fare Analysis by Airline (Non-Cancelled Bookings, Fare $> 0$)}
 
-Khảo sát trên $N = 7.224$ giao dịch thương mại thành công không hủy và có giá vé dương (loại 9 vé 0 đồng và 30 dòng thiếu giá) nhằm đo lường mặt bằng giá giữa hai hãng.
+This comparison examines $N = 7,224$ non-cancelled commercial transactions with strictly positive fares (excluding 9 zero-fare bookings and 30 missing-fare rows) to benchmark pricing across both carriers.
 
 \begin{table}[H]
   \centering
@@ -688,12 +688,12 @@ Khảo sát trên $N = 7.224$ giao dịch thương mại thành công không h�
   \label{fig:q08}
 \end{figure}
 
-Phân phối giá vé có độ lệch phải mạnh (\textit{positive skewness}), khi giá trị trung bình ở cả hai hãng đều cao hơn trung vị từ 44 đến 59 USD do sự kéo lệch của các vé hạng Thương gia/Hạng nhất (lên tới hơn 2.200 USD). Vì vậy, **trung vị là thước đo tin cậy hơn**: giá vé trung vị của Aurora Air (149,54 USD) cao hơn Horizon Wings (135,26 USD) là **14,28 USD** (tương đương cao hơn \pct{10,56}), phản ánh đúng định vị dịch vụ cao cấp của hãng truyền thống.
+Fare distributions exhibit strong positive skewness, with mean fares exceeding medians by 44 to 59 USD for both carriers due to high-value Business and First Class tickets (exceeding 2,200 USD). Consequently, \textbf{the median provides a more representative measure of typical pricing}: Aurora Air's median fare (149.54 USD) exceeds Horizon Wings' median fare (135.26 USD) by \textbf{14.28 USD} (\pct{10.56} higher), consistent with the positioning of a full-service carrier.
 
-% ---- CÂU 9 ----
-\subsection{Câu 9: Phân phối độ dài chuyến đi (Total Trip Days)}
+% ---- QUESTION 9 ----
+\subsection{Question 9: Trip Duration Distribution (Total Trip Days)}
 
-Khảo sát tổng thời gian lưu trú (đêm cuối tuần + đêm trong tuần) trên $N = 7.232$ đặt chỗ hoàn thành chuyến bay (Aurora Air: 4.733 khách; Horizon Wings: 2.499 khách).
+Trip duration (weekend nights plus weeknights) is analyzed across $N = 7,232$ completed itineraries (Aurora Air: 4,733 bookings; Horizon Wings: 2,499 bookings).
 
 \begin{table}[H]
   \centering
@@ -740,12 +740,12 @@ Khảo sát tổng thời gian lưu trú (đêm cuối tuần + đêm trong tu�
   \label{fig:q09}
 \end{figure}
 
-Gần 80\% hành khách thực hiện các chuyến đi có độ dài từ 1 đến 7 ngày, trong đó phân khúc **3--4 ngày** chiếm ưu thế lớn nhất ($\sim$31--32\%). Điều này phản ánh rõ nét đặc trưng của nhu cầu du lịch nghỉ dưỡng ngắn ngày và các chuyến công tác tuần.
+Nearly 80\% of passengers undertake trips lasting 1 to 7 days, with the \textbf{3--4 day} duration bracket accounting for the largest single share ($\sim$31--32\%). This pattern reflects strong demand from short-break leisure travelers and weekly business itineraries.
 
-% ---- CÂU 10 ----
-\subsection{Câu 10: Tỷ lệ đổi hạng khoang cabin}
+% ---- QUESTION 10 ----
+\subsection{Question 10: Cabin Class Change Rates}
 
-Đo lường mức độ ổn định trong bố trí chỗ ngồi trên $N = 9.921$ bản ghi có đầy đủ cả mã cabin đặt và mã xếp chỗ thực tế (Bảng \ref{tab:q10_airline} và Bảng \ref{tab:q10_cabin}).
+Seating assignment consistency is measured across $N = 9,921$ bookings containing valid codes for both booked cabin and assigned cabin (Table \ref{tab:q10_airline} and Table \ref{tab:q10_cabin}).
 
 \begin{table}[H]
   \centering
@@ -796,13 +796,13 @@ Gần 80\% hành khách thực hiện các chuyến đi có độ dài từ 1 đ
   \end{tabularx}
 \end{table}
 
-Quy trình quản lý chỗ ngồi duy trì tính ổn định cao khi gần \pct{89} hành khách được phục vụ đúng khoang ghế đã đặt. Tỷ lệ tái sắp xếp tập trung đáng kể tại khoang Thương gia (mã **B3** đạt \pct{13,56} và **B2** đạt \pct{12,96}), phản ánh nghiệp vụ nâng hạng thương quyền (\textit{Operational Upgrade}) để giải quyết tình trạng quá tải khoang phổ thông.
+Seating operations remain broadly stable, with roughly \pct{89} of passengers accommodated in their originally booked cabin class. Cabin reassignments are most prevalent among Business Class bookings (\textbf{B3} at \pct{13.56} and \textbf{B2} at \pct{12.96}), reflecting operational seat reallocations and upgrades designed to balance cabin capacity across flights.
 
 % =========================================================
-\section{Đúc kết 6 phát hiện kinh doanh chuyên sâu}
+\section{Synthesis of Six Key Business Insights}
 % =========================================================
 
-Bảng \ref{tab:insights_summary} hệ thống hóa 6 phát hiện thực nghiệm mang giá trị chiến lược cho công tác quản trị doanh thu.
+Table \ref{tab:insights_summary} synthesizes six strategic empirical findings supporting airline revenue management decisions.
 
 \begin{table}[H]
   \centering
@@ -839,66 +839,66 @@ Bảng \ref{tab:insights_summary} hệ thống hóa 6 phát hiện thực nghi�
   \end{tabularx}
 \end{table}
 
-Dưới đây là luận giải chuyên sâu cho từng đúc kết:
+Detailed interpretations of each key finding are presented below:
 
-\begin{insightbox}{Phát hiện 1: Quy luật thời gian đặt trước và hiệu ứng gia tăng rủi ro hủy vé phi tuyến tính}
-Khảo sát 9.978 giao dịch có lead time xác định khẳng định mối quan hệ nghịch đảo giữa độ xa của ngày đặt vé và tính chắc chắn của lịch trình. Khách hàng đặt vé sát ngày khởi hành (0--7 ngày) chỉ có \pct{22,22} hủy chỗ, nhưng tỷ lệ này tăng dần qua các mốc 8--30 ngày (\pct{24,19}), 31--90 ngày (\pct{25,77}) và nhảy vọt lên \pct{44,63} đối với các giao dịch thực hiện trước hơn nửa năm (181+ ngày). Khách đặt trước trên 6 tháng có xác suất hủy vé cao gấp **2,01 lần** (+22,41 điểm phần trăm) so với khách đặt trong tuần bay. 
+\begin{insightbox}{Insight 1: Booking Lead Time and Nonlinear Escalation of Cancellation Risk}
+Analyzing 9,978 transactions with valid lead-time data highlights a clear inverse relationship between booking horizon and itinerary certainty. Passengers booking close to departure (0--7 days) record a cancellation rate of only \pct{22.22}, whereas cancellations climb progressively through 8--30 days (\pct{24.19}) and 31--90 days (\pct{25.77}) before accelerating sharply to \pct{44.63} for bookings made over six months ahead (181+ days). Bookings made more than six months in advance are cancelled at \textbf{2.01 times} the rate (+22.41 percentage points) of last-week bookings.
 
-\textit{Ý nghĩa kinh doanh:} Khách đặt vé quá xa thường có tâm lý giữ chỗ sớm khi có chương trình khuyến mãi nhưng kế hoạch công việc chưa ổn định, dẫn đến lượng "đặt chỗ ảo" rất lớn trên hệ thống. Hãng hàng không cần áp dụng chính sách đặt cọc từng phần hoặc siết chặt thời hạn giữ chỗ đối với các vé phát sinh trước hơn 90 ngày.
+\textit{Business Implication:} Early shoppers frequently lock in promotional inventory before travel plans are firm, inflating speculative reservations across inventory systems. Airlines should introduce staged deposit requirements or stricter ticketing time limits for reservations created more than 90 days prior to departure.
 \end{insightbox}
 
-\begin{insightbox}{Phát hiện 2: Chế tài tài chính trong chính sách giá định hình cam kết bay của hành khách}
-Phân tích 9.957 đặt chỗ cho thấy điều kiện giá vé chi phối trực tiếp đến kết quả hoàn thành chuyến bay. Loại vé không hoàn tiền (\textbf{Non-Refundable}) đạt tỷ lệ thực bay (\textit{Flown}) cao nhất hệ thống với \pct{77,26} (2.089/2.704 vé), đồng thời ghi nhận tỷ lệ hủy thấp nhất (\pct{21,30}). Ngược lại, vé linh hoạt (\textbf{Flexible}) có tỷ lệ hủy lên tới \pct{28,56}---cao hơn vé Non-Refundable tới **7,26 điểm phần trăm**. Tỷ lệ bỏ chuyến không báo trước (\textit{No-Show}) duy trì ở mức rất thấp (1,4\%--1,6\%) ở mọi phân hạng.
+\begin{insightbox}{Insight 2: Financial Commitments in Fare Policies Align with Passenger Retention}
+Across 9,957 bookings, ticket refundability rules correspond strongly to final flight completion outcomes. \textbf{Non-Refundable} fares achieve the highest flown rate across the network at \pct{77.26} (2,089 of 2,704 bookings) alongside the lowest cancellation rate (\pct{21.30}). Conversely, \textbf{Flexible} fares reach a \pct{28.56} cancellation rate---\textbf{7.26 percentage points} higher than Non-Refundable tickets. Across all three fare policies, \textit{No-Show} rates remain consistently low (1.4\%--1.6\%).
 
-\textit{Ý nghĩa kinh doanh:} Áp lực mất toàn bộ tiền vé tạo ra cam kết tài chính mạnh mẽ buộc khách hàng phải tuân thủ hành trình. Doanh nghiệp cần cơ cấu lại tỷ trọng vé Semi-Flexible để dung hòa giữa tính linh hoạt của khách hàng và bài toán tối ưu hóa tỷ lệ lấp đầy ghế.
+\textit{Business Implication:} Monetary forfeiture risk reinforces traveler commitment to confirmed itineraries. Carriers can rebalance seat capacity protection against customer flexibility by expanding well-calibrated Semi-Flexible fare tiers rather than offering overly permissive Flexible allotments.
 \end{insightbox}
 
-\begin{insightbox}{Phát hiện 3: Nghịch lý kênh Online OTA --- Doanh số cao nhất đi kèm tỷ lệ hủy chỗ cao nhất}
-Trong 9.968 đặt chỗ khảo sát, kênh đại lý trực tuyến (\textbf{Online OTA}) chiếm thị phần áp đảo với \pct{39,17} tổng lượng giao dịch (3.906 vé). Tuy nhiên, đây cũng chính là phân khúc ghi nhận rủi ro hủy vé cao nhất hệ thống với \pct{29,47} (1.151 vé hủy). Con số này vượt xa kênh khách hàng doanh nghiệp (\textbf{Corporate}) vốn có tỷ lệ hủy thấp nhất chỉ \pct{21,45} (chênh lệch **8,02 điểm phần trăm**) và kênh đặt trực tiếp (\textbf{Direct}: \pct{27,21}).
+\begin{insightbox}{Insight 3: The Online OTA Paradox --- Highest Volume Accompanied by Highest Cancellation Risk}
+Among 9,968 bookings with known segments, the \textbf{Online OTA} channel generates the largest share of reservations at \pct{39.17} (3,906 bookings). At the same time, it carries the highest cancellation risk across the network at \pct{29.47} (1,151 cancellations). This rate stands well above both the \textbf{Corporate} segment---which posts the lowest cancellation rate at \pct{21.45} (a gap of \textbf{8.02 percentage points})---and the \textbf{Direct} channel (\pct{27.21}).
 
-\textit{Ý nghĩa kinh doanh:} Các công cụ tìm kiếm và so sánh giá trên nền tảng OTA giúp người dùng dễ dàng chuyển đổi sang chuyến bay rẻ hơn vào phút chót. Hãng cần thắt chặt thỏa thuận mức dịch vụ (SLA) với các đối tác OTA, rút ngắn thời gian giữ chỗ chờ thanh toán nhằm hạn chế tối đa các đơn đặt giữ chỗ ảo.
+\textit{Business Implication:} Metasearch and price-comparison workflows on OTA platforms make it frictionless for travelers to hold duplicate seats or switch to cheaper departures close to travel dates. Airlines should tighten Service Level Agreements (SLAs) with OTA partners and shorten unpaid hold windows to curb speculative bookings.
 \end{insightbox}
 
-\begin{insightbox}{Phát hiện 4: Tính mùa vụ hai đỉnh đồng pha đòi hỏi năng lực điều tiết tải bay linh hoạt}
-Phân tích 5.753 đặt chỗ trong năm 2025 xác nhận mô hình biến động nhu cầu hai đỉnh diễn ra song hành ở cả hai hãng: đỉnh cao điểm du lịch hè (Tháng 7--8) và đỉnh lễ hội thăm thân cuối năm (Tháng 12). Lượng đặt chỗ trong tháng đỉnh điểm cao gấp **1,53 lần** ở Aurora Air (383 so với 251 vé) và **1,61 lần** ở Horizon Wings (229 so với 142 vé) so với tháng thấp điểm nhất.
+\begin{insightbox}{Insight 4: Synchronized Double-Peak Seasonality Requires Agile Capacity Management}
+Evaluation of 5,753 departures in calendar year 2025 confirms a synchronized two-peak demand cycle across both airlines: a summer travel peak (July--August) and a year-end holiday peak (December). Peak-month booking volume reaches \textbf{1.53 times} the lowest-month volume for Aurora Air (383 vs.\ 251 bookings) and \textbf{1.61 times} for Horizon Wings (229 vs.\ 142 bookings).
 
-\textit{Ý nghĩa kinh doanh:} Tính tương đồng về chu kỳ khẳng định nhu cầu đi lại chịu tác động của quy luật thị trường chung. Doanh nghiệp cần triển khai giải pháp định giá động (\textit{Dynamic Pricing}) nhằm tối đa hóa doanh thu trong hai giai đoạn cao điểm, đồng thời chủ động bố trí lịch bảo dưỡng đội tàu bay vào các tháng thấp điểm (Tháng 5 và Tháng 10).
+\textit{Business Implication:} Parallel seasonal swings indicate shared market-wide travel cycles. Revenue teams should deploy active \textit{Dynamic Pricing} during summer and December peaks while scheduling planned fleet maintenance and crew training during off-peak troughs in May and October.
 \end{insightbox}
 
-\begin{insightbox}{Phát hiện 5: Phân phối giá vé lệch phải và sự phân hóa định vị giữa hai hãng hàng không}
-Khảo sát 7.224 giao dịch thương mại thành công chỉ ra rằng phân phối giá vé bị lệch phải mạnh do sự chi phối của các vé khoang Thương gia và Hạng nhất có giá vượt trên 2.100 USD. Do đó, trung vị là thước đo khách quan phản ánh mức giá phổ thông: trung vị của Aurora Air là **149,54 USD**, cao hơn mức **135,26 USD** của Horizon Wings là **14,28 USD** (chênh lệch \pct{10,56}).
+\begin{insightbox}{Insight 5: Right-Skewed Fare Distribution and Carrier Market Positioning}
+Across 7,224 non-cancelled positive-fare transactions, ticket pricing exhibits strong right skewness driven by Business and First Class fares exceeding 2,100 USD. Accordingly, the median serves as the primary benchmark for typical ticket pricing: Aurora Air's median fare of \textbf{149.54 USD} surpasses Horizon Wings' median of \textbf{135.26 USD} by \textbf{14.28 USD} (a \pct{10.56} premium).
 
-\textit{Ý nghĩa kinh doanh:} Khoảng cách giá vé phản ánh đúng định vị chiến lược của một hãng hàng không truyền thống cung cấp dịch vụ đầy đủ so với mô hình hàng không tối ưu chi phí. Tuy nhiên, do số liệu chưa bao gồm các khoản phụ thu dịch vụ (hành lý, suất ăn), hãng Horizon Wings có thể thu hẹp khoảng cách doanh thu thực tế bằng các gói dịch vụ phụ trợ.
+\textit{Business Implication:} The median price differential reflects distinct competitive positioning between a full-service carrier and a cost-optimized challenger. Because ancillary fees (baggage, seat selection, meals) are not captured in the base fare field, Horizon Wings may narrow effective yield differences through targeted ancillary bundling.
 \end{insightbox}
 
-\begin{insightbox}{Phát hiện 6: Ổn định trong phân bổ chỗ ngồi với tần suất tái sắp xếp tập trung tại khoang Thương gia}
-Dữ liệu 9.921 đặt chỗ ghi nhận tỷ lệ đổi hạng cabin ở cả Aurora Air (\pct{11,39}) và Horizon Wings (\pct{11,74}) đều duy trì quanh ngưỡng 11,5\%, minh chứng cho quy trình điều phối ghế ngồi hoạt động hiệu quả khi gần 89\% hành khách được bố trí đúng khoang mong muốn. Đáng chú ý, tỷ lệ đổi ghế xuất hiện cao nhất ở phân khúc Thương gia với mã **B3** đạt \pct{13,56} và **B2** đạt \pct{12,96}---cao hơn khoang Phổ thông E3 (\pct{10,61}) gần 3 điểm phần trăm.
+\begin{insightbox}{Insight 6: High Overall Cabin Stability with Elevated Reassignment in Business Class}
+Analysis of 9,921 bookings shows comparable cabin-change rates for Aurora Air (\pct{11.39}) and Horizon Wings (\pct{11.74}), averaging roughly 11.5\%---indicating that nearly 89\% of travelers receive seats in their originally booked cabin. Cabin reassignments occur most frequently in Business Class bookings, led by \textbf{B3} (\pct{13.56}) and \textbf{B2} (\pct{12.96}), nearly 3 percentage points higher than Economy sub-class E3 (\pct{10.61}).
 
-\textit{Ý nghĩa kinh doanh:} Tỷ lệ thay đổi ở khoang Thương gia phần lớn là kết quả của nghiệp vụ nâng hạng dịch vụ (\textit{Operational Upgrade}) cho khách hàng thân thiết nhằm giải tỏa áp lực quá tải ghế ở khoang Phổ thông. Doanh nghiệp cần chuẩn hóa quy trình nâng hạng để gia tăng mức độ hài lòng của khách hàng mà không làm phát sinh chi phí vận hành.
+\textit{Business Implication:} Elevated reassignment rates in Business fare buckets likely reflect operational upgrades, cabin swaps, or inventory rebalancing during peak Economy demand. Standardizing upgrade allocation rules around loyalty status can boost customer satisfaction without inflating operating costs.
 \end{insightbox}
 
 % =========================================================
-\chapter{GIỚI HẠN DỮ LIỆU \& KHUYẾN NGHỊ QUẢN TRỊ}
+\chapter{DATA LIMITATIONS \& MANAGERIAL RECOMMENDATIONS}
 % =========================================================
 
-\section{Giới hạn của nghiên cứu}
+\section{Study Limitations}
 
-Nhóm nghiên cứu ghi nhận một số giới hạn khách quan gắn liền với đặc tính của bộ dữ liệu:
+The research team notes several methodological and structural limitations inherent to the dataset:
 \begin{enumerate}
-  \item \textbf{Đặc trưng dữ liệu mô phỏng:} Dữ liệu được thiết lập nhân tạo nhằm đánh giá kỹ năng xử lý dữ liệu và tư duy thống kê. Các mối tương quan quan sát được phản ánh cấu trúc thuật toán phát sinh dữ liệu, do đó cần được kiểm chứng thêm trước khi khái quát hóa thành quy luật cho thị trường hàng không thực tế.
-  \item \textbf{Khung thời gian không liên tục:} Trong 26 tháng thu thập (07/2024 đến 08/2026), chỉ riêng năm 2025 là có trọn vẹn 12 tháng dữ liệu. Do đó, phân tích tính mùa vụ bắt buộc phải giới hạn trên năm 2025 để tránh sai lệch mẫu, đồng thời chưa thể thực hiện phân tích tăng trưởng theo năm (\textit{Year-over-Year}).
-  \item \textbf{Thiếu hụt dữ liệu chi phí và phụ thu:} Thuộc tính \code{avg\_ticket\_fare} chỉ đo lường giá vé danh nghĩa cơ bản, chưa bao gồm các khoản thu phụ trợ (hành lý, suất ăn, bảo hiểm) cũng như các biến phí khai thác (nhiên liệu, nhân công, dịch vụ mặt đất). Do đó, chỉ số \code{booking\_value\_est} chỉ phản ánh giá trị đặt chỗ danh nghĩa, không đại diện cho lợi nhuận ròng của chuyến bay.
+  \item \textbf{Simulated Dataset Design:} The dataset was synthetically constructed for data-cleaning evaluation and quantitative analytics practice. Observed statistical associations reflect the underlying data-generation process and cannot establish causal mechanisms or be directly generalized to live airline operations without real-world validation.
+  \item \textbf{Incomplete Multi-Year Coverage:} Across the 26-month observation window (July 2024 to August 2026), only calendar year 2025 spans all 12 complete months. Seasonality analysis was therefore scoped strictly to 2025 to prevent edge-month sampling distortion, precluding formal Year-over-Year (YoY) growth comparisons.
+  \item \textbf{Absence of Operating Cost and Ancillary Revenue Fields:} The \code{avg\_ticket\_fare} field measures nominal base ticket value only and omits ancillary revenues (baggage, meals, seat fees) as well as variable operating expenses (fuel, crew, airport charges). Consequently, \code{booking\_value\_est} represents nominal gross booking value rather than flight net profit.
 \end{enumerate}
 
-\section{Khuyến nghị quản trị cho hãng hàng không}
+\section{Managerial Recommendations for Airlines}
 
-Từ các phát hiện định lượng, nhóm đề xuất 4 nhóm giải pháp chiến lược dành cho bộ phận Quản trị Doanh thu:
+Grounded in the empirical findings above, the team proposes four strategic actions for airline Revenue Management:
 
 \begin{itemize}
-  \item \textbf{Kiểm soát rủi ro hủy vé đặt xa (Lead Time $>$ 90 ngày):} Thiết lập cơ chế thanh toán lũy tiến hoặc thu phí hủy tăng dần theo thời gian giữ chỗ đối với các giao dịch phát sinh sớm hơn ngày bay trên 3 tháng, nhằm hạn chế tình trạng chiếm dụng ghế ảo.
-  \item \textbf{Tối ưu hóa chính sách hợp tác với kênh Online OTA:} Rút ngắn thời hạn thanh toán giữ chỗ của các đại lý trực tuyến xuống trong vòng 24 giờ sau khi tạo mã đặt chỗ; đồng thời áp dụng chính sách chiết khấu linh hoạt để khuyến khích khách hàng chuyển đổi sang đặt vé trực tiếp qua website/ứng dụng chính thức của hãng.
-  \item \textbf{Chiến lược định giá thích ứng theo mùa vụ:} Vận hành hệ thống định giá động (\textit{Dynamic Pricing}) trong các tháng cao điểm hè và tháng 12; đồng thời phối hợp với các công ty du lịch phát hành các gói sản phẩm trọn gói (\textit{Package Tour}) nhằm kích cầu hành khách trong các tháng thấp điểm Tháng 5 và Tháng 10.
-  \item \textbf{Phát triển gói tiện ích cho chặng bay ngắn ngày:} Với hơn 50\% lượng khách thực hiện các chuyến đi có thời gian lưu trú từ 1 đến 4 ngày, hãng nên đẩy mạnh đóng gói bán kèm các dịch vụ tiện ích nhanh (lối đi ưu tiên, hành lý xách tay bổ sung, đưa đón sân bay) để tối ưu hóa biên lợi nhuận trên mỗi ghế bay.
+  \item \textbf{Control Cancellation Risk on Long-Lead Bookings (Lead Time $>$ 90 Days):} Implement progressive payment schedules or tiered cancellation fees scaled by booking horizon for reservations created more than three months before departure to deter speculative seat holding.
+  \item \textbf{Optimize Online OTA Channel Governance:} Shorten unpaid reservation hold windows for Online OTA bookings to within 24 hours of PNR creation, while introducing targeted digital perks or loyalty discounts to shift repeat travelers toward direct airline websites and mobile apps.
+  \item \textbf{Deploy Seasonality-Adaptive Pricing and Packaging:} Calibrate \textit{Dynamic Pricing} rules to capture peak willingness-to-pay during the July--August and December surges, while partnering with tour operators on bundled \textit{Package Tour} promotions to stimulate load factors during May and October troughs.
+  \item \textbf{Monetize Short-Trip Segments Through Convenience Bundles:} Because over 50\% of passengers travel for 1 to 4 days, airlines should promote fast-track add-on bundles (priority boarding, extra cabin baggage, express airport transfers) tailored to time-sensitive leisure and corporate short-haul travelers.
 \end{itemize}
 
 % =========================================================
